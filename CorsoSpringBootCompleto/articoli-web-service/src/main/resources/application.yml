@@ -1,0 +1,78 @@
+# ==============================================================
+# = Articoli Web Service - Versione Base
+# ==============================================================
+server:
+  port: 5051
+  ssl:
+    enabled: false
+    key-store-type: PKCS12
+    key-store: classpath:ssl-server.jks
+    key-store-password: A.
+logging:
+  level:
+    root: WARN
+    org.springframework: INFO
+    com.xantrix.webapp: TRACE
+#Actuator
+management:
+  endpoint:
+    health:
+      show-details: when-authorized
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+#ActuatorInfo
+info:
+  assisenteza:
+    nome: Alnao
+    mail: alnao@alnao.it
+  nome:
+    nome-app: "Articoli web service"
+
+applicazione:
+  listino : 2
+gestuser:
+  srvUrl: http://localhost:8019/api/utenti/cerca/userid/
+  userId: read
+  password: bim
+sicurezza:
+  uri: /auth
+  refresh: /refresh
+  header: Authorization
+  prefix: Bearer 
+  expiration: 86400
+  secret: AA
+feign:
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+
+
+spring:
+  application:
+    name: ProductsWebService
+# ==============================================================
+# = DBMS PostgreSQL Parameters
+# ==============================================================
+  datasource:
+    initialization-mode: always
+    password: A.
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/AlphaShop
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    show-sql: true
+
+  
+

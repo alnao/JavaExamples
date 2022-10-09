@@ -1,0 +1,16 @@
+
+server:
+  port: 8019
+spring:
+  application:
+    name: gestUser
+  data:
+    mongodb:
+      authentication-database: admin
+      database: ms-users
+      host: localhost
+      password: AA
+      port: 27017
+      username: alberto
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration  

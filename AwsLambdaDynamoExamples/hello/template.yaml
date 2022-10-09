@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: Creazione funzione Lambda AlNao Saluti
+
+Resources:
+
+  AlNaoSalutiLambdaJava:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: java8
+      MemorySize: 512
+      Timeout: 25
+      Handler: it.alnao.lambda.Saluti::handler
+      CodeUri: target/lambda.jar
+
+      
+# info: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html

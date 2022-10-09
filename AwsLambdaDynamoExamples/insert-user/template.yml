@@ -1,0 +1,117 @@
+# info: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html
+# $ cd /mnt/Dati/Java/CorsoLambda/insert-user/
+# mvn clean install
+# $ sam deploy --s3-bucket alnao-lambda --stack-name CorsoLambda --capabilities CAPABILITY_IAM
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: Applicazione Servless Gestione Dati Clienti Insert
+
+Globals:
+  Function:
+    Runtime: java8
+    MemorySize: 512
+    Timeout: 25
+    
+Resources:
+  ClientiTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: CorsoLambdaClienti
+      PrimaryKey:
+        Name: userId
+        Type: String
+  ClientiAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: clienti-api
+      EndpointConfiguration: REGIONAL
+      StageName: dev
+      
+  InsertClienteJavaConApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: it.alnao.servless.insertUser.hendler.DataFuncionHandler
+      CodeUri: ./target/insert-user-0.0.1-SNAPSHOT-aws.jar
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /api/clienti/inserisci
+            Method: post
+            RestApiId:
+              Ref: ClientiAPI
+              
+  SelectCodeClienteJavaConApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: it.alnao.servless.selectcodeUser.DataFuncionHandler
+      CodeUri: /mnt/Dati/Java/CorsoLambda/selectcode-user/target/selectcode-user-0.0.1-SNAPSHOT-aws.jar
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /api/clienti/selectcode/{codFid}
+            Method: get
+            RestApiId:
+              Ref: ClientiAPI
+              
+  SelectNameClienteJavaConApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: it.alnao.servless.selectnameUser.DataFuncionHandler
+      CodeUri: /mnt/Dati/Java/CorsoLambda/selectname-user/target/selectname-user-0.0.1-SNAPSHOT-aws.jar
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /api/clienti/selectname/{name}
+            Method: get
+            RestApiId:
+              Ref: ClientiAPI
+              
+  SelectBollClienteJavaConApi:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: it.alnao.servless.selectbolUser.DataFuncionHandler
+      CodeUri: /mnt/Dati/Java/CorsoLambda/selectbol-user/target/selectbol-user-0.0.1-SNAPSHOT-aws.jar
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /api/clienti/selectbol/{name}
+            Method: get
+            RestApiId:
+              Ref: ClientiAPI              
+
+#nome di merda, doveva essere verifyCredential perche verifica le credenziali ma non posso cambiare              
+  AuthAdminJava:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.xantrix.servless.handler.DataServiceFunctionHandler
+      CodeUri: /mnt/Dati/Java/CorsoLambda/jwt-authsrv/target/jwt-authsrv-0.0.1-SNAPSHOT-aws.jar
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /api/clienti/auth
+            Method: post
+            RestApiId:
+              Ref: ClientiAPI              
+
+  VerifyTokenJava:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.xantrix.servless.handler.DataServiceFunctionHandler
+      CodeUri: /mnt/Dati/Java/CorsoLambda/auth-user/target/auth-user-0.0.1-SNAPSHOT-aws.jar
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /api/clienti/verifyToken
+            Method: post
+            RestApiId:
+              Ref: ClientiAPI              
+
+
+
+

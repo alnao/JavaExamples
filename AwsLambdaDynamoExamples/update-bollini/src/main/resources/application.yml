@@ -1,0 +1,14 @@
+
+# ==============================================================
+# = Parametri Sicurezza AWS DynamoDb 
+# ==============================================================
+sicurezza:
+    key: AKIAWAUHRQF3EA4WGGG6
+    secret: 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
+
+# ==============================================================
+# = Nome Bucket AWS S3 in uso
+# ==============================================================    
+buckets:
+    spese: com.xantrix.spese
+    backup: com.xantrix.backup

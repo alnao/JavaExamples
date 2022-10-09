@@ -1,0 +1,23 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creazione Tabella DynamoDb Clienti
+
+Resources:
+
+  ClientiTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: clienti2
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      KeySchema:
+        -
+          AttributeName: userId
+          KeyType: HASH
+      AttributeDefinitions:
+        -
+          AttributeName: userId
+          AttributeType: S
+
+#aws cloudformation create-stack --stack-name DynamoDbClienti  --template-body file://dynamoClienti2.yml --capabilities CAPABILITY_NAMED_IAM 
