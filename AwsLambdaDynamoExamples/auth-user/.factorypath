@@ -28,7 +28,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/spring-web/5.3.9/spring-web-5.3.9.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/projectreactor/reactor-core/3.4.9/reactor-core-3.4.9.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/amazonaws/aws-lambda-java-events/3.10.0/aws-lambda-java-events-3.10.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/amazonaws/aws-lambda-java-events/3.11.0/aws-lambda-java-events-3.11.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/joda-time/joda-time/2.6/joda-time-2.6.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/amazonaws/aws-lambda-java-log4j/1.0.1/aws-lambda-java-log4j-1.0.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/amazonaws/aws-lambda-java-core/1.2.1/aws-lambda-java-core-1.2.1.jar" enabled="true" runInBatchMode="false"/>

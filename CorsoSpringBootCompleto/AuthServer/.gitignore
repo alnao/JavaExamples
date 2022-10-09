@@ -4,6 +4,10 @@ target/
 !**/src/main/**
 !**/src/test/**
 
+**.classpath
+**.project
+**.factorypath
+**/org.eclipse*
 ### STS ###
 .apt_generated
 .classpath
