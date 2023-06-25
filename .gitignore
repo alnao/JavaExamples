@@ -32,3 +32,7 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+MyWebDBeaver/.dbeaver/credentials-config.json
+MyWebDBeaver/.dbeaver/data-sources.json
+MyWebDBeaver/.dbeaver/project-settings.json
+MyWebDBeaver/Diagrams/MyWeb.erd
