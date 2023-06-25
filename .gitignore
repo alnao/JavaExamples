@@ -1,3 +1,13 @@
+**/target/
+**/bin/
+.mvn
+
+**/.classpath
+**/.project
+**/.factorypath
+**/org.eclipse*
+
+
 **.classpath
 **.project
 **.factorypath

@@ -11,6 +11,10 @@
 - 01maven created with 
         
       mvn archetype:generate -DgroupId=it.alnao -DartifactId=01maven
+
+   to compile
+
+      mvn clean dependency:copy-dependencies package
 - 02webModule created with 
         
       mvn archetype:generate -DgroupId=it.alnao -DartifactId=02webModule -DarchetypeArtifactId=maven-archetype-webapp 
