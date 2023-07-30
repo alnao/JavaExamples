@@ -5,7 +5,9 @@
 **/.classpath
 **/.project
 **/.factorypath
+**/.settings
 **/org.eclipse*
+GenericJava/Servers
 
 
 **.classpath
