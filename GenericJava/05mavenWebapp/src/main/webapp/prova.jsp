@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="/WEB-INF/prova.tld" prefix="alnaoTLD" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -7,13 +8,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
   <head>
     <title>Prova</title>
+    <style>.classeCCS1{color:green;} .classeCCS2{color:red;}</style>
   </head>
-  <body>
- 	Pagina di prova
- 	<br/>
+  <body> 
+ 	Pagina di prova ( http://localhost:8081/05mavenWebapp/ )
+ 	<hr />
  	BasePath = <%=basePath%>
- 	<br />
+ 	<hr />
  	<%=request.getAttribute("nomeInRequest") %>
  	<%=request.getSession().getAttribute("cognomeInSessione") %>
+ 	<hr />
+ 	Commento e ora: <alnaoTLD:TagCommentoSenzaParametri />
+ 	<hr />
+	<alnaoTLD:Importo positiveStyle="classeCCS1" negativeStyle="classeCCS2">-12.42</alnaoTLD:Importo>
+	<hr />
   </body>
 </html>
