@@ -22,9 +22,12 @@ public class PrimaAction extends Action  {
 		if (loginForm.getUserName() == null || loginForm.getPassword() == null
 				|| !loginForm.getUserName().equalsIgnoreCase("alnao")
 				|| !loginForm.getPassword().equals("bellissimo")) {
-			request.setAttribute("nomeUtente", "Alberto Nao");
 			return mapping.findForward("failure");
-		} else
+		} else {
+			request.setAttribute("nomeUtente", "Alberto Nao");
+			PrimoBean b= new PrimoBean (loginForm.getUserName());
+			request.setAttribute("oggetto", b);
 			return mapping.findForward("success");
+		}
 	}
 }
