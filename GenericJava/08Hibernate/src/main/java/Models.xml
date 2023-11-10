@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"https://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+	
+<hibernate-mapping package="it.alnao.hibernate">
+	<class name="Model" table="test_alberto" >
+		<id name="id" type="long" column = "id">
+			<generator class="native"/>
+		</id>
+		<property name="nome" type="string" column="name" />
+		<property name="cognome" type="string" column="cognome" />
+   	</class>
+</hibernate-mapping>
