@@ -8,14 +8,17 @@
 
 ## Projects:
 
-- 01: maven created with 
-- 02: webModule created with 
-- 03: j2ee 
-- 04: eclipse 
-- 05: webApp
-- 06: struts 
-- 07: mysql
-- 08: hibernate
+- 01: Maven created 
+- 02: WebModule created 
+- 03: J2ee 
+- 04: Eclipse created
+- 05: WebApp
+- 06: Struts 
+- 07: MySql
+- 08: Hibernate
+- 09: Gui with Swing 
+- 10: Soap server
+- 11: Rest server & client
 
 
 ## Genenric commands for Java with Apache Maven:
@@ -39,5 +42,10 @@ java -jar target/*.jar
 
 ```
 
-# Licence
-GNU <a href="https://github.com/alnao/JavaExamples/blob/master/LICENSE">LICENSE</a> file for details
+# AlNao.it
+Nessun contenuto in questo repository è stato creato con IA o automaticamente, tutto il codice è stato scritto con molta pazienza da Alberto Nao. Se il codice è stato preso da altri siti/progetti è sempre indicata la fonte. Per maggior informazioni visitare il sito [alnao.it](https://www.alnao.it/).
+
+## License
+Public projects 
+<a href="https://it.wikipedia.org/wiki/GNU_General_Public_License"  valign="middle"><img src="https://img.shields.io/badge/License-GNU-blue" style="height:22px;"  valign="middle"></a> 
+*Free Software!*
