@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.util.List;
 
 public class App{
-	static String server="10.10.111.102";
+	static String server="XXX.XXX.XXX.XXX";
 	static int port=22;
-	static String user="bitnami";
+	static String user="username";
 	static String passw=null;
-	static String pem="C:\\Transito\\000_FILES\\Keys\\20211009_Chiavi\\AlbertoNao_privata.pem";
-	static String path="/efs-utils";
+	static String pem="C:\\privata.pem";
+	static String path="/folder";
     
     public static void main( String[] args ) throws Exception{
     	sftpVfs2Example();

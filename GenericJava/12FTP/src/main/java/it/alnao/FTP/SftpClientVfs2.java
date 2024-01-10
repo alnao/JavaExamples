@@ -2,18 +2,18 @@ package it.alnao.FTP;
 
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystemException;
+//import java.net.URISyntaxException;
+//import java.nio.charset.StandardCharsets;
+//import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemManager;
+//import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.FileSystemOptions;
-import org.apache.commons.vfs2.VFS;
+//import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.impl.StandardFileSystemManager;
-import org.apache.commons.vfs2.provider.sftp.IdentityInfo;
+//import org.apache.commons.vfs2.provider.sftp.IdentityInfo;
 import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
 
 /* see https://www.north-47.com/sftp-file-transfers-with-java/

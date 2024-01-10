@@ -55,12 +55,12 @@
 			<groupId>com.hierynomus</groupId>
 			<artifactId>sshj</artifactId>
 			<version>0.34.0</version>
-		</dependency>-->
+		</dependency>
 	<dependency>
 	    <groupId>com.github.mwiede</groupId>
 	    <artifactId>jsch</artifactId>
 	    <version>0.2.0</version>
-	</dependency>
+	</dependency>-->
   </dependencies>
 
   <build>
