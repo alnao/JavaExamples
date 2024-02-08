@@ -12,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 */
-
+/*
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
@@ -21,7 +21,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
+*/
 public class App /*extends Application*/{
     public static void main( String[] args )    {
     	App.mateye();
@@ -49,10 +49,10 @@ public class App /*extends Application*/{
         System.out.println("mat = " + mat.dump());
     }
     public static void faseDetector(  )    {    
-        FaceDetector.start("/mnt/Dati/Dropbox/Foto/foto_20240101_tutto2023/PCeLavoro/IMG-20231022-WA0000.jpg"
-        		, "/home/alnao/out.jpg"
+        FaceDetector.start("in.jpg"
+        		, "out.jpg"
         		//#https://github.com/kipr/opencv/blob/master/data/haarcascades/haarcascade_frontalface_default.xml
-        		, "/mnt/Dati/Workspace/JavaExamples/GenericJava/13openCv/src/main/resources/haarcascade_frontalface_alt.xml");
+        		, "haarcascade_frontalface_alt.xml");
     }
 
     
