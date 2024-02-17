@@ -1,6 +1,6 @@
-package it.alnao.roguelike.bean;
+package it.alnao.jgame.bean;
 
-import it.alnao.roguelike.App;
+import it.alnao.jgame.App;
 import processing.core.PGraphics;
 
 public class Hero {

@@ -1,4 +1,4 @@
-package it.alnao.roguelike;
+package it.alnao.jgame;
 
 import static org.junit.Assert.assertTrue;
 

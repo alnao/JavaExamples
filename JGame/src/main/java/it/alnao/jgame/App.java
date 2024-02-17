@@ -1,6 +1,6 @@
-package it.alnao.roguelike;
+package it.alnao.jgame;
 
-import it.alnao.roguelike.bean.Hero;
+import it.alnao.jgame.bean.Hero;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
@@ -18,8 +18,8 @@ public class App extends PApplet{
         this.hero=new Hero(20,40); //start position
     }
     public static void main( String[] args ){
-        PApplet.main("it.alnao.roguelike.App");
-        System.out.println( "Hello World!" );
+        PApplet.main("it.alnao.jgame.App");
+        System.out.println( "Hello Alnao-jgame!" );
     }
     @Override
     public void settings(){
