@@ -19,6 +19,9 @@
 - 09: Gui with Swing 
 - 10: Soap server
 - 11: Rest server & client
+- 12: SFTP
+- 13: Open CV (Face detector with openCV library, required installed on system)
+- 14: testJUnit5
 
 
 ## Genenric commands for Java with Apache Maven:
