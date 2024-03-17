@@ -1,6 +1,16 @@
 # Alnao RogueLike 
 
-See https://www.youtube.com/watch?v=kumZYVKhn6I
+## Fonti
+
+- Base e Spritesheet: https://www.youtube.com/watch?v=kumZYVKhn6I
+
+- Spritesheet from https://kenney.nl/assets/1-bit-pack file "colored-transparent.png" > 
+
+- Tail e hero con indici e renderer https://www.youtube.com/watch?v=2yR5qEDRpgc
+
+- Movimenti hero https://www.youtube.com/watch?v=eaGwgPI27Ao riprendere dal minuto 25
+
+- Parte 3 https://www.youtube.com/watch?v=7CfJ0Z5ZhAA
 
 
 ## Create project
@@ -33,6 +43,4 @@ See https://www.youtube.com/watch?v=kumZYVKhn6I
     }
     ```
 
-## TODO
-    https://www.youtube.com/watch?v=kumZYVKhn6I
-    Riprendere dal 27:11
+
