@@ -33,7 +33,7 @@ public class App extends PApplet{
 
     @Override
     public void settings(){
-        size(PIXEL_DIMENSION,PIXEL_DIMENSION);
+        size(PIXEL_DIMENSION+10,PIXEL_DIMENSION+10);
     }
     @Override
     public void setup(){
@@ -73,10 +73,10 @@ public class App extends PApplet{
         int x=hero.getX();
         int y=hero.getY();
         //System.out.println(key);
-        if (key=='a'){ x--; /*hero.moveLeft(1);*/ }
-        if (key=='d'){ x++; /*hero.moveRight(1);*/ }
-        if (key=='w'){ y--; /*hero.moveUp(1);*/ }
-        if (key=='s'){ y++; /*hero.moveDown(1);*/ }
+        if (key=='a' || key =='z' || key =='q'){ x--; /*hero.moveLeft(1);*/ }
+        if (key=='d' || key =='e' || key =='c'){ x++; /*hero.moveRight(1);*/ }
+        if (key=='w' || key =='q' || key =='e'){ y--; /*hero.moveUp(1);*/ }
+        if (key=='s' || key =='z' || key =='c'){ y++; /*hero.moveDown(1);*/ }
         if (x>=DIMENSION || y>=DIMENSION || x<0 || y<0){ return; } 
         if (grid.getTile(x,y).isSolid() ) { return ;}
         hero.setPosition(x,y);
