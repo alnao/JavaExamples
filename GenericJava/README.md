@@ -4,6 +4,21 @@
         <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=plastic&logo=SpringBoot&logoColor=white" height="25px" />
 </a>
 
+## Contenuti
+- [Come creare e compilare un progetto con Maven](#Come-creare-e-compilare-un-progetto-con-Maven )
+- [Come gestire progetti Maven con Eclipse](#Come-gestire-progetti-Maven-con-Eclipse )
+- [Come creare applicazioni Web con servlet e JSP](#Come-creare-applicazioni-Web-con-servlet-e-JSP)
+- [Come usare tag e creare custom tag](#Come-usare-tag-e-creare-custom-tag)
+- [Come creare applicazioni web con Struts 1](#Come-creare-applicazioni-web-con-Struts-1)
+- [Come usare le taglib di Struts e JSTL](#Come-usare-le-taglib-di-Struts-e-JSTL)
+- [Come gestire connessioni a database con JDBC](#Come-gestire-connessioni-a-database-con-JDBC)
+- [Come gestire connessioni a database con Hibernate](#Come-gestire-connessioni-a-database-con-Hibernate)
+- [Come creare applicazioni grafiche con swag](#Come-creare-applicazioni-grafiche-con-swag)
+- [Come creare servizi SOAP e Rest con Axis2 e Jersey](#Come-creare-servizi-SOAP-e-Rest-con-Axis2-e-Jersey)
+- [Come usare i protocolli di rete SFTP e FTP](#Come-usare-i-protocolli-di-rete-SFTP-e-FTP)
+- [Cosa sono le Lambda Function in Java](#Cosa-sono-le-Lambda-Function-in-Java)
+- [Cosa è il Test Driven Development](#Cosa-è-il-Test-Driven-Development)
+
 ## Come creare e compilare un progetto con Maven
 
 Maven è uno tool creato dal team di Apache per la gestione della compilazione dei progetti Java con lo scopo di gestire e organizzare le dipendenze di un qualsiasi progetto. È pensato per semplificare il processo di compilazione e semplificare la gestione delle dipendenze del progetto. Apache Maven è ormai diventato uno strumento essenziale per qualsiasi sviluppatore Java diventato uno strumento standard universalmente usato. 
@@ -167,7 +182,7 @@ public class App {
 ```
 In ogni caso si rimanda sempre alla documentazione ufficiale per maggiori informazioni ed esempi.
 
-# Come gestire progetti Maven con Eclipse
+## Come gestire progetti Maven con Eclipse
 
 Eclipse è un ambiente di sviluppo (SDK), in questi articoli viene usato per la gestione di tutti i progetti Java, è possibile usare anche altri tool compatibili con Java-Maven come Visual Studio Code di Microsoft o i tool a pagamento come IntelliJ.
 
@@ -213,7 +228,7 @@ Per i progetti di questo tipo il programma mette a disposizione di compilazione 
 Eclipse dispone anche di una procedura per eseguire i debug di un progetto, per esempio inserendo un breakpoint in un punto del codice Java e poi cliccando sul sotto-menu "Debug" del progetto e  selezionando la voce "Java application".
 Questo articolo sarà integrato in futuro se in articoli di questa categoria saranno usate altre funzionalità di Eclipse per gestire progetti Maven, è disponibile una ricca la guida ufficiale del progetto m2eclipse per l'integrazione tra i due sistemi.
 
-# Come creare applicazioni Web-J2EE con servlet & JSP
+## Come creare applicazioni Web con servlet e JSP
 
 Per la creazione di applicazioni web Java mette a disposizione la tecnologia Java 2 Enterprise Edition (spesso abbreviata con la sigla J2EE), tecnica diventata negli anni uno standard molto usato in quanto robusto, sicuro ma anche flessibile. Il successo è dovuto soprattutto al linguaggio Java stesso che può fondersi con le tecnologie di frontend come HTML e Javascript. La tecnologia si può dividere in alcune componenti base. Si tratta delle tecnologie legate alla produzione di interfacce web dinamiche, le cui componenti si possono dividere in tre parti:
 - pagine web Java Server Pages (JSP), Java Server Faces (JSF), Custom Tag oppure framework specifici come Struts
@@ -375,7 +390,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+
 ```
 Questa tecnica di scrivere le pagine jsp è considerato deprecato e non dovrebbe essere usato, in passato molto codice è stato scritto con questi metodi ed è sempre bene conoscere le basi di testa tecnologia!
 
-# Come usare tag e creare custom-tag
+## Come usare tag e creare custom tag
 
 La caratteristica principale della programmazione di Java è l'uso delle classi e degli oggetti, esattamente come nei file di una classe, all'interno di un file jsp è possibile ed usare usare classi se importate ovviamente metatag:
 ```
@@ -1140,7 +1155,7 @@ Questa tecnica eviterebbe l'uso delle tante annotation nelle classi java, tuttav
 
 Questa libreria con queste tecnica permette di costruire applicazioni perfettamente in linea con la filosofia del MVC, dove Hibernate e il suo file di configurazione si prende il compido del Model, delegando ad altre librerie (come Struts o Spring) il compito di gestire le View e il controller.
 
-# Come creare applicazioni grafiche con swag
+## Come creare applicazioni grafiche con swag
 
 Con la sigla GUI (Graphical User Interface) si intendono le applicazioni con una interfaccia grafica che permette all'utente di iteragire con i dati, questo concetto comprende anche le applicazioni formate da finestre, bottoni, labels e così via. Le librerie Swing e JavaFX sono tra le due più comuni usate per creare applicazioni GUI con il linguaggio Java, in questo articolo sarà introdotta la prima libreria che è la più usata dai programmatori anche se è sempre meno usata visto che questo tipo di applicazioni è stato sostituito dalle applicazioni web. Questa si basa su'altra libreria AWT di cui è, de facto, una estensione, si rimanda ai tantissimi siti per maggiori informazioni riguardo alla libreria e le sue caratteristiche.
 
@@ -1540,6 +1555,10 @@ In questo semplice esempio sono stati usati i metodi:
 - assertTrue per una verifica statica, può essere usato per per far fallire automaticamente un test in un ramo di codice che non deve essere eseguito con il parametro false.
 Inoltre negli esempi si possono notare tutte diverse le annotazioni messe a disposizione dalla libreria, l'elenco completo di tutti i metodi disponibili e le varie annotazioni si può trovare alla documentazione ufficiale. 
 
+Consiglio di consultare anche un repository ricco di esempi:
+```
+https://github.com/eugenp/tutorials/blob/master/testing-modules/junit-5-basics/pom.xml
+```
 
 # AlNao.it
 Nessun contenuto in questo repository è stato creato con IA o automaticamente, tutto il codice è stato scritto con molta pazienza da Alberto Nao. Se il codice è stato preso da altri siti/progetti è sempre indicata la fonte. Per maggior informazioni visitare il sito [alnao.it](https://www.alnao.it/).
