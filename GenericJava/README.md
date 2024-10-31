@@ -18,6 +18,7 @@
 - [Come usare i protocolli di rete SFTP e FTP](#Come-usare-i-protocolli-di-rete-SFTP-e-FTP)
 - [Cosa sono le Lambda Function in Java](#Cosa-sono-le-Lambda-Function-in-Java)
 - [Cosa è il Test Driven Development](#Cosa-è-il-Test-Driven-Development)
+- [Come creare un processo Spark](#Come-creare-un-processo-Spark)
 
 ## Come creare e compilare un progetto con Maven
 
@@ -1558,6 +1559,128 @@ Inoltre negli esempi si possono notare tutte diverse le annotazioni messe a disp
 Consiglio di consultare anche un repository ricco di esempi:
 ```
 https://github.com/eugenp/tutorials/blob/master/testing-modules/junit-5-basics/pom.xml
+```
+
+
+## Come creare un processo Spark
+
+**Apache Spark** è un potente framework di elaborazione dei dati distribuito, ideale per il trattamento di grandi volumi di dati. Ecco come possiamo utilizzare Spark per leggere un file CSV, filtrare le persone con età maggiore di 40 anni e salvare il risultato in un nuovo file CSV. 
+
+Per crare il progetto lanciato il comando:
+```
+mvn archetype:generate -DgroupId=it.alnao -DartifactId=Spark
+```
+Nel pom.xml aggiunta le librerie:
+```
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-core_2.12</artifactId>
+        <version>3.4.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-sql_2.12</artifactId>
+        <version>3.4.0</version>
+    </dependency>
+```
+E il plugin del compilatore:
+```
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-dependency-plugin</artifactId>
+  <version>3.0.1</version>
+  <executions>
+    <execution>
+      <id>copy-dependencies</id>
+      <phase>package</phase>
+      <goals>
+        <goal>copy-dependencies</goal>
+      </goals>
+    </execution>
+  </executions>
+</plugin>
+<plugin>
+  <artifactId>maven-jar-plugin</artifactId>
+  <version>3.4.2</version>
+  <configuration>
+    <archive>
+      <manifest>
+        <addClasspath>true</addClasspath>
+        <classpathPrefix>dependency/</classpathPrefix>
+        <mainClass>it.alnao.App</mainClass>
+      </manifest>
+    </archive>
+  </configuration>
+</plugin>
+```
+Nella classe main aggiunti i comandi per la libreria Spark:
+```
+// Crea una sessione Spark
+SparkSession spark = SparkSession.builder().appName("FilterCSV").master("local[*]") .getOrCreate();
+
+// Leggi il file CSV
+Dataset<Row> df = spark.read().option("header", "true").option("inferSchema", "true").option("delimiter",";").csv(inputPath);
+
+// Filtra le persone con età > 40
+Dataset<Row> filteredDF = df.filter(df.col("age").gt(40));
+
+// Salva il risultato in un nuovo file CSV
+filteredDF.write().option("header", "true").option("delimiter",";").csv(outputPath);
+
+// Ferma la sessione Spark
+spark.stop();
+```
+Comandi per la compilazione e l'esecuzione
+```
+mvn clean dependency:copy-dependencies package
+java -jar target\Spark-1.0-SNAPSHOT.jar
+```
+
+**OpenCSV** è una libreria leggera e facile da usare per leggere e scrivere file CSV in Java. Ecco come possiamo utilizzare OpenCSV per ottenere lo stesso risultato. Per importare la libreria nei progetti nel file pom:
+```
+<dependency>
+    <groupId>com.opencsv</groupId>
+    <artifactId>opencsv</artifactId>
+    <version>5.7.1</version>
+</dependency>
+```
+e poi implementando la loca in ciclo for classico:
+```
+// Configura il lettore CSV per usare il punto e virgola come separatore
+try (CSVReader reader = new CSVReaderBuilder(new FileReader(inputPath))
+        .withCSVParser(new CSVParserBuilder().withSeparator(';').build())
+        .build()) {
+
+    List<String[]> allRows = new ArrayList<>();
+    String[] nextLine;
+    while ((nextLine = reader.readNext()) != null) {
+        allRows.add(nextLine);
+    }
+
+    // Filtra le persone con età > 40
+    List<String[]> filteredRows = new ArrayList<>();
+    if (!allRows.isEmpty()) {
+        // Aggiungi l'intestazione
+        filteredRows.add(allRows.get(0));
+        for (String[] row : allRows.subList(1, allRows.size())) {
+            int eta = Integer.parseInt(row[2]);
+            if (eta > 40) {
+                filteredRows.add(row);
+            }
+        }
+    }
+
+    // Configura lo scrittore CSV per usare il punto e virgola come separatore e disabilitare i doppi apici
+    try (CSVWriter writer = (CSVWriter) new CSVWriterBuilder(new FileWriter(outputPath))
+            .withSeparator(';')
+            .withQuoteChar(CSVWriter.NO_QUOTE_CHARACTER)
+            .build()) {
+        writer.writeAll(filteredRows);
+    }
+
+} catch (IOException e) {
+    e.printStackTrace();
+}
 ```
 
 # AlNao.it
