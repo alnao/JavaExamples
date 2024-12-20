@@ -5,8 +5,11 @@
 </a>
 
 ## Projects:
-- Aws Code Whisperer
-- Aws SDK Java
+- Aws 
+  - Code Whisperer
+  - Lambda Dynamo Examples
+  - Sdk
+  - S3Console
 - Corsi Vari
 - Generic Java
 - JGame
