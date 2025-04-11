@@ -1,5 +1,5 @@
 # Generic Java Examples
-<a href="https://www.alnao.it/javaee/"> 
+<a href="https://www.alnao.it/"> 
         <img src="https://img.shields.io/badge/Java-ED8B00?style=plastic&logo=openjdk&logoColor=white" height="25px"/>
         <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=plastic&logo=SpringBoot&logoColor=white" height="25px" />
 </a>

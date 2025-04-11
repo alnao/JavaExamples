@@ -1,0 +1,89 @@
+Core Spring Framework
+    @Component: Indica che una classe è un componente Spring.
+    @Service: Indica che una classe è un servizio (logica di business).
+    @Repository: Indica che una classe è un repository (accesso ai dati).
+    @Controller: Indica che una classe è un controller web MVC.
+    @RestController: Combina @Controller e @ResponseBody, per API REST.
+    @Configuration: Indica che una classe definisce bean di Spring.
+Dependency Injection
+    @Autowired: Inietta automaticamente le dipendenze.
+    @Qualifier: Specifica quale bean iniettare quando esistono più candidati.
+    @Value: Inietta valori da proprietà esterne.
+    @Resource: Alternativa a @Autowired (standard JSR-250).
+    @Inject: Alternativa a @Autowired (standard JSR-330).
+Bean Configuration
+    @Bean: Indica che un metodo produce un bean da registrare nel container.
+    @Scope: Definisce l'ambito di un bean (singleton, prototype, etc.).
+    @Primary: Indica un bean come scelta preferita quando ci sono più candidati.
+    @DependsOn: Specifica i bean che devono essere inizializzati prima di questo.
+    @Lazy: Inizializza il bean solo quando richiesto, non all'avvio.
+    @Profile: Specifica in quale profilo il bean deve essere registrato.
+Spring MVC
+    @RequestMapping: Mappa richieste web a metodi specifici.
+    @GetMapping: Abbreviazione per @RequestMapping(method = RequestMethod.GET).
+    @PostMapping: Abbreviazione per @RequestMapping(method = RequestMethod.POST).
+    @PutMapping: Abbreviazione per @RequestMapping(method = RequestMethod.PUT).
+    @DeleteMapping: Abbreviazione per @RequestMapping(method = RequestMethod.DELETE).
+    @PatchMapping: Abbreviazione per @RequestMapping(method = RequestMethod.PATCH).
+Parametri
+    @RequestParam: Estrae parametri dalla query string.
+    @PathVariable: Estrae valori dalle variabili nell'URL.
+    @RequestBody: Estrae il corpo della richiesta e lo deserializza.
+    @RequestHeader: Estrae valori dall'header della richiesta.
+    @CookieValue: Estrae valori dai cookie.
+    @ModelAttribute: Lega un parametro di metodo o un valore di ritorno a un attributo del model.
+Risposte
+    @ResponseBody: Indica che il valore di ritorno è serializzato direttamente nel corpo della risposta.
+    @ResponseStatus: Specifica lo status HTTP della risposta.
+    @ExceptionHandler: Gestisce le eccezioni lanciate dai metodi del controller.
+    @ControllerAdvice: Applica @ExceptionHandler e altre annotazioni a livello globale.
+    @RestControllerAdvice: Combina @ControllerAdvice e @ResponseBody.
+Spring Boot
+    @SpringBootApplication: Combina @Configuration, @EnableAutoConfiguration e @ComponentScan.
+    @EnableAutoConfiguration: Abilita l'auto-configurazione Spring Boot.
+    @ConfigurationProperties: Associa proprietà esterne a un bean.
+    @PropertySource: Indica da dove caricare i file di proprietà.
+    @ImportResource: Importa configurazioni XML.
+    @Import: Importa classi di configurazione.
+Testing
+    @SpringBootTest: Avvia il contesto Spring Boot per i test.
+    @WebMvcTest: Test per il layer MVC.
+    @DataJpaTest: Test per il layer JPA.
+    @MockBean: Crea e inietta un mock Mockito.
+    @SpyBean: Crea e inietta una spia Mockito.
+    @TestConfiguration: Definisce bean solo per i test.
+Spring Data JPA
+    @Entity: Indica che una classe è un'entità JPA.
+    @Table: Personalizza la tabella mappata dall'entità.
+    @Id: Indica il campo chiave primaria.
+    @GeneratedValue: Specifica la strategia di generazione per la chiave primaria.
+    @Column: Personalizza la colonna mappata da un campo.
+    @JoinColumn: Personalizza la colonna di join in una relazione.
+    @OneToMany, @ManyToOne, @OneToOne, @ManyToMany: Definiscono relazioni tra entità.
+    @Transactional: Indica che un metodo deve essere eseguito in una transazione.
+    @Query: Definisce una query personalizzata.
+    @Modifying: Indica che la query modifica i dati.
+Spring Security
+    @EnableWebSecurity: Abilita la sicurezza web Spring.
+    @EnableGlobalMethodSecurity: Abilita la sicurezza a livello di metodo.
+    @PreAuthorize, @PostAuthorize: Definiscono autorizzazioni prima o dopo l'esecuzione del metodo.
+    @Secured: Specifica i ruoli richiesti per accedere a un metodo.
+    @RolesAllowed: Alternativa a @Secured (standard JSR-250).
+    @AuthenticationPrincipal: Inietta il principal autenticato.
+Spring Cache
+    @EnableCaching: Abilita il supporto per il caching.
+    @Cacheable: Indica che il risultato di un metodo è memorizzabile in cache.
+    @CachePut: Aggiorna la cache senza influenzare l'esecuzione del metodo.
+    @CacheEvict: Rimuove voci dalla cache.
+    @Caching: Raggruppa più annotazioni di caching.
+Spring Cloud
+    @EnableEurekaServer: Crea un server di discovery Eureka.
+    @EnableEurekaClient: Abilita il client Eureka.
+    @EnableDiscoveryClient: Abilita client di discovery generici.
+    @EnableConfigServer: Crea un server di configurazione.
+    @EnableCircuitBreaker: Abilita i circuit breaker.
+    @HystrixCommand: Definisce un fallback per un metodo in caso di fallimento.
+    @EnableFeignClients: Abilita i client Feign.
+    @FeignClient: Definisce un client Feign.
+    @EnableZuulProxy: Abilita un gateway Zuul.
+    @LoadBalanced: Abilita il bilanciamento del carico per un componente.

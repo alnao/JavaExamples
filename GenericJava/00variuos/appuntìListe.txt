@@ -1,0 +1,42 @@
+
+        public List<Table> getAvailableTables(int numberOfPeople) {
+            List<Table> availableTables = new ArrayList<>();
+            for (Table table : tables) {
+                if (table.getCapacity() >= numberOfPeople && !table.isOccupied()) {
+                    availableTables.add(table);
+                }
+            }
+            return availableTables;
+        }
+-----------
+
+    public static Map<Category, List<Product>> getProductOrderByAmountGroupedByType(List<Product> products) {
+        if (products == null || products.isEmpty()) {
+            return new HashMap<>();
+        }
+        Map<Category, List<Product>> resultMap = new HashMap<>();
+        for (Product product : products) {// Raggruppiamo i prodotti per categoria
+            Category category = product.getCategory();
+            if (resultMap.containsKey(category)) {// Se la categoria è già nella mappa, aggiungiamo il prodotto alla lista esistente
+                List<Product> productList = resultMap.get(category);
+                productList.add(product);
+            } else {// Altrimenti, creiamo una nuova lista con il prodotto
+                List<Product> productList = new ArrayList<>();
+                productList.add(product);
+                resultMap.put(category, productList);
+            }
+        }
+-------------
+        System.out.println("\n---------- Test getProductOrderByAmountGroupedByType ----------");
+        Map<ProductOrderByAmountGroupedByType.Category, List<ProductOrderByAmountGroupedByType.Product>> productsByCategory = 
+            ProductOrderByAmountGroupedByType.getProductOrderByAmountGroupedByType(products);
+        
+        for (Map.Entry<ProductOrderByAmountGroupedByType.Category, List<ProductOrderByAmountGroupedByType.Product>> entry : productsByCategory.entrySet()) {
+            System.out.println("\nCategoria: " + entry.getKey().getName());
+            System.out.println("Prodotti ordinati per amount (prezzo * quantità):");
+            
+            for (ProductOrderByAmountGroupedByType.Product product : entry.getValue()) {
+                System.out.printf("  - %s: %.2f€ (quantità: %d, prezzo: %.2f€)\n", 
+                    product.getName(), product.getAmount(), product.getQuantity(), product.getPrice());
+            }
+        }

@@ -1,0 +1,55 @@
+Java utilizza un approccio sofisticato alla gestione della memoria che è fondamentalmente diverso da linguaggi come C o C++. Ecco una panoramica completa di come funziona:
+Modello di memoria in Java. La memoria in Java è organizzata in diverse aree:
+- Heap: Area di memoria dinamica dove vengono allocati tutti gli oggetti
+- Stack: Memorizza variabili locali e chiamate di metodo (una per ogni thread)
+- Metaspace (nelle versioni recenti, precedentemente chiamato PermGen): Memorizza metadati delle classi
+- Area di memoria nativa: Utilizzata per codice nativo (JNI)
+In Java, la memoria viene allocata automaticamente:
+- Gli oggetti vengono creati con l'operatore new e allocati nell'heap
+- Le variabili primitive locali e i riferimenti vengono memorizzati nello stack
+- L'allocazione di memoria è gestita dalla JVM (Java Virtual Machine)
+Garbage Collector (GC), che automatizza la deallocazione della memoria:
+- Il GC identifica gli oggetti non più raggiungibili (senza riferimenti attivi)
+- Recupera la memoria occupata da questi oggetti Opera in background, solitamente con algoritmi generazionali
+La maggior parte dei Garbage Collector moderni utilizza un approccio generazionale basato sull'osservazione che la maggior parte degli oggetti ha vita breve:
+- Young Generation: Area per oggetti appena creati
+- Suddivisa in Eden Space e due Survivor Spaces Utilizza algoritmi "copy collection" più efficienti
+- Old Generation: Area per oggetti di lunga durata Contiene oggetti "sopravvissuti" a diverse collezioni nella Young Generation
+Java offre diversi tipi di Garbage Collector, selezionabili mediante opzioni della JVM:
+- Serial Collector: Singolo thread, per piccole applicazioni
+- Parallel Collector: Multi-thread, massimizza il throughput
+- Concurrent Mark-Sweep (CMS): Minimizza le pause dell'applicazione
+- G1 Collector (Garbage First): Successore di CMS, default in Java 9+
+- ZGC (Java 11+) e Shenandoah (Java 12+): Minimizzano le pause per grandi heap
+Strategie di gestione della memoria
+- Oggetti senza riferimenti: Un oggetto diventa idoneo per la Garbage Collection quando non esistono più riferimenti ad esso:
+Java supporta diverse tipologie di riferimenti:
+- Strong Reference: Riferimento normale (non permette la GC)
+- Weak Reference: Permette la GC se non ci sono riferimenti forti
+- Soft Reference: Come i weak, ma resistono alla GC fino a quando non serve memoria
+- Phantom Reference: Utilizzati per rilevare quando un oggetto è stato fisicamente rimosso
+Il metodo System.gc() fornisce un suggerimento alla JVM di eseguire la Garbage Collection, ma non c'è garanzia che venga effettivamente eseguita:
+    javaCopySystem.gc();  // Suggerisce l'esecuzione del GC, ma potrebbe essere ignorato
+    Metodo finalize()
+    Il metodo finalize() viene chiamato prima che un oggetto venga raccolto dal GC, ma è deprecato nelle versioni recenti di Java:
+Nonostante il Garbage Collector, è possibile avere perdite di memoria (memory leaks) anche in Java:
+- Riferimenti non rilasciati: Mantenere riferimenti ad oggetti non più necessari
+- Cache senza limiti: Memorizzare oggetti in cache senza meccanismi di pulizia
+- Listener non rimossi: Mancata rimozione di listener di eventi
+- Classi interne statiche: Riferimenti non intenzionali all'oggetto esterno
+- ThreadLocal non pulite: Variabili ThreadLocal non rimosse in thread pool
+Java offre diversi strumenti per monitorare e diagnosticare problemi di memoria:
+- JConsole: Tool grafico per monitorare memoria, thread e classi
+- VisualVM: Tool più avanzato con profiling
+- Java Mission Control (JMC): Suite di strumenti di monitoraggio commerciale
+- jmap: Tool a riga di comando per dump della memoria
+- jstat: Statistiche della JVM
+- Java Flight Recorder (JFR): Registra eventi a basso livello
+Parametri della JVM per la gestione della memoria
+    La JVM può essere configurata con numerosi parametri:
+    Copy-Xms<size>       : Dimensione iniziale dell'heap
+    -Xmx<size>       : Dimensione massima dell'heap
+    -XX:NewSize=<n>  : Dimensione iniziale della Young Generation
+    -XX:MaxNewSize=<n>: Dimensione massima della Young Generation
+    -XX:+UseG1GC     : Utilizza il G1 Garbage Collector
+    -XX:+UseZGC      : Utilizza il Z Garbage Collector (Java 11+)

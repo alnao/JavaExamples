@@ -1,0 +1,106 @@
+Array in Java
+Gli array in Java sono strutture dati che permettono di memorizzare una collezione di elementi dello stesso tipo. Sono oggetti che contengono un numero fisso di valori di un singolo tipo. Ecco una panoramica completa con esempi.
+Caratteristiche principali: Sono oggetti (istanze della classe Object), Hanno una dimensione fissa definita alla creazione, Gli indici partono da 0, Memorizzano elementi dello stesso tipo (primitivi o riferimenti)
+Possono essere monodimensionali o multidimensionali
+Dichiarazione e inizializzazione Esistono diversi modi per dichiarare e inizializzare un array:
+    int[] numeri;  // Stile preferito
+    int numeri[];  // Stile alternativo
+// Allocazione
+    numeri = new int[5];  // Crea un array di 5 interi (tutti inizializzati a 0)
+// Dichiarazione e allocazione in un'unica istruzione
+    String[] nomi = new String[3];  // Array di 3 stringhe (tutte inizializzate a null)
+// Dichiarazione, allocazione e inizializzazione
+    int[] valori = {10, 20, 30, 40, 50};  // Inizializzazione mediante lista di valori
+// Alternativa per l'inizializzazione
+    int[] altriValori = new int[] {1, 2, 3, 4, 5};
+Proprietà length: Ogni array ha una proprietà length che indica il numero di elementi:
+    javaCopyint[] numeri = {10, 20, 30, 40, 50};
+    int dimensione = numeri.length;  // 5
+for (int numero : numeri) { // Ciclo for-each (introdotto in Java 5)
+    System.out.println("Valore: " + numero);
+}
+// Utilizzo di Arrays.stream (Java 8+)
+    Arrays.stream(numeri).forEach(numero -> System.out.println("Valore: " + numero));
+    Array multidimensionali
+Java supporta array multidimensionali, in pratica array di array:
+    javaCopy// Dichiarazione e allocazione
+    int[][] matrice = new int[3][4];  // Matrice 3x4
+    int[][] tabella = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+Array irregolari (jagged arrays)
+    In Java è possibile creare array multidimensionali in cui ogni riga può avere una lunghezza diversa:
+    javaCopyint[][] irregolare = new int[3][];
+    irregolare[0] = new int[2];
+    irregolare[1] = new int[4];
+Classi di utilità per gli array
+    La classe java.util.Arrays fornisce metodi utili per lavorare con gli array:
+    javaCopyint[] numeri = {5, 2, 9, 1, 7};
+// Ordinamento
+Arrays.sort(numeri);  // Ora numeri è {1, 2, 5, 7, 9}
+// Ricerca binaria (in un array ordinato)
+int indice = Arrays.binarySearch(numeri, 5);  // Restituisce 2
+
+// Confronto
+int[] altriNumeri = {1, 2, 5, 7, 9};
+boolean uguali = Arrays.equals(numeri, altriNumeri);  // true
+
+// Riempimento
+int[] vettore = new int[5];
+Arrays.fill(vettore, 10);  // Ora vettore è {10, 10, 10, 10, 10}
+
+// Conversione in stringa
+String rappresentazione = Arrays.toString(numeri);  // "[1, 2, 5, 7, 9]"
+
+// Copia
+int[] copia = Arrays.copyOf(numeri, numeri.length);
+int[] parteIniziale = Arrays.copyOf(numeri, 3);  // {1, 2, 5}
+int[] parteFinale = Arrays.copyOfRange(numeri, 2, 4);  // {5, 7}
+Esempio completo: Calcolo della media
+Ecco un esempio pratico che mostra come usare un array per calcolare la media di un insieme di valori:
+javaCopypublic class CalcoloMedia {
+    public static void main(String[] args) {
+        double[] temperature = {22.5, 25.3, 23.0, 26.8, 24.1, 23.5, 27.0};
+        
+        // Calcolo della somma
+        double somma = 0;
+        for (double temperatura : temperature) {
+            somma += temperatura;
+        }
+        
+        // Calcolo della media
+        double media = somma / temperature.length;
+        
+        System.out.printf("La temperatura media è: %.2f°C", media);
+    }
+}
+Passaggio di array ai metodi
+Gli array sono passati ai metodi per riferimento, quindi le modifiche all'array all'interno del metodo si riflettono sull'array originale:
+javaCopypublic class PassaggioArray {
+    public static void main(String[] args) {
+        int[] numeri = {1, 2, 3, 4, 5};
+        
+        System.out.println("Prima: " + Arrays.toString(numeri));
+        raddoppiaValori(numeri);
+        System.out.println("Dopo: " + Arrays.toString(numeri));
+    }
+    
+    public static void raddoppiaValori(int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            array[i] *= 2;
+        }
+    }
+}
+Questo codice stamperà:
+CopyPrima: [1, 2, 3, 4, 5]
+Dopo: [2, 4, 6, 8, 10]
+Limiti e considerazioni
+
+Gli array hanno dimensione fissa: una volta creati, non è possibile cambiarne la dimensione
+Per collezioni di dimensioni variabili, è preferibile usare ArrayList o altre classi di Collection
+L'accesso a un indice fuori dai limiti causa un'eccezione ArrayIndexOutOfBoundsException
+Gli array di tipo primitivo non possono contenere null, mentre gli array di oggetti possono
+
+Se hai bisogno di strutture dati più flessibili, Java offre l'interfaccia Collection e le sue implementazioni come ArrayList, LinkedList, HashSet e HashMap nel pacchetto java.util.

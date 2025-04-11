@@ -1,0 +1,2208 @@
+SOLID
+S - Single Responsibility Principle (Principio di Responsabilità Singola) Ogni classe dovrebbe avere una sola responsabilità o funzione
+O - Open/Closed Principle (Principio Aperto/Chiuso) Le entità software dovrebbero essere aperte all'estensione ma chiuse alla modifica Dovresti poter aggiungere nuove funzionalità senza modificare
+L - Liskov Substitution Principle (Principio di Sostituzione di Liskov) Un oggetto di una sottoclasse deve poter sostituire un oggetto della classe padre senza alterare la correttezza del programma
+I - Interface Segregation Principle (Principio di Segregazione dell'Interfaccia) Meglio avere molte interfacce specifiche che una sola interfaccia generale
+D - Dependency Inversion Principle (Principio di Inversione delle Dipendenze) I moduli di alto livello non dovrebbero dipendere da moduli di basso livello, entrambi dovrebbero dipendere da astrazioni
+	Le astrazioni non dovrebbero dipendere dai dettagli, i dettagli dovrebbero dipendere dalle astrazioni
+Java Spring
+	@Configuration Questa annotazione indica a Spring che la classe è una fonte di definizioni di bean. Le classi con @Configuration vengono elaborate durante l'avvio dell'applicazione per creare e configurare i bean del contesto applicativo
+	@Bean L'annotazione @Bean viene applicata a metodi all'interno di classi @Configuration per dichiarare che l'oggetto restituito dal metodo deve essere registrato come bean nel contesto Spring. 
+	Questi metodi fungono da "factory" per la creazione di oggetti gestiti da Spring. I bean così definiti possono:
+		@Controller è stata introdotta con Spring MVC molto prima dell'esistenza di Spring Boot. È una specializzazione dell'annotazione @Component usata per identificare le classi che fungono da controller nell'architettura MVC (Model-View-Controller) 
+		@RequestMapping si trova nel pacchetto org.springframework.web.bind.annotation ed è una delle annotazioni fondamentali di Spring MVC, utilizzata per mappare le richieste web ai metodi del controller.
+Singleton (default): Un solo oggetto viene creato e condiviso per tutti i riferimenti a quel bean L'istanza viene creata all'avvio del contesto Spring e gestita dal container
+    Lo stesso oggetto viene restituito ogni volta che il bean viene richiesto. È thread-safe solo se implementato in modo thread-safe. Ottimizza l'uso della memoria e migliora le prestazioni Ideale per bean stateless o con stato condiviso
+Prototype: Una nuova istanza viene creata ogni volta che il bean viene richiesto, Spring non gestisce completamente il ciclo di vita (non chiama distruttori)
+    Ogni componente che richiede il bean riceve una propria copia indipendente. Utile quando lo stato del bean è unico per ogni cliente Consuma più memoria quando richiesto frequentemente Ideale per bean stateful che non devono condividere stato
+Piramide Test
+    Unit Test: Verificano il funzionamento corretto di singole unità di codice in isolamento, tipicamente metodi o classi, utilizzando mock, given->when->then 
+    Component Test: Testano l'interazione tra componenti correlati all'interno di un modulo o sottosistema, verificando il loro comportamento collettivo senza applicazione
+    Integration Test: Verificano che gruppi di componenti o moduli funzionino correttamente insieme, spesso includendo database e altri servizi esterni reali.
+    API Test: Controllano la correttezza, affidabilità e sicurezza delle interfacce API dell'applicazione, simulando le richieste degli utenti o di altri sistemi.
+    UI Test (E2E): Simulano l'interazione dell'utente finale con l'applicazione attraverso l'interfaccia utente, verificando scenari completi dall'inizio alla fine.
+Domante varie
+    Lib vs Framework
+        Una libreria è una collezione di funzioni o componenti riutilizzabili che il tuo codice chiama quando ne hai bisogno. Tu mantieni il controllo del flusso dell'applicazione e decidi quando e dove utilizzare le funzionalità 
+        Un framework definisce l'architettura completa dell'applicazione, fornendo strutture, linee guida e punti specifici dove inserire il tuo codice. Il framework ha il controllo del flusso generale e chiama il tuo codice quando 
+    Memoria:
+        heap: crea oggetti in JVM con i new, array
+        stack: tipi primitivi, riferimenti, variabili locali? in blocchi,
+    Java utilizza riferimenti anziché puntatori diretti Spring Boot: Spring Boot crea e gestisce i bean nel suo container IoC
+        WeakReference<Person> weakPerson = new WeakReference<>(person) Gli oggetti con solo weak references possono essere raccolti durante il ciclo di garbage collection
+            SoftReference<Person> softPerson = new SoftReference<>(person); Simili ai weak references, ma raccolti solo quando la memoria è scarsa
+    Spring Boot: è un framework che semplifica enormemente la creazione di applicazioni Java. configurando automaticamente molti componenti necessari, così che gli sviluppatori possano concentrarsi sulla logica dell'applicazione invece che sulla configurazione.
+    L'incapsulamento è nascondere i dettagli interni di implementazione di una classe e fornire un'interfaccia controllata per interagire con essa. Nasconde i dati, Espone metodi controllati, Vantaggi: dell'incapsulamento(flessibilita,controllo, manutenzione)
+    Le interfacce in Java sono collezioni di metodi astratti (senza implementazione) e costanti che definiscono ciò che una classe deve fare, senza specificare come farlo
+    J2EE (ora chiamato Jakarta EE, precedentemente Java EE) e Spring Boot è significativa, anche se entrambi sono framework per lo sviluppo di applicazioni enterprise in Java:
+        In sintesi, mentre Jakarta EE è uno standard formale che richiede compatibilità con specifiche precise, Spring Boot è un framework più agile che privilegia la produttività e la semplicità di sviluppo
+    Overload: In Java, l'overload consente di definire più metodi con lo stesso nome nella stessa classe ma con parametri diversi (per numero, tipo o ordine).
+    Override: L'override permette a una sottoclasse di fornire una propria implementazione di un metodo già definito nella superclasse, mantenendo la stessa firma.
+    ORM (Object-Relational Mapping) è un tecnica di programmazione che converte dati tra sistemi di tipo incompatibili in linguaggi di programmazione orientati agli oggetti. 
+    	In pratica, un ORM è un framework software che permette di mappare oggetti di un linguaggio di programmazione (come Java, C#, Python) a tabelle di un database relazionale. "database virtuale orientato agli oggetti" all'interno del codice
+        Interagire con il database usando il paradigma orientato agli oggetti,     Astrarre la logica di persistenza dei dati,  Ridurre la quantità di codice necessario per operazioni CRUD , Gestire automaticamente le relazioni tra entità (one-to-many, many-to-many
+Scrum
+	Agile: Una filosofia di sviluppo software iterativa e collaborativa che valorizza l'adattabilità, il feedback continuo e la consegna incrementale di valore.
+	Scrum: Un framework Agile strutturato che definisce ruoli specifici (Product Owner, Scrum Master, Team), eventi timeboxed (Sprint, Daily Scrum) e artefatti (Product Backlog, Sprint Backlog) per implementare processi di sviluppo.
+	Sprint: periodi di lavoro brevi (solitamente 2-4 settimane)
+	Ruoli definiti: Product Owner (decide le priorità), Scrum Master (facilita il processo), Development Team (realizza il lavoro)
+	Cerimonie regolari:
+	    Daily Standup (breve riunione quotidiana), 	    Sprint Planning (pianificazione del lavoro) ,	    Sprint Review (presentazione dei risultati) , 	    Sprint Retrospective (riflessione sul processo)
+	Artifact: Product Backlog (lista di tutte le funzionalità desiderate), Sprint Backlog (lavoro specifico dello sprint), Increment (prodotto funzionante)
+	Scrum è particolarmente efficace quando i requisiti cambiano frequentemente o non sono completamente chiari all'inizio del progetto.
+Evoluzione delle versioni Java stabili dalla 8 in poi
+	Java 8 (LTS, marzo 2014) 		Espressioni lambda e interfacce funzionali	Stream API per elaborazione dati dichiarativa 	Date and Time API (java.time)	Metodi default nelle interfacce
+	Java 11 (LTS, settembre 2018)	Esecuzione file sorgente senza compilazione (java NomeFile.java)	API client HTTP standardizzata	Nuovi metodi per String (isBlank, lines, strip)		Inferenza di tipo var per parametri lambda
+	Java 17 (LTS, settembre 2021)	Pattern matching per instanceof				Record (classi immutabili di dati)		Sealed classes per limitare la gerarchia di ereditarietà	Miglioramento dei text block introdotti in Java 15
+	Java 21 (LTS, settembre 2023)	Pattern matching per switch				Record patterns					Sequenced Collections				Virtual threads per concorrenza scalabile
+
+
+Documentazione: OpenAPI e Swagger, actuator
+---------------------
+
+Array 1: 123456. Array 2: 264153. Dimostrare se l’array è ordinato oppure no
+public class VerificaOrdinamento {
+    public static boolean isOrdinato(int[] array) {
+        if (array == null || array.length <= 1) {
+            return true; // Array vuoto o con un solo elemento è sempre ordinato
+        }
+
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] < array[i-1]) {
+                return false; // Se un elemento è minore del precedente, l'array non è ordinato
+            }
+        }
+        return true; // Se abbiamo attraversato tutto l'array senza trovare elementi fuori ordine
+    }
+
+    public static void main(String[] args) {
+        int[] array1 = {1, 2, 3, 4, 5, 6};
+        int[] array2 = {2, 6, 4, 1, 5, 3};
+
+        System.out.println("Array 1 è ordinato: " + isOrdinato(array1));
+        System.out.println("Array 2 è ordinato: " + isOrdinato(array2));
+    }
+}
+
+Array: «dog cat cat cow cow cow». Ricavare il numero di occorrenze per ogni elemento
+    import java.util.HashMap;
+    import java.util.Map;
+    public class ContaOccorrenze {
+        public static void main(String[] args) {
+            String[] array = {"dog", "cat", "cat", "cow", "cow", "cow"};
+            // Utilizziamo una HashMap per contare le occorrenze
+            Map<String, Integer> occorrenze = new HashMap<>();
+            // Iteriamo attraverso l'array e contiamo le occorrenze
+            for (String elemento : array) {
+                // Se l'elemento è già presente, incrementiamo il contatore
+                // altrimenti lo aggiungiamo con contatore 1
+                occorrenze.put(elemento, occorrenze.getOrDefault(elemento, 0) + 1);
+            }
+            // Stampiamo il risultato
+            for (Map.Entry<String, Integer> entry : occorrenze.entrySet()) {
+                System.out.println(entry.getKey() + ": " + entry.getValue());
+            }
+        }
+    }
+Ricreare ex-novo a livello logico una LinkedList (rami e foglie)
+    public class CustomLinkedList<T> {
+        // Definizione del nodo interno (ramo)
+        private class Node {
+            T data;       // Il dato contenuto nel nodo (foglia)
+            Node next;    // Riferimento al nodo successivo
+
+            // Costruttore del nodo
+            public Node(T data) {
+                this.data = data;
+                this.next = null;
+            }
+        }
+
+        // Attributi della LinkedList
+        private Node head;    // Testa della lista
+        private Node tail;    // Coda della lista
+        private int size;     // Dimensione della lista
+
+        // Costruttore della LinkedList
+        public CustomLinkedList() {
+            this.head = null;
+            this.tail = null;
+            this.size = 0;
+        }
+        ...
+Ricreare ex-novo a livello logico lo Stack/Pila
+    public class CustomStack<T> {
+        // Definizione del nodo interno
+        private class Node {
+            T data;        // Il dato contenuto nel nodo
+            Node next;     // Riferimento al nodo successivo
+            // Costruttore del nodo
+            public Node(T data) {
+                this.data = data;
+                this.next = null;
+            }
+        }
+
+        // Attributi dello stack
+        private Node top;      // Cima dello stack
+        private int size;      // Dimensione dello stack
+
+        // Costruttore dello stack
+        public CustomStack() {
+            this.top = null;
+            this.size = 0;
+        }
+
+Fare una classe di nome «employed» che abbia come unico attributo un’intero e fornire un’implementazione delle classi «manager» ed «employed administrator»
+    // Classe base Employed
+    public class Employed {
+        protected int employeeId; // Attributo intero
+    }
+    // Sottoclasse Manager
+    public class Manager extends Employed {
+        private int teamSize;       // Numero di persone gestite
+        private String department;  // Dipartimento gestito
+
+        // Costruttore
+        public Manager(int employeeId, int teamSize, String department) {
+            super(employeeId);      // Chiama il costruttore della classe base
+            this.teamSize = teamSize;
+            this.department = department;
+        }
+    }
+    // Sottoclasse EmployedAdministrator
+    public class EmployedAdministrator extends Employed {
+        private String adminRole;           // Ruolo amministrativo
+        private String accessLevel;         // Livello di accesso
+        // Costruttore
+        public EmployedAdministrator(int employeeId, String adminRole, String accessLevel) {
+            super(employeeId);              // Chiama il costruttore della classe base
+            this.adminRole = adminRole;
+            this.accessLevel = accessLevel;
+        }
+    }
+Implementare un albero n-ario
+    import java.util.*;
+    public class TreeNode<T> {
+        private T data;                        // Dato contenuto nel nodo
+        private List<TreeNode<T>> children;    // Lista dei figli
+        private TreeNode<T> parent;            // Riferimento al nodo genitore
+        public TreeNode(T data) {
+            this.data = data;
+            this.children = new ArrayList<>();
+            this.parent = null;
+        }
+        public void addChild(TreeNode<T> child) {
+            child.parent = this;
+            children.add(child);
+        }
+        public TreeNode<T> addChild(T data) {
+            TreeNode<T> child = new TreeNode<>(data);
+            child.parent = this;
+            children.add(child);
+            return child;
+        }
+        public int getChildCount() {
+            return children.size();
+        }
+        public boolean isLeaf() {
+            return children.isEmpty();
+        }
+        public boolean isRoot() {
+            return parent == null;
+        }
+Verificare se 2 stringhe sono una l’anagramma dell’altra. (Utilizzare una HashMap)
+    import java.util.HashMap;
+    import java.util.Map;
+    public class AnagramChecker {
+        public static boolean areAnagrams(String str1, String str2) {
+            // Verifica casi base
+            if (str1 == null || str2 == null) {
+                return false;
+            }
+            // Rimuovi spazi e converti in minuscolo per un confronto più flessibile
+            str1 = str1.replaceAll("\\s", "").toLowerCase();
+            str2 = str2.replaceAll("\\s", "").toLowerCase();
+            // Se le lunghezze sono diverse, non possono essere anagrammi
+            if (str1.length() != str2.length()) {
+                return false;
+            }
+            // Usa una HashMap per contare i caratteri della prima stringa
+            Map<Character, Integer> charCountMap = new HashMap<>();
+            // Incrementa il conteggio per ogni carattere della prima stringa
+            for (char c : str1.toCharArray()) {
+                charCountMap.put(c, charCountMap.getOrDefault(c, 0) + 1);
+            }
+            // Decrementa il conteggio per ogni carattere della seconda stringa
+            for (char c : str2.toCharArray()) {
+                // Se il carattere non esiste nella mappa o ha conteggio 0, non è un anagramma
+                if (!charCountMap.containsKey(c) || charCountMap.get(c) == 0) {
+                    return false;
+                }
+                charCountMap.put(c, charCountMap.get(c) - 1);
+            }
+            // Se tutti i conteggi sono stati decrementati correttamente, le stringhe sono anagrammi
+            return true;
+        }
+        public static void main(String[] args) {
+            // Test cases
+            String[][] testCases = {
+                {"listen", "silent"},             // anagrammi
+                {"hello", "hello"},               // stessa parola
+                {"triangle", "integral"},         // anagrammi
+                {"conversation", "conservation"}, // anagrammi
+                {"hello", "world"},               // non anagrammi
+                {"abc", "abcd"},                  // lunghezze diverse
+                {"rail safety", "fairy tales"},   // anagrammi con spazi
+                {"William Shakespeare", "I am a weakish speller"}, // anagrammi famosi
+                {"", ""},                         // stringhe vuote
+                {"a", "a"}                        // singolo carattere
+            };
+
+            for (String[] test : testCases) {
+                boolean result = areAnagrams(test[0], test[1]);
+                System.out.println("\"" + test[0] + "\" e \"" + test[1] + "\" sono anagrammi? " + result);
+            }
+        }
+    }
+Ecco un'implementazione in Java che verifica se due stringhe sono palindrome utilizzando una HashMap:
+    public static boolean isPalindrome(String str) {
+        // Verifica caso base
+        if (str == null) {
+            return false;
+        }
+        // Rimuovi spazi e converti in minuscolo per un confronto più flessibile
+        str = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        int left = 0;
+        int right = str.length() - 1;
+        // Confronta i caratteri simmetrici rispetto al centro
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+---------------------
+da qui su code
+---------------------
+Esercizio università
+    import java.util.ArrayList;
+    import java.util.List;
+    // Classe base Persona
+    class Persona {
+        private String nome;
+        private String cognome;
+        public Persona(String nome, String cognome) {
+            this.nome = nome;
+            this.cognome = cognome;
+        }
+    }
+    // Classe Studente che eredita da Persona
+    class Studente extends Persona {
+        private String matricola;
+        private String universita;
+        public Studente(String nome, String cognome, String matricola, String universita) {
+            super(nome, cognome);
+            this.matricola = matricola;
+            this.universita = universita;
+        }
+        public String getMatricola() {
+            return matricola;
+        }
+        public String getUniversita() {
+            return universita;
+        }
+    }
+    // Classe Docente che eredita da Persona
+    class Docente extends Persona {
+        private String materia;
+        private double salario;
+        public Docente(String nome, String cognome, String materia, double salario) {
+            super(nome, cognome);
+            this.materia = materia;
+            this.salario = salario;
+        }
+    }
+    // Classe Università che gestisce studenti e docenti
+    class Universita {
+        private String nome;
+        private List<Studente> studenti;
+        private List<Docente> docenti;
+
+        public Universita(String nome) {
+            this.nome = nome;
+            this.studenti = new ArrayList<>();
+            this.docenti = new ArrayList<>();
+        }
+        public void aggiungiStudente(Studente studente) {
+            studenti.add(studente);
+        }
+        public void aggiungiDocente(Docente docente) {
+            docenti.add(docente);
+        }
+        public void stampaPersone() {
+            System.out.println("Persone dell'Università " + nome + ":");
+            System.out.println("\nDocenti:");
+            for (Docente docente : docenti) {
+                docente.stampaInfo();
+            }
+
+            System.out.println("\nStudenti:");
+            for (Studente studente : studenti) {
+                studente.stampaInfo();
+            }
+        }
+        public Docente getDocenteConSalarioPiuAlto() {
+            if (docenti.isEmpty()) {
+                return null;
+            }
+            Docente docenteMaxSalario = docenti.get(0);
+            for (Docente docente : docenti) {
+                if (docente.getSalario() > docenteMaxSalario.getSalario()) {
+                    docenteMaxSalario = docente;
+                }
+            }
+            return docenteMaxSalario;
+        }
+        // Metodo per creare un array di tutte le persone (studenti e docenti)
+        public List<Persona> getElencoPersone() {
+            List<Persona> persone = new ArrayList<>();
+            // Aggiungi tutti i docenti (sono anche persone)
+            persone.addAll(docenti);
+            // Aggiungi tutti gli studenti (sono anche persone)
+            persone.addAll(studenti);
+            return persone;
+        }
+        // Metodo per stampare tutte le persone
+        public void stampaElencoPersone() {
+            List<Persona> persone = getElencoPersone();
+            System.out.println("Elenco completo delle persone nell'Università " + nome + ":");
+            for (Persona persona : persone) {
+                persona.stampaInfo();
+            }
+        }
+    }
+
+    // Classe di test
+    public class GestioneUniversita {
+        public static void main(String[] args) {
+            // Creazione università
+            Universita uniPd = new Universita("Università di Padova");
+
+            // Aggiunta docenti
+            uniPd.aggiungiDocente(new Docente("Mario", "Rossi", "Matematica", 45000.0));
+            uniPd.aggiungiDocente(new Docente("Laura", "Bianchi", "Fisica", 52000.0));
+            uniPd.aggiungiDocente(new Docente("Giovanni", "Verdi", "Informatica", 48000.0));
+
+            // Aggiunta studenti
+            uniPd.aggiungiStudente(new Studente("Andrea", "Neri", "S123456", "Università di Padova"));
+            uniPd.aggiungiStudente(new Studente("Paola", "Gialli", "S789012", "Università di Padova"));
+            uniPd.aggiungiStudente(new Studente("Marco", "Blu", "S345678", "Università di Padova"));
+
+            // Stampa tutte le persone
+            uniPd.stampaPersone();
+
+            // Trova e stampa il docente con il salario più alto
+            Docente docenteMaxSalario = uniPd.getDocenteConSalarioPiuAlto();
+            System.out.println("\nDocente con il salario più alto:");
+            if (docenteMaxSalario != null) {
+                docenteMaxSalario.stampaInfo();
+            } else {
+                System.out.println("Nessun docente trovato.");
+            }
+
+            // Stampa l'elenco completo di persone
+            System.out.println("\nElenco completo:");
+            uniPd.stampaElencoPersone();
+        }
+    }
+    Singleton
+        Costruttore privato:
+            private Universita(String nome) {
+                this.nome = nome;
+                this.studenti = new ArrayList<>();
+                this.docenti = new ArrayList<>();
+            }
+        Istanza statica privata:
+            private static Universita instance;
+        Metodo statico per ottenere l'istanza:
+            public static Universita getInstance(String nome) {
+                if (instance == null) {
+                    instance = new Universita(nome);
+                }
+                return instance;
+            }
+        Modifica nell'utilizzo della classe:
+        // Prima:
+            Universita uniPd = new Universita("Università di Padova");
+        // Dopo:
+            Universita uniPd = Universita.getInstance("Università di Padova");
+- Scrivere una classe IntWrapper che abbia come unico attributo un intero e lo esponga all'esterno. Fornire un'implementazione dell'interfaccia SimpleStack o GenericStack Per implementare lo stack utilizzare un array di dimensione 1
+    // Classe IntWrapper che incapsula un intero
+    class IntWrapper {
+        private int value;
+
+        // Costruttore
+        public IntWrapper(int value) {
+            this.value = value;
+        }
+
+        // Getter
+        public int getValue() {
+            return value;
+        }
+
+        // Setter
+        public void setValue(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return Integer.toString(value);
+        }
+    }
+    // Interfaccia per uno stack generico
+    interface GenericStack<T> {
+        void push(T item);
+        T pop();
+        T peek();
+        boolean isEmpty();
+        boolean isFull();
+    }
+    // Implementazione dello stack con array di dimensione 1
+    class SingleElementStack<T> implements GenericStack<T> {
+        private T[] stack;
+        private int top;
+        @SuppressWarnings("unchecked")
+        public SingleElementStack() {
+            stack = (T[]) new Object[1];
+            top = -1; // Stack vuoto
+        }
+        @Override
+        public void push(T item) {
+            if (isFull()) {
+                throw new IllegalStateException("Stack è pieno");
+            }
+            stack[++top] = item;
+        }
+        @Override
+        public T pop() {
+            if (isEmpty()) {
+                throw new IllegalStateException("Stack è vuoto");
+            }
+            return stack[top--];
+        }
+        @Override
+        public T peek() {
+            if (isEmpty()) {
+                throw new IllegalStateException("Stack è vuoto");
+            }
+            return stack[top];
+        }
+        @Override
+        public boolean isEmpty() {
+            return top == -1;
+        }
+        @Override
+        public boolean isFull() {
+            return top == stack.length - 1;
+        }
+    }
+Scrivi in java super classe Employee e due classi Manager e developer estendono la Employee, la classe Employee con un costruttore che riceve un double chiamato baseRank e che espone due metodi 1) abstract method getRankMultiplier senza parametri che me rigotna un rankMultiplier, il secondo concreto getRank che ritorna il valore di baseRank * rankMultiplier
+    TODO
+
+
+definire una classe immutabile (importante che sia immutabile) MyObject avente unico valore "value" di tipo String con getter. definire classe AnagramChecker con metodo per verificare se due oggetti MyObject sono anagrammi. Fornire anche una classe di test.
+    // Classe immutabile MyObject
+    public final class MyObject {
+        private final String value;
+        public MyObject(String value) {
+            this.value = value != null ? value : "";
+        }
+        public String getValue() {
+            return value;
+        }
+        @Override
+        public String toString() {
+            return "MyObject[value=" + value + "]";
+        }
+    }
+    // Classe AnagramChecker per verificare se due MyObject sono anagrammi
+    public class AnagramChecker {
+        public static boolean areAnagrams(MyObject obj1, MyObject obj2) {
+            // Verifica parametri nulli
+            if (obj1 == null || obj2 == null) {
+                return false;
+            }
+
+            String str1 = obj1.getValue();
+            String str2 = obj2.getValue();
+
+            // Se le lunghezze sono diverse, non possono essere anagrammi
+            if (str1.length() != str2.length()) {
+                return false;
+            }
+
+            // Utilizza un array di conteggio dei caratteri
+            int[] charCount = new int[256]; // Assumiamo ASCII
+
+            // Incrementa il conteggio per ogni carattere nella prima stringa
+            for (char c : str1.toCharArray()) {
+                charCount[c]++;
+            }
+
+            // Decrementa il conteggio per ogni carattere nella seconda stringa
+            for (char c : str2.toCharArray()) {
+                charCount[c]--;
+                // Se troviamo un carattere non presente nella prima stringa
+                if (charCount[c] < 0) {
+                    return false;
+                }
+            }
+
+            // Tutte le occorrenze si sono annullate, quindi sono anagrammi
+            return true;
+        }
+    }
+
+    // Classe di test
+    public class AnagramTest {
+        public static void main(String[] args) {
+            // Test case 1: anagrammi
+            MyObject obj1 = new MyObject("listen");
+            MyObject obj2 = new MyObject("silent");
+            System.out.println("Test 1 - '" + obj1.getValue() + "' e '" + obj2.getValue() +
+                            "' sono anagrammi: " + AnagramChecker.areAnagrams(obj1, obj2));
+
+            // Test case 2: non anagrammi
+            MyObject obj3 = new MyObject("hello");
+            MyObject obj4 = new MyObject("world");
+            System.out.println("Test 2 - '" + obj3.getValue() + "' e '" + obj4.getValue() +
+                            "' sono anagrammi: " + AnagramChecker.areAnagrams(obj3, obj4));
+
+            // Test case 3: stessa parola
+            MyObject obj5 = new MyObject("test");
+            MyObject obj6 = new MyObject("test");
+            System.out.println("Test 3 - '" + obj5.getValue() + "' e '" + obj6.getValue() +
+                            "' sono anagrammi: " + AnagramChecker.areAnagrams(obj5, obj6));
+
+            // Test case 4: case sensitive
+            MyObject obj7 = new MyObject("State");
+            MyObject obj8 = new MyObject("Taste");
+            System.out.println("Test 4 - '" + obj7.getValue() + "' e '" + obj8.getValue() +
+                            "' sono anagrammi: " + AnagramChecker.areAnagrams(obj7, obj8));
+
+            // Test case 5: spazi
+            MyObject obj9 = new MyObject("rail safety");
+            MyObject obj10 = new MyObject("fairy tales");
+            System.out.println("Test 5 - '" + obj9.getValue() + "' e '" + obj10.getValue() +
+                            "' sono anagrammi: " + AnagramChecker.areAnagrams(obj9, obj10));
+
+            // Test case 6: null
+            MyObject obj11
+    }
+modifica anagramChecker in modo che isAnagram sia in grado di lavorare non solo con MyObject
+    public static boolean isAnagram(Object obj1, Object obj2) {
+        if (obj1 == null || obj2 == null) {
+            return false;
+        }
+
+        // Se sono entrambi MyObject, usa il metodo specifico
+        if (obj1 instanceof MyObject && obj2 instanceof MyObject) {
+            return areAnagrams((MyObject)obj1, (MyObject)obj2);
+        }
+
+        // Altrimenti, utilizza toString() degli oggetti
+        return isAnagram(obj1.toString(), obj2.toString());
+    }
+
+scrivi i  test con JUnit5 fatti bene
+    @Test
+    @DisplayName("Should return true for MyObjects with anagram values")
+    void shouldReturnTrueForAnagrams() {
+        MyObject obj1 = new MyObject("listen");
+        MyObject obj2 = new MyObject("silent");
+        assertTrue(AnagramChecker.areAnagrams(obj1, obj2));
+    }
+in java implementa classe astratta Shape con metodo getArea (double) e metodo getType (stringa), due sottoclassi Rectangle con metodo base per altezza e Circle con raggio. Classe Main con metodo getAreaSumByType che prende una lista di Shape e restituisce una struttura dati che indica, per ogni tipo di figura in input, la somma delle areea delle figure di quel tipo e la struttura risultante deve essere ordinata per l campo type. Secondo metodo getShapesOrderByAreaGroupedByType che prende una lista di shape in input e restituisce una struttura dati che contiene ogni figura nell'elenco in input ordinata per area in ordine crescente
+    // Classe astratta Shape
+    abstract class Shape {
+        public abstract double getArea();
+        public abstract String getType();
+    }
+    class Rectangle extends Shape {
+        private double base;
+        private double height;
+        public Rectangle(double base, double height) {
+            this.base = base;
+            this.height = height;
+        }
+        @Override
+        public double getArea() {
+            return base * height;
+        }
+        @Override
+        public String getType() {
+            return "Rectangle";
+        }
+    }
+    class Circle extends Shape {
+        private double radius;
+        public Circle(double radius) {
+            this.radius = radius;
+        }
+        @Override
+        public double getArea() {
+            return Math.PI * radius * radius;
+        }
+        @Override
+        public String getType() {
+            return "Circle";
+        }
+        public double getRadius() {
+            return radius;
+        }
+    }
+    // Classe Main con i metodi richiesti
+    public class Main {
+        // Restituisce la somma delle aree per tipo, ordinata per tipo
+        public static Map<String, Double> getAreaSumByType(List<Shape> shapes) {
+            // Utilizzo di una mappa per accumulare le somme delle aree per tipo
+            Map<String, Double> areaSumByType = new HashMap<>();
+            // Calcolo della somma delle aree per ciascun tipo
+            for (Shape shape : shapes) {
+                String type = shape.getType();
+                double area = shape.getArea();
+                areaSumByType.put(type, areaSumByType.getOrDefault(type, 0.0) + area);
+            }
+            // Conversione in TreeMap per l'ordinamento per chiave (tipo)
+            return new TreeMap<>(areaSumByType);
+        }
+        // Restituisce le shape raggruppate per tipo e ordinate per area
+        public static Map<String, List<Shape>> getShapesOrderByAreaGroupedByType(List<Shape> shapes) {
+            // Raggruppa per tipo usando TreeMap per l'ordinamento automatico delle chiavi
+            Map<String, List<Shape>> result = new TreeMap<>();
+
+            // Raggruppamento per tipo
+            for (Shape shape : shapes) {
+                String type = shape.getType();
+                if (!result.containsKey(type)) {
+                    result.put(type, new ArrayList<>());
+                }
+                result.get(type).add(shape);
+            }
+
+            // Ordinamento di ciascun gruppo per area
+            for (List<Shape> shapeList : result.values()) {
+                Collections.sort(shapeList, Comparator.comparingDouble(Shape::getArea));
+            }
+
+            return result;
+        }
+
+        // Metodo main per testare l'implementazione
+        public static void main(String[] args) {
+            List<Shape> shapes = new ArrayList<>();
+
+            // Aggiunta di alcune figure
+            shapes.add(new Rectangle(3, 4));      // Area = 12
+            shapes.add(new Circle(2));            // Area ≈ 12.57
+            shapes.add(new Rectangle(5, 6));      // Area = 30
+            shapes.add(new Circle(3));            // Area ≈ 28.27
+            shapes.add(new Rectangle(2, 2));      // Area = 4
+
+            // Test del primo metodo
+            System.out.println("Area sum by type (sorted by type):");
+            Map<String, Double> areaSumByType = getAreaSumByType(shapes);
+            for (Map.Entry<String, Double> entry : areaSumByType.entrySet()) {
+                System.out.println(entry.getKey() + ": " + entry.getValue());
+            }
+
+            // Test del secondo metodo
+            System.out.println("\nShapes grouped by type and ordered by area:");
+            Map<String, List<Shape>> shapesGrouped = getShapesOrderByAreaGroupedByType(shapes);
+
+            for (Map.Entry<String, List<Shape>> entry : shapesGrouped.entrySet()) {
+                System.out.println(entry.getKey() + ":");
+                for (Shape shape : entry.getValue()) {
+                    System.out.println("  " + shape);
+                }
+            }
+        }
+    }
+
+
+in java: definisci una classe BracketObj per identificare un oggetto con uno solo attributo immutabile che rappresenti una parentesi valida, la lista delle parentesi valide sono { } [ ] ( ). Fornire una implementazione della interfaccia BackerValidator per verificare se l'array di parentesi passato in input rappresenti una sequenza valida di parentesi bilanciatre. 
+Esempio valido "{{()()}()}", esempio non valido "{[}()}". 
+dammi anche un test auotmatico per il metodo isvalid.
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+
+/**
+ * Classe immutabile che rappresenta una parentesi.
+ */
+public final class BracketObj {
+    private final char bracket;
+    
+    /**
+     * Costruttore per BracketObj che verifica la validità della parentesi.
+     * 
+     * @param bracket il carattere parentesi
+     * @throws IllegalArgumentException se il carattere non è una parentesi valida
+     */
+    public BracketObj(char bracket) {
+        if (bracket != '{' && bracket != '}' && 
+            bracket != '[' && bracket != ']' && 
+            bracket != '(' && bracket != ')') {
+            throw new IllegalArgumentException("Carattere non valido: " + bracket);
+        }
+        this.bracket = bracket;
+    }
+    
+    /**
+     * Restituisce il carattere parentesi.
+     * 
+     * @return il carattere parentesi
+     */
+    public char getBracket() {
+        return bracket;
+    }
+    
+    /**
+     * Verifica se la parentesi è una parentesi di apertura.
+     * 
+     * @return true se è una parentesi di apertura, false altrimenti
+     */
+    public boolean isOpeningBracket() {
+        return bracket == '{' || bracket == '[' || bracket == '(';
+    }
+    
+    /**
+     * Restituisce la parentesi di chiusura corrispondente.
+     * 
+     * @return la parentesi di chiusura corrispondente
+     * @throws IllegalStateException se chiamato su una parentesi di chiusura
+     */
+    public char getMatchingClosingBracket() {
+        if (!isOpeningBracket()) {
+            throw new IllegalStateException("Non è una parentesi di apertura: " + bracket);
+        }
+        
+        switch (bracket) {
+            case '{': return '}';
+            case '[': return ']';
+            case '(': return ')';
+            default: throw new IllegalStateException("Parentesi non riconosciuta");
+        }
+    }
+    
+    @Override
+    public String toString() {
+        return String.valueOf(bracket);
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        
+        BracketObj that = (BracketObj) obj;
+        return bracket == that.bracket;
+    }
+    
+    @Override
+    public int hashCode() {
+        return Character.hashCode(bracket);
+    }
+}
+
+/**
+ * Interfaccia per validare sequenze di parentesi.
+ */
+interface BracketValidator {
+    /**
+     * Verifica se una sequenza di parentesi è bilanciata.
+     * 
+     * @param brackets array di oggetti BracketObj
+     * @return true se la sequenza è bilanciata, false altrimenti
+     */
+    boolean isValid(BracketObj[] brackets);
+}
+
+
+/**
+ * Implementazione dell'interfaccia BracketValidator.
+ */
+class BracketValidatorImpl implements BracketValidator {
+    private static final Map<Character, Character> BRACKETS_MAP = new HashMap<>();
+    
+    static {
+        BRACKETS_MAP.put('}', '{');
+        BRACKETS_MAP.put(']', '[');
+        BRACKETS_MAP.put(')', '(');
+    }
+    
+    /**
+     * Verifica se una sequenza di parentesi è bilanciata.
+     * 
+     * @param brackets array di oggetti BracketObj
+     * @return true se la sequenza è bilanciata, false altrimenti
+     */
+    @Override
+    public boolean isValid(BracketObj[] brackets) {
+        if (brackets == null) {
+            return true; // Una sequenza vuota è considerata bilanciata
+        }
+        
+        Stack<Character> stack = new Stack<>();
+        
+        for (BracketObj bracketObj : brackets) {
+            char bracket = bracketObj.getBracket();
+            
+            if (bracketObj.isOpeningBracket()) {
+                stack.push(bracket);
+            } else {
+                // È una parentesi di chiusura
+                if (stack.isEmpty()) {
+                    return false; // Non c'è una parentesi di apertura corrispondente
+                }
+                
+                char lastOpenBracket = stack.pop();
+                if (lastOpenBracket != BRACKETS_MAP.get(bracket)) {
+                    return false; 
+                }
+            }
+        }
+        
+        return stack.isEmpty(); // La sequenza è bilanciata se lo stack è vuoto
+    }
+    @Override
+    public boolean isValid(String brackets) {
+        if (brackets == null || brackets.isEmpty()) {
+            return true; // Una sequenza vuota è considerata bilanciata
+        }
+        
+        // Converti la stringa in un array di BracketObj
+        BracketObj[] bracketObjArray = new BracketObj[brackets.length()];
+        for (int i = 0; i < brackets.length(); i++) {
+            bracketObjArray[i] = new BracketObj(brackets.charAt(i));
+        }
+        
+        // Richiama il metodo che lavora su array di BracketObj
+        return isValid(bracketObjArray);
+    }
+}
+sempre in java, creami una classe e un metodo che mi indica se una stringa contiene solo numeri palindromi, esempio "1 7 33 99" è ok, esempio "1 23 99" non è palindromo
+/**
+ * Classe che fornisce metodi per verificare se una stringa contiene solo numeri palindromi.
+ * Un numero palindromo si legge allo stesso modo da sinistra a destra e da destra a sinistra.
+ */
+public class PalindromeNumberChecker {
+
+    /**
+     * Verifica se una stringa contiene solo numeri palindromi.
+     * I numeri nella stringa devono essere separati da spazi.
+     * 
+     * @param input la stringa da verificare
+     * @return true se tutti i numeri sono palindromi, false altrimenti
+     * @throws NumberFormatException se la stringa contiene elementi non numerici
+     */
+    public static boolean containsOnlyPalindromeNumbers(String input) {
+        // Gestione caso null o stringa vuota
+        if (input == null || input.trim().isEmpty()) {
+            return true; // Per convenzione, consideriamo una stringa vuota come valida
+        }
+
+        // Dividiamo la stringa in token separati da spazi
+        String[] numbers = input.trim().split("\\s+");
+
+        // Controlliamo che ogni token sia un numero palindromo
+        for (String number : numbers) {
+            try {
+                // Verifichiamo che sia un numero
+                Integer.parseInt(number);
+                
+                // Verifichiamo che sia palindromo
+                if (!isPalindrome(number)) {
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                throw new NumberFormatException("Input non valido: '" + number + "' non è un numero");
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica se una stringa è palindroma (si legge allo stesso modo in entrambe le direzioni).
+     * 
+     * @param str la stringa da verificare
+     * @return true se la stringa è palindroma, false altrimenti
+     */
+    private static boolean isPalindrome(String str) {
+        int left = 0;
+        int right = str.length() - 1;
+
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+
+    /**
+     * Metodo main per testare la funzionalità.
+     */
+    public static void main(String[] args) {
+        // Test con stringhe valide (contengono solo numeri palindromi)
+        testAndPrint("1 7 33 99");
+        testAndPrint("121 1331 1221");
+        testAndPrint("9");
+        testAndPrint("");  // stringa vuota
+
+        // Test con stringhe non valide (contengono numeri non palindromi)
+        testAndPrint("1 23 99");
+        testAndPrint("12345");
+        testAndPrint("121 123 121");
+
+        // Test con input non validi
+        try {
+            testAndPrint("1 abc 33");
+        } catch (NumberFormatException e) {
+            System.out.println("Eccezione catturata come previsto: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Utility per testare e stampare il risultato.
+     */
+    private static void testAndPrint(String input) {
+        boolean result = containsOnlyPalindromeNumbers(input);
+        System.out.println("\"" + input + "\" contiene solo numeri palindromi? " + result);
+    }
+}
+
+in java, implementa le classi Category con nome e order (int), Product con nome, category, quantity (int) e price (double). implementa metodo getTotalAmountByCategory che prende una lista di Product in input e ritorna una struttura dati Map che indica, per ogni categoria, la somma degli amount (quantità * prezzo). implementa metodo getProductOrderByAmountGroupedByType che prende la lista di product in input e ritorna struttura Map che contiene categoria di prodotto nella collezione con l'elenco dei prodotti di quel tipo ordinati per amount
+
+class Category {
+    private String name;
+    private int order;
+
+    /**
+     * Costruttore della classe Category.
+     * 
+     * @param name nome della categoria
+     * @param order ordine della categoria
+     */
+    public Category(String name, int order) {
+        this.name = name;
+        this.order = order;
+    }
+
+    // Getters e setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{name='" + name + "', order=" + order + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return order == category.order && Objects.equals(name, category.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, order);
+    }
+}
+
+/**
+ * Classe che rappresenta un prodotto.
+ */
+class Product {
+    private String name;
+    private Category category;
+    private int quantity;
+    private double price;
+
+    /**
+     * Costruttore della classe Product.
+     * 
+     * @param name nome del prodotto
+     * @param category categoria del prodotto
+     * @param quantity quantità del prodotto
+     * @param price prezzo del prodotto
+     */
+    public Product(String name, Category category, int quantity, double price) {
+        this.name = name;
+        this.category = category;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    // Getters e setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    /**
+     * Calcola l'importo totale del prodotto (quantità * prezzo).
+     * 
+     * @return l'importo totale del prodotto
+     */
+    public double getAmount() {
+        return quantity * price;
+    }
+    @Override
+    public int compareTo(Product other) {
+        return Double.compare(this.getAmount(), other.getAmount());
+    }
+
+    @Override
+    public String toString() {
+        return "Product{name='" + name + "', category=" + category + 
+               ", quantity=" + quantity + ", price=" + price + ", amount=" + getAmount() + '}';
+    }
+}
+
+/**
+ * Classe che implementa la logica richiesta per la gestione di prodotti e categorie.
+ */
+public class ProductService {
+
+    /**
+     * Calcola la somma degli importi (quantità * prezzo) per ogni categoria.
+     * 
+     * @param products lista dei prodotti
+     * @return mappa che associa ad ogni categoria la somma degli importi
+     */
+    public static Map<Category, Double> getTotalAmountByCategory(List<Product> products) {
+        if (products == null || products.isEmpty()) {
+            return new HashMap<>();
+        }
+
+        Map<Category, Double> resultMap = new HashMap<>();
+        
+        for (Product product : products) {
+            Category category = product.getCategory();
+            double amount = product.getAmount();
+            
+            // Se la categoria è già nella mappa, aggiungiamo l'amount al valore esistente
+            if (resultMap.containsKey(category)) {
+                double currentAmount = resultMap.get(category);
+                resultMap.put(category, currentAmount + amount);
+            } else {
+                // Altrimenti, inseriamo la nuova categoria con il relativo amount
+                resultMap.put(category, amount);
+            }
+        }
+        
+        return resultMap;
+    }
+
+    /**
+     * Raggruppa i prodotti per categoria e ordina i prodotti all'interno di ciascuna categoria per importo.
+     * 
+     * @param products lista dei prodotti
+     * @return mappa che associa ad ogni categoria la lista dei prodotti ordinata per importo
+     */
+    public static Map<Category, List<Product>> getProductOrderByAmountGroupedByType(List<Product> products) {
+        if (products == null || products.isEmpty()) {
+            return new HashMap<>();
+        }
+
+        Map<Category, List<Product>> resultMap = new HashMap<>();
+        
+        // Raggruppiamo i prodotti per categoria
+        for (Product product : products) {
+            Category category = product.getCategory();
+            
+            // Se la categoria è già nella mappa, aggiungiamo il prodotto alla lista esistente
+            if (resultMap.containsKey(category)) {
+                List<Product> productList = resultMap.get(category);
+                productList.add(product);
+            } else {
+                // Altrimenti, creiamo una nuova lista con il prodotto
+                List<Product> productList = new ArrayList<>();
+                productList.add(product);
+                resultMap.put(category, productList);
+            }
+        }
+        
+        // Ordiniamo ogni lista di prodotti per amount
+        for (Map.Entry<Category, List<Product>> entry : resultMap.entrySet()) {
+            List<Product> productList = entry.getValue();
+            
+            // Ordinamento della lista per amount usando Collections.sort
+            Collections.sort(productList, new Comparator<Product>() {
+                @Override
+                public int compare(Product p1, Product p2) {
+                    return Double.compare(p1.getAmount(), p2.getAmount());
+                }
+            });
+        }
+        
+        return resultMap;
+    }
+    
+scrivimi ora metodo che verifica se due stringhe in input sono una l'anagramma dell'altra, deve confrontare solo le lettere e ignorare i caratteri speciali.
+
+/**
+ * Utility per verificare se due stringhe sono anagrammi.
+ */
+public class AnagramChecker {
+
+    /**
+     * Verifica se due stringhe sono anagrammi, ignorando i caratteri non alfabetici.
+     * Un anagramma è una stringa formata riorganizzando le lettere di un'altra stringa.
+     * 
+     * @param str1 la prima stringa
+     * @param str2 la seconda stringa
+     * @return true se le stringhe sono anagrammi, false altrimenti
+     */
+    public static boolean areAnagrams(String str1, String str2) {
+        // Gestione casi limite
+        if (str1 == null || str2 == null) {
+            return false;
+        }
+        
+        // Rimuoviamo tutti i caratteri non alfabetici e convertiamo in minuscolo
+        String cleanStr1 = str1.replaceAll("[^a-zA-Z]", "").toLowerCase();
+        String cleanStr2 = str2.replaceAll("[^a-zA-Z]", "").toLowerCase();
+        
+        // Se le lunghezze sono diverse, non possono essere anagrammi
+        if (cleanStr1.length() != cleanStr2.length()) {
+            return false;
+        }
+        
+        // Contiamo le occorrenze di ogni carattere
+        int[] charCount = new int[26]; // 26 lettere dell'alfabeto inglese
+        
+        // Incrementiamo i conteggi per i caratteri della prima stringa
+        for (char c : cleanStr1.toCharArray()) {
+            charCount[c - 'a']++;
+        }
+        
+        // Decrementiamo i conteggi per i caratteri della seconda stringa
+        for (char c : cleanStr2.toCharArray()) {
+            charCount[c - 'a']--;
+            // Se un conteggio diventa negativo, non sono anagrammi
+            if (charCount[c - 'a'] < 0) {
+                return false;
+            }
+        }
+        
+        // Verifichiamo che tutti i conteggi siano zero
+        for (int count : charCount) {
+            if (count != 0) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Approccio alternativo usando l'ordinamento.
+     */
+    public static boolean areAnagramsUsingSort(String str1, String str2) {
+        // Gestione casi limite
+        if (str1 == null || str2 == null) {
+            return false;
+        }
+        
+        // Rimuoviamo tutti i caratteri non alfabetici e convertiamo in minuscolo
+        String cleanStr1 = str1.replaceAll("[^a-zA-Z]", "").toLowerCase();
+        String cleanStr2 = str2.replaceAll("[^a-zA-Z]", "").toLowerCase();
+        
+        // Se le lunghezze sono diverse, non possono essere anagrammi
+        if (cleanStr1.length() != cleanStr2.length()) {
+            return false;
+        }
+        
+        // Convertiamo in array di caratteri e ordiniamo
+        char[] charArray1 = cleanStr1.toCharArray();
+        char[] charArray2 = cleanStr2.toCharArray();
+        
+        Arrays.sort(charArray1);
+        Arrays.sort(charArray2);
+        
+        // Confrontiamo gli array ordinati
+        return Arrays.equals(charArray1, charArray2);
+    }
+    
+    /**
+     * Metodo main per testare la funzionalità.
+     */
+    public static void main(String[] args) {
+        // Test con anagrammi
+        testAnagrams("listen", "silent", true);
+        testAnagrams("triangle", "integral", true);
+        testAnagrams("Astronomer", "Moon starer", true);
+        
+        // Test con caratteri speciali e maiuscole/minuscole
+        testAnagrams("A gentleman", "Elegant man!", true);
+        testAnagrams("Eleven plus two", "Twelve plus one", true);
+        testAnagrams("Mother-in-law", "Woman Hitler", true);
+        
+        // Test con stringhe che non sono anagrammi
+        testAnagrams("hello", "world", false);
+        testAnagrams("java", "javascript", false);
+        testAnagrams("aab", "abb", false);
+        
+        // Test con casi limite
+        testAnagrams("", "", true);
+        testAnagrams(null, "test", false);
+        testAnagrams("test", null, false);
+        testAnagrams("a", "a", true);
+    }
+    
+    /**
+     * Utility per testare e stampare il risultato.
+     */
+    private static void testAnagrams(String str1, String str2, boolean expected) {
+        boolean result1 = areAnagrams(str1, str2);
+        boolean result2 = areAnagramsUsingSort(str1, str2);
+        
+        System.out.println("Test: \"" + str1 + "\" e \"" + str2 + "\"");
+        System.out.println("  Metodo 1 (conteggio): " + (result1 == expected ? "CORRETTO" : "ERRATO") + 
+                          " (risultato: " + result1 + ", atteso: " + expected + ")");
+        System.out.println("  Metodo 2 (ordinamento): " + (result2 == expected ? "CORRETTO" : "ERRATO") + 
+                          " (risultato: " + result2 + ", atteso: " + expected + ")");
+        System.out.println();
+    }
+}
+
+implementa un SaleRecord : id, product, region,sales. Region solo North,South. implementa funzione che data una lista di record, ritorni la somma di sales divisi per prodotto, ritorna qualcosa di suitable e dimmi cosa intendi per suitable 
+enum Region {
+    NORTH,
+    SOUTH
+}
+
+    public static Map<String, Double> getSalesByProduct(List<SaleRecord> records) {
+        if (records == null || records.isEmpty()) {
+            return new HashMap<>();
+        }
+
+        Map<String, Double> totalSalesByProduct = new HashMap<>();
+
+        for (SaleRecord record : records) {
+            String product = record.getProduct();
+            double salesAmount = record.getSales();
+
+            // Aggiorniamo la somma delle vendite per questo prodotto
+            totalSalesByProduct.put(
+                product, 
+                totalSalesByProduct.getOrDefault(product, 0.0) + salesAmount
+            );
+        }
+
+        return totalSalesByProduct;
+    }
+    public static void main(String[] args) {
+        // Creiamo alcuni record di vendita di esempio
+        List<SaleRecord> salesRecords = List.of(
+            new SaleRecord("Laptop", Region.NORTH, 1200.0),
+            new SaleRecord("Smartphone", Region.SOUTH, 800.0),
+            new SaleRecord("Laptop", Region.SOUTH, 1300.0),
+            new SaleRecord("Tablet", Region.NORTH, 500.0),
+            new SaleRecord("Smartphone", Region.NORTH, 750.0),
+            new SaleRecord("Headphones", Region.SOUTH, 150.0),
+            new SaleRecord("Tablet", Region.SOUTH, 550.0),
+            new SaleRecord("Laptop", Region.NORTH, 1250.0)
+        );
+
+        // Calcoliamo le vendite totali per prodotto
+        Map<String, Double> salesByProduct = getSalesByProduct(salesRecords);
+
+        // Stampiamo i risultati
+        System.out.println("Vendite totali per prodotto:");
+        for (Map.Entry<String, Double> entry : salesByProduct.entrySet()) {
+            System.out.printf("- %s: %.2f€%n", entry.getKey(), entry.getValue());
+        }
+    }
+Resturant reservation: each reservation contains name,number,date time. implement adding,remove e retrieving reservations. reservation should be returned sorted by name.
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+/**
+ * Classe che rappresenta una prenotazione al ristorante.
+ */
+class Reservation implements Comparable<Reservation> {
+    private String name;
+    private int numberOfPeople;
+    private LocalDateTime dateTime;
+
+    /**
+     * Costruttore per creare una nuova prenotazione.
+     *
+     * @param name nome del cliente
+     * @param numberOfPeople numero di persone
+     * @param dateTime data e ora della prenotazione
+     */
+    public Reservation(String name, int numberOfPeople, LocalDateTime dateTime) {
+        this.name = name;
+        this.numberOfPeople = numberOfPeople;
+        this.dateTime = dateTime;
+    }
+
+    // Getters e setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getNumberOfPeople() {
+        return numberOfPeople;
+    }
+
+    public void setNumberOfPeople(int numberOfPeople) {
+        this.numberOfPeople = numberOfPeople;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    /**
+     * Implementazione del metodo compareTo per ordinare le prenotazioni per nome.
+     *
+     * @param other l'altra prenotazione da confrontare
+     * @return un valore negativo, zero o positivo se questo nome viene prima,
+     *         è uguale o viene dopo l'altro nome in ordine alfabetico
+     */
+    @Override
+    public int compareTo(Reservation other) {
+        return this.name.compareTo(other.name);
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return "Reservation{" +
+               "name='" + name + '\'' +
+               ", numberOfPeople=" + numberOfPeople +
+               ", dateTime=" + dateTime.format(formatter) +
+               '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return numberOfPeople == that.numberOfPeople &&
+               Objects.equals(name, that.name) &&
+               Objects.equals(dateTime, that.dateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, numberOfPeople, dateTime);
+    }
+}
+
+/**
+ * Sistema di gestione delle prenotazioni del ristorante.
+ */
+public class ReservationSystem {
+    private List<Reservation> reservations;
+
+    /**
+     * Costruttore che inizializza il sistema di prenotazioni.
+     */
+    public ReservationSystem() {
+        this.reservations = new ArrayList<>();
+    }
+
+    /**
+     * Aggiunge una nuova prenotazione al sistema.
+     *
+     * @param reservation la prenotazione da aggiungere
+     * @return true se l'aggiunta è avvenuta con successo, false altrimenti
+     */
+    public boolean addReservation(Reservation reservation) {
+        if (reservation == null) {
+            return false;
+        }
+        return reservations.add(reservation);
+    }
+
+    /**
+     * Rimuove una prenotazione dal sistema.
+     *
+     * @param reservation la prenotazione da rimuovere
+     * @return true se la rimozione è avvenuta con successo, false altrimenti
+     */
+    public boolean removeReservation(Reservation reservation) {
+        if (reservation == null) {
+            return false;
+        }
+        return reservations.remove(reservation);
+    }
+
+    /**
+     * Rimuove tutte le prenotazioni per un dato nome.
+     *
+     * @param name il nome del cliente
+     * @return il numero di prenotazioni rimosse
+     */
+    public int removeReservationsByName(String name) {
+        if (name == null) {
+            return 0;
+        }
+        
+        int count = 0;
+        Iterator<Reservation> iterator = reservations.iterator();
+        while (iterator.hasNext()) {
+            Reservation reservation = iterator.next();
+            if (reservation.getName().equals(name)) {
+                iterator.remove();
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Recupera tutte le prenotazioni ordinate per nome.
+     *
+     * @return lista di prenotazioni ordinate per nome
+     */
+    public List<Reservation> getAllReservations() {
+        List<Reservation> sortedReservations = new ArrayList<>(reservations);
+        Collections.sort(sortedReservations);
+        return sortedReservations;
+    }
+
+    /**
+     * Recupera le prenotazioni per una data specifica, ordinate per nome.
+     *
+     * @param date la data per cui cercare le prenotazioni
+     * @return lista di prenotazioni per la data specificata, ordinate per nome
+     */
+    public List<Reservation> getReservationsByDate(LocalDateTime date) {
+        if (date == null) {
+            return Collections.emptyList();
+        }
+        
+        List<Reservation> result = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            LocalDateTime reservationDate = reservation.getDateTime();
+            if (reservationDate.getYear() == date.getYear() && 
+                reservationDate.getMonth() == date.getMonth() && 
+                reservationDate.getDayOfMonth() == date.getDayOfMonth()) {
+                result.add(reservation);
+            }
+        }
+        
+        Collections.sort(result);
+        return result;
+    }
+
+    /**
+     * Recupera le prenotazioni per un nome specifico, ordinate per data.
+     *
+     * @param name il nome del cliente
+     * @return lista di prenotazioni per il nome specificato, ordinate per data
+     */
+    public List<Reservation> getReservationsByName(String name) {
+        if (name == null) {
+            return Collections.emptyList();
+        }
+        
+        List<Reservation> result = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getName().equals(name)) {
+                result.add(reservation);
+            }
+        }
+        
+        // Ordiniamo per data invece che per nome
+        result.sort(Comparator.comparing(Reservation::getDateTime));
+        return result;
+    }
+
+    /**
+     * Metodo main per testare il sistema di prenotazioni.
+     */
+    public static void main(String[] args) {
+        ReservationSystem system = new ReservationSystem();
+        
+        // Aggiungiamo alcune prenotazioni
+        system.addReservation(new Reservation("Smith", 4, 
+                              LocalDateTime.of(2023, 3, 15, 19, 30)));
+        system.addReservation(new Reservation("Johnson", 2, 
+                              LocalDateTime.of(2023, 3, 15, 20, 0)));
+        system.addReservation(new Reservation("Brown", 6, 
+                              LocalDateTime.of(2023, 3, 16, 19, 0)));
+        system.addReservation(new Reservation("Davis", 3, 
+                              LocalDateTime.of(2023, 3, 16, 20, 30)));
+        system.addReservation(new Reservation("Smith", 2, 
+                              LocalDateTime.of(2023, 3, 17, 19, 0)));
+        
+        // Recuperiamo tutte le prenotazioni (ordinate per nome)
+        System.out.println("Tutte le prenotazioni (ordinate per nome):");
+        for (Reservation reservation : system.getAllReservations()) {
+            System.out.println(reservation);
+        }
+        
+        // Recuperiamo le prenotazioni per una data specifica
+        System.out.println("\nPrenotazioni per il 15 marzo 2023:");
+        for (Reservation reservation : 
+             system.getReservationsByDate(LocalDateTime.of(2023, 3, 15, 0, 0))) {
+            System.out.println(reservation);
+        }
+        
+        // Recuperiamo le prenotazioni per un nome specifico
+        System.out.println("\nPrenotazioni per Smith (ordinate per data):");
+        for (Reservation reservation : system.getReservationsByName("Smith")) {
+            System.out.println(reservation);
+        }
+        
+        // Rimuoviamo una prenotazione
+        Reservation toRemove = new Reservation("Johnson", 2, 
+                               LocalDateTime.of(2023, 3, 15, 20, 0));
+        system.removeReservation(toRemove);
+        
+        // Rimuoviamo tutte le prenotazioni per un nome
+        system.removeReservationsByName("Smith");
+        
+        // Verifichiamo le prenotazioni rimanenti
+        System.out.println("\nPrenotazioni rimanenti dopo le rimozioni:");
+        for (Reservation reservation : system.getAllReservations()) {
+            System.out.println(reservation);
+        }
+    }
+}
+modifica l'ultimo codice del ristoranre per aggiungere la disponiblità dei tavoli, cioè una collezione di tavoli e riserve, considera che ogni tabolo ha un numero massimo di posti
+import java.util.*;
+
+/**
+ * Classe che rappresenta un tavolo del ristorante.
+ */
+class Table {
+    private int tableNumber;
+    private int capacity;
+    private boolean isAvailable;
+
+    /**
+     * Costruttore per creare un nuovo tavolo.
+     *
+     * @param tableNumber numero del tavolo
+     * @param capacity numero massimo di posti
+     */
+    public Table(int tableNumber, int capacity) {
+        this.tableNumber = tableNumber;
+        this.capacity = capacity;
+        this.isAvailable = true;
+    }
+
+    // Getters e setters
+    public int getTableNumber() {
+        return tableNumber;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    @Override
+    public String toString() {
+        return "Table{" +
+               "tableNumber=" + tableNumber +
+               ", capacity=" + capacity +
+               ", isAvailable=" + isAvailable +
+               '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Table table = (Table) o;
+        return tableNumber == table.tableNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tableNumber);
+    }
+}
+
+/**
+ * Classe che rappresenta una prenotazione al ristorante.
+ */
+class Reservation implements Comparable<Reservation> {
+    private String name;
+    private int numberOfPeople;
+    private String date;       // Data in formato "dd/MM/yyyy"
+    private String timeSlot;   // Fascia oraria (es. "PRANZO", "CENA")
+    private Table assignedTable;
+
+    /**
+     * Costruttore per creare una nuova prenotazione.
+     *
+     * @param name nome del cliente
+     * @param numberOfPeople numero di persone
+     * @param date data della prenotazione
+     * @param timeSlot fascia oraria della prenotazione
+     */
+    public Reservation(String name, int numberOfPeople, String date, String timeSlot) {
+        this.name = name;
+        this.numberOfPeople = numberOfPeople;
+        this.date = date;
+        this.timeSlot = timeSlot;
+        this.assignedTable = null;
+    }
+
+    // Getters e setters
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getNumberOfPeople() {
+        return numberOfPeople;
+    }
+
+    public void setNumberOfPeople(int numberOfPeople) {
+        this.numberOfPeople = numberOfPeople;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(String timeSlot) {
+        this.timeSlot = timeSlot;
+    }
+
+    public Table getAssignedTable() {
+        return assignedTable;
+    }
+
+    public void setAssignedTable(Table assignedTable) {
+        this.assignedTable = assignedTable;
+    }
+
+    /**
+     * Implementazione del metodo compareTo per ordinare le prenotazioni per nome.
+     *
+     * @param other l'altra prenotazione da confrontare
+     * @return un valore negativo, zero o positivo se questo nome viene prima,
+     *         è uguale o viene dopo l'altro nome in ordine alfabetico
+     */
+    @Override
+    public int compareTo(Reservation other) {
+        return this.name.compareTo(other.name);
+    }
+
+    @Override
+    public String toString() {
+        String tableInfo = assignedTable != null ? "Table #" + assignedTable.getTableNumber() : "No table assigned";
+        return "Reservation{" +
+               "name='" + name + '\'' +
+               ", numberOfPeople=" + numberOfPeople +
+               ", date='" + date + '\'' +
+               ", timeSlot='" + timeSlot + '\'' +
+               ", " + tableInfo +
+               '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return numberOfPeople == that.numberOfPeople &&
+               Objects.equals(name, that.name) &&
+               Objects.equals(date, that.date) &&
+               Objects.equals(timeSlot, that.timeSlot);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, numberOfPeople, date, timeSlot);
+    }
+}
+
+/**
+ * Sistema di gestione delle prenotazioni del ristorante.
+ */
+public class ReservationSystem {
+    // Fasce orarie predefinite
+    public static final String LUNCH = "PRANZO";
+    public static final String DINNER = "CENA";
+    
+    private List<Table> tables;
+    private List<Reservation> reservations;
+    private Map<String, Map<String, Map<Table, Reservation>>> tableSchedule; // date -> timeSlot -> table -> reservation
+
+    /**
+     * Costruttore che inizializza il sistema di prenotazioni.
+     */
+    public ReservationSystem() {
+        this.tables = new ArrayList<>();
+        this.reservations = new ArrayList<>();
+        this.tableSchedule = new HashMap<>();
+    }
+
+    /**
+     * Aggiunge un nuovo tavolo al ristorante.
+     *
+     * @param table il tavolo da aggiungere
+     * @return true se l'aggiunta è avvenuta con successo, false altrimenti
+     */
+    public boolean addTable(Table table) {
+        if (table == null) {
+            return false;
+        }
+
+        // Verifica che non esista già un tavolo con lo stesso numero
+        for (Table existingTable : tables) {
+            if (existingTable.getTableNumber() == table.getTableNumber()) {
+                return false;
+            }
+        }
+
+        return tables.add(table);
+    }
+
+    /**
+     * Trova un tavolo disponibile per una prenotazione.
+     *
+     * @param numberOfPeople numero di persone
+     * @param date data della prenotazione
+     * @param timeSlot fascia oraria della prenotazione
+     * @return il tavolo disponibile, o null se non ce ne sono
+     */
+    public Table findAvailableTable(int numberOfPeople, String date, String timeSlot) {
+        // Ordiniamo i tavoli per capacità (per assegnare il tavolo più adatto)
+        List<Table> sortedTables = new ArrayList<>(tables);
+        sortedTables.sort(Comparator.comparing(Table::getCapacity));
+        
+        // Cerchiamo un tavolo adatto
+        for (Table table : sortedTables) {
+            // Verifichiamo che il tavolo abbia una capacità sufficiente
+            if (table.getCapacity() >= numberOfPeople) {
+                // Verifichiamo che il tavolo sia disponibile nell'orario richiesto
+                if (isTableAvailableAtTime(table, date, timeSlot)) {
+                    return table;
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    /**
+     * Verifica se un tavolo è disponibile in un determinato orario.
+     *
+     * @param table il tavolo da verificare
+     * @param date la data desiderata
+     * @param timeSlot la fascia oraria desiderata
+     * @return true se il tavolo è disponibile, false altrimenti
+     */
+    private boolean isTableAvailableAtTime(Table table, String date, String timeSlot) {
+        // Se non abbiamo prenotazioni per quella data, il tavolo è disponibile
+        if (!tableSchedule.containsKey(date)) {
+            return true;
+        }
+        
+        // Se non abbiamo prenotazioni per quella fascia oraria, il tavolo è disponibile
+        Map<String, Map<Table, Reservation>> timeSlots = tableSchedule.get(date);
+        if (!timeSlots.containsKey(timeSlot)) {
+            return true;
+        }
+        
+        // Altrimenti, verifichiamo se il tavolo è già prenotato
+        Map<Table, Reservation> reservationsAtTime = timeSlots.get(timeSlot);
+        return !reservationsAtTime.containsKey(table);
+    }
+
+    /**
+     * Aggiunge una nuova prenotazione al sistema e assegna un tavolo.
+     *
+     * @param reservation la prenotazione da aggiungere
+     * @return true se l'aggiunta è avvenuta con successo, false altrimenti
+     */
+    public boolean addReservation(Reservation reservation) {
+        if (reservation == null) {
+            return false;
+        }
+        
+        // Cerchiamo un tavolo disponibile
+        Table availableTable = findAvailableTable(
+            reservation.getNumberOfPeople(), 
+            reservation.getDate(),
+            reservation.getTimeSlot()
+        );
+        
+        // Se non ci sono tavoli disponibili, la prenotazione non può essere accettata
+        if (availableTable == null) {
+            return false;
+        }
+        
+        // Assegniamo il tavolo alla prenotazione
+        reservation.setAssignedTable(availableTable);
+        
+        // Aggiorniamo la disponibilità nel tableSchedule
+        tableSchedule.computeIfAbsent(reservation.getDate(), k -> new HashMap<>())
+                    .computeIfAbsent(reservation.getTimeSlot(), k -> new HashMap<>())
+                    .put(availableTable, reservation);
+        
+        // Aggiungiamo la prenotazione alla lista
+        return reservations.add(reservation);
+    }
+
+    /**
+     * Rimuove una prenotazione dal sistema e libera il tavolo.
+     *
+     * @param reservation la prenotazione da rimuovere
+     * @return true se la rimozione è avvenuta con successo, false altrimenti
+     */
+    public boolean removeReservation(Reservation reservation) {
+        if (reservation == null) {
+            return false;
+        }
+        
+        // Se la prenotazione ha un tavolo assegnato, lo liberiamo
+        if (reservation.getAssignedTable() != null) {
+            String date = reservation.getDate();
+            String timeSlot = reservation.getTimeSlot();
+            
+            if (tableSchedule.containsKey(date) && 
+                tableSchedule.get(date).containsKey(timeSlot)) {
+                tableSchedule.get(date).get(timeSlot).remove(reservation.getAssignedTable());
+            }
+        }
+        
+        return reservations.remove(reservation);
+    }
+
+    /**
+     * Rimuove tutte le prenotazioni per un dato nome.
+     *
+     * @param name il nome del cliente
+     * @return il numero di prenotazioni rimosse
+     */
+    public int removeReservationsByName(String name) {
+        if (name == null) {
+            return 0;
+        }
+        
+        List<Reservation> toRemove = new ArrayList<>();
+        
+        // Identifichiamo le prenotazioni da rimuovere
+        for (Reservation reservation : reservations) {
+            if (reservation.getName().equals(name)) {
+                toRemove.add(reservation);
+            }
+        }
+        
+        // Rimuoviamo ogni prenotazione
+        for (Reservation reservation : toRemove) {
+            removeReservation(reservation);
+        }
+        
+        return toRemove.size();
+    }
+
+    /**
+     * Recupera tutte le prenotazioni ordinate per nome.
+     *
+     * @return lista di prenotazioni ordinate per nome
+     */
+    public List<Reservation> getAllReservations() {
+        List<Reservation> sortedReservations = new ArrayList<>(reservations);
+        Collections.sort(sortedReservations);
+        return sortedReservations;
+    }
+
+    /**
+     * Recupera le prenotazioni per una data specifica, ordinate per nome.
+     *
+     * @param date la data per cui cercare le prenotazioni
+     * @return lista di prenotazioni per la data specificata, ordinate per nome
+     */
+    public List<Reservation> getReservationsByDate(String date) {
+        if (date == null) {
+            return Collections.emptyList();
+        }
+        
+        List<Reservation> result = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getDate().equals(date)) {
+                result.add(reservation);
+            }
+        }
+        
+        Collections.sort(result);
+        return result;
+    }
+
+    /**
+     * Recupera le prenotazioni per un nome specifico.
+     *
+     * @param name il nome del cliente
+     * @return lista di prenotazioni per il nome specificato
+     */
+    public List<Reservation> getReservationsByName(String name) {
+        if (name == null) {
+            return Collections.emptyList();
+        }
+        
+        List<Reservation> result = new ArrayList<>();
+        for (Reservation reservation : reservations) {
+            if (reservation.getName().equals(name)) {
+                result.add(reservation);
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Recupera tutti i tavoli del ristorante.
+     *
+     * @return lista di tutti i tavoli
+     */
+    public List<Table> getAllTables() {
+        return new ArrayList<>(tables);
+    }
+
+    /**
+     * Recupera i tavoli disponibili per una specifica data, fascia oraria e numero di persone.
+     * 
+     * @param numberOfPeople numero di persone
+     * @param date data
+     * @param timeSlot fascia oraria
+     * @return lista di tavoli disponibili
+     */
+    public List<Table> getAvailableTables(int numberOfPeople, String date, String timeSlot) {
+        List<Table> availableTables = new ArrayList<>();
+        
+        for (Table table : tables) {
+            if (table.getCapacity() >= numberOfPeople && 
+                isTableAvailableAtTime(table, date, timeSlot)) {
+                availableTables.add(table);
+            }
+        }
+        
+        return availableTables;
+    }
+
+    /**
+     * Metodo main per testare il sistema di prenotazioni.
+     */
+    public static void main(String[] args) {
+        ReservationSystem system = new ReservationSystem();
+        
+        // Aggiungiamo alcuni tavoli
+        system.addTable(new Table(1, 2));  // Tavolo per 2 persone
+        system.addTable(new Table(2, 2));  // Tavolo per 2 persone
+        system.addTable(new Table(3, 4));  // Tavolo per 4 persone
+        system.addTable(new Table(4, 4));  // Tavolo per 4 persone
+        system.addTable(new Table(5, 6));  // Tavolo per 6 persone
+        system.addTable(new Table(6, 8));  // Tavolo per 8 persone
+        
+        System.out.println("Tavoli disponibili nel ristorante:");
+        for (Table table : system.getAllTables()) {
+            System.out.println(table);
+        }
+        
+        // Date e fasce orarie per le prenotazioni
+        String date1 = "15/03/2023";
+        String date2 = "16/03/2023";
+        
+        // Aggiungiamo alcune prenotazioni
+        Reservation res1 = new Reservation("Smith", 4, date1, ReservationSystem.LUNCH);
+        Reservation res2 = new Reservation("Johnson", 2, date1, ReservationSystem.LUNCH);
+        Reservation res3 = new Reservation("Brown", 6, date1, ReservationSystem.DINNER);
+        Reservation res4 = new Reservation("Davis", 3, date1, ReservationSystem.DINNER);
+        Reservation res5 = new Reservation("Wilson", 2, date1, ReservationSystem.DINNER);
+        Reservation res6 = new Reservation("Smith", 2, date2, ReservationSystem.LUNCH);
+        
+        // Proviamo ad aggiungere le prenotazioni
+        System.out.println("\nAggiunta prenotazioni:");
+        System.out.println("Smith, 4 persone, pranzo: " + system.addReservation(res1));
+        System.out.println("Johnson, 2 persone, pranzo: " + system.addReservation(res2));
+        System.out.println("Brown, 6 persone, cena: " + system.addReservation(res3));
+        System.out.println("Davis, 3 persone, cena: " + system.addReservation(res4));
+        System.out.println("Wilson, 2 persone, cena: " + system.addReservation(res5));
+        System.out.println("Smith, 2 persone, pranzo: " + system.addReservation(res6));
+        
+        // Recuperiamo tutte le prenotazioni (ordinate per nome)
+        System.out.println("\nTutte le prenotazioni (ordinate per nome):");
+        for (Reservation reservation : system.getAllReservations()) {
+            System.out.println(reservation);
+        }
+        
+        // Vediamo quali tavoli sono disponibili per una nuova prenotazione
+        System.out.println("\nTavoli disponibili per 4 persone il 15/03/2023 a pranzo:");
+        for (Table table : system.getAvailableTables(4, date1, ReservationSystem.LUNCH)) {
+            System.out.println(table);
+        }
+        
+        // Proviamo a fare una prenotazione che non può essere soddisfatta
+        Reservation impossibleRes = new Reservation("Thompson", 8, date1, ReservationSystem.LUNCH);
+        boolean added = system.addReservation(impossibleRes);
+        System.out.println("\nPrenotazione per Thompson, 8 persone a pranzo: " + 
+                          (added ? "Accettata" : "Rifiutata (nessun tavolo disponibile)"));
+        
+        // Rimuoviamo una prenotazione e verifichiamo che il tavolo sia di nuovo disponibile
+        System.out.println("\nRimozione della prenotazione di Brown:");
+        system.removeReservation(res3);
+        
+        System.out.println("\nTavoli disponibili per 8 persone il 15/03/2023 a cena dopo la rimozione:");
+        for (Table table : system.getAvailableTables(8, date1, ReservationSystem.DINNER)) {
+            System.out.println(table);
+        }
+        
+        // Ora la prenotazione di Thompson dovrebbe essere possibile (ma a cena, non a pranzo)
+        Reservation possibleRes = new Reservation("Thompson", 8, date1, ReservationSystem.DINNER);
+        added = system.addReservation(possibleRes);
+        System.out.println("\nPrenotazione per Thompson, 8 persone a cena: " + 
+                          (added ? "Accettata" : "Rifiutata"));
+        
+        // Recuperiamo le prenotazioni per una data specifica
+        System.out.println("\nPrenotazioni per il 15/03/2023:");
+        for (Reservation reservation : system.getReservationsByDate(date1)) {
+            System.out.println(reservation);
+        }
+    }
+}
+
+
+Singleton 
+public class ReservationSystem {
+    // Fasce orarie predefinite
+    public static final String LUNCH = "PRANZO";
+    public static final String DINNER = "CENA";
+    
+    // Istanza singleton
+    private static ReservationSystem instance;
+    
+    private List<Table> tables;
+    private List<Reservation> reservations;
+    private Map<String, Map<String, Map<Table, Reservation>>> tableSchedule; // date -> timeSlot -> table -> reservation
+
+    /**
+     * Costruttore privato per il pattern Singleton.
+     */
+    private ReservationSystem() {
+        this.tables = new ArrayList<>();
+        this.reservations = new ArrayList<>();
+        this.tableSchedule = new HashMap<>();
+    }
+    
+    /**
+     * Metodo per ottenere l'istanza singleton del sistema di prenotazioni.
+     * 
+     * @return l'istanza singleton del sistema di prenotazioni
+     */
+    public static synchronized ReservationSystem getInstance() {
+        if (instance == null) {
+            instance = new ReservationSystem();
+        }
+        return instance;
+    }
+    
+    
+    
+    Dependency Injection: Puoi facilmente iniettare altre dipendenze nel tuo Singleton.
+javaCopy@Component
+public class ReservationSystem {
+    private final EmailService emailService;
+    
+    @Autowired
+    public ReservationSystem(EmailService emailService) {
+        this.emailService = emailService;
+    }
+}
