@@ -48,3 +48,5 @@ MyWebDBeaver/.dbeaver/credentials-config.json
 MyWebDBeaver/.dbeaver/data-sources.json
 MyWebDBeaver/.dbeaver/project-settings.json
 MyWebDBeaver/Diagrams/MyWeb.erd
+
+.vscode

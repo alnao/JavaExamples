@@ -1,0 +1,9 @@
+server:
+  address: 8042
+
+aws:
+    accessKey: ${AWS_ACCESS_KEY:}
+    secretKey: ${AWS_SECRET_KEY:}
+    region: ${AWS_REGION:eu-central-1}
+    profile: ${AWS_PROFILE:}
+    
