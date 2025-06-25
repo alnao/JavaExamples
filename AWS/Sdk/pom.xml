@@ -48,20 +48,21 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-
+<!--
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
-        </dependency>
+        </dependency>-->
 
         <!-- Needed to adapt Apache Commons Logging used by Apache HTTP Client to Slf4j to avoid
-        ClassNotFoundException: org.apache.commons.logging.impl.LogFactoryImpl during runtime -->
+        ClassNotFoundException: org.apache.commons.logging.impl.LogFactoryImpl during runtime
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+         -->
 
         <!-- Testing -->
         <dependency>
@@ -131,7 +132,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.s3commander.Main</mainClass>
+                            <mainClass>it.alnao.javaexamples.awssdk.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

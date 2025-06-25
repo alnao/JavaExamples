@@ -1,5 +1,5 @@
 server:
-  address: 8042
+  port: 8042
 
 aws:
     accessKey: ${AWS_ACCESS_KEY:}

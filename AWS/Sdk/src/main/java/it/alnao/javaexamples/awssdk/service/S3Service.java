@@ -23,6 +23,7 @@ public class S3Service {
     private S3Content s3Content;
 
     public List<String> listFiles(String bucketName, String prefix) {
+        logger.info("S3Service.listFiles {} {}",bucketName,prefix);
         return s3Content.listFiles(bucketName, prefix);
     }
 

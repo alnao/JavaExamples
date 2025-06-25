@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/s3")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class S3Controller {
     private static final Logger logger = LoggerFactory.getLogger(S3Controller.class);
 

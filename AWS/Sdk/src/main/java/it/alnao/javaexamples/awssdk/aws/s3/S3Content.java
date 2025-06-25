@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import it.alnao.javaexamples.awssdk.controller.S3Controller;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.Bucket;
@@ -16,7 +21,9 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
+@Component
 public class S3Content {
+    private static final Logger logger = LoggerFactory.getLogger(S3Content.class);
 
     private final S3Client s3Client;
 
@@ -31,6 +38,7 @@ public class S3Content {
                 .collect(Collectors.toList());
     }
     public List<String> listFiles(String bucketName, String prefix) {
+        logger.info("S3Content.listFiles {} {}",bucketName,prefix);
         ListObjectsV2Request request = ListObjectsV2Request.builder()
                 .bucket(bucketName)
                 .prefix(prefix)

@@ -2,8 +2,10 @@ package it.alnao.javaexamples.awssdk.aws;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import io.micrometer.common.util.StringUtils;
 import software.amazon.awssdk.auth.credentials.*;
-//import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.regions.Region;
 
 @Configuration
 public class AwsConfig {
@@ -16,7 +18,8 @@ public class AwsConfig {
 
     @Bean
     public AwsCredentialsProvider awsCredentialsProvider() {
-        if (awsProperties.getAccessKey() != null && awsProperties.getSecretKey() != null) {
+        if ( StringUtils.isNotEmpty(awsProperties.getAccessKey()) && StringUtils.isNotEmpty(awsProperties.getSecretKey()) ){
+        //if (awsProperties.getAccessKey() != null && awsProperties.getSecretKey() != null) {
             return StaticCredentialsProvider.create(
                     AwsBasicCredentials.create(
                             awsProperties.getAccessKey(),
@@ -28,8 +31,8 @@ public class AwsConfig {
         }
     }
 
-//    @Bean
-//    public Region awsRegion() {
-//        return Region.of(awsProperties.getRegion());
-//    }
+    @Bean
+    public Region awsRegion() {
+        return Region.of(awsProperties.getRegion());
+    }
 }
