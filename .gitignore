@@ -9,6 +9,7 @@ Servers/
 **/org.eclipse*
 GenericJava/Servers
 
+**/node_modules
 
 **.classpath
 **.project
