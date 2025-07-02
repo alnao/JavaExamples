@@ -1,10 +1,9 @@
 package it.alnao.cdk01bucketS3;
 
 import software.amazon.awscdk.App;
-import software.amazon.awscdk.Environment;
-import software.amazon.awscdk.StackProps;
-
-import java.util.Arrays;
+//import software.amazon.awscdk.Environment;
+//import software.amazon.awscdk.StackProps;
+//import java.util.Arrays;
 
 public class Cdk01BucketS3App {
     public static void main(final String[] args) {

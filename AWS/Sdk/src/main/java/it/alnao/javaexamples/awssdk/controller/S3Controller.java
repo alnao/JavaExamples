@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import it.alnao.javaexamples.awssdk.aws.s3.S3Content;
 import it.alnao.javaexamples.awssdk.restModel.ApiResponse;
 import it.alnao.javaexamples.awssdk.restModel.s3.CreateBucketRequest;
 import it.alnao.javaexamples.awssdk.restModel.s3.DeleteBucketRequest;
@@ -31,6 +32,9 @@ public class S3Controller {
     @Autowired
     private S3Service s3Service;
 
+    @Autowired
+    private S3Content s3Content;
+
     @GetMapping("/listBuckets")
     public ResponseEntity<?> listBuckets() {
         try {
@@ -41,6 +45,7 @@ public class S3Controller {
                 .body(new ApiResponse(false, "Errore nel listing dei bucket: " + e.getMessage(), null));
         }
     }
+
 
     @PostMapping("/listFiles")
     public ResponseEntity<?> listFiles(@RequestBody ListFilesRequest request) {
@@ -54,6 +59,11 @@ public class S3Controller {
         }
     }
 
+    @GetMapping("/files")
+    public List<String> listFilesAlt(@RequestParam String bucketName, @RequestParam(required = false) String prefix) {
+        return s3Content.listFiles(bucketName, prefix != null ? prefix : "");
+    }
+
     @PostMapping("/deleteFile")
     public ResponseEntity<?> deleteFile(@RequestBody DeleteFileRequest request) {
         try {
@@ -63,6 +73,11 @@ public class S3Controller {
             return ResponseEntity.badRequest()
                 .body(new ApiResponse(false, "Errore nella cancellazione: " + e.getMessage(), null));
         }
+    }
+
+    @DeleteMapping("/files")
+    public String deleteFileAlt(@RequestParam String bucketName, @RequestParam String key) {
+        return s3Content.deleteFile(bucketName, key);
     }
     
     @PostMapping("/createBucket")

@@ -20,7 +20,8 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.model.ServerSideEncryption;
-/*
+
+/* - - - - 
 import software.amazon.awssdk.services.s3.model.GetBucketAclRequest;
 import software.amazon.awssdk.services.s3.model.GetBucketVersioningRequest;
 import software.amazon.awssdk.services.s3.model.GetBucketEncryptionRequest;
@@ -36,17 +37,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class S3Create {
     private static final Logger logger = LoggerFactory.getLogger(S3Create.class);
+    private static final String DEFAULT_BUCKET_NAME = System.getenv("DEFAULT_BUCKET_NAME");
+    private static final Region DEFAULT_REGION = Region.of(System.getenv("AWS_REGION"));
 
-    private static final String DEFAULT_BUCKET_NAME = "esempio01-bucket-s3-sdk"; // Ho aggiunto "-sdk" per distinguere
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         logger.info("S3 Main started");
         
         String bucketName = DEFAULT_BUCKET_NAME;
         if (args.length > 0) {
             bucketName = args[0]; // Permette di passare il nome del bucket come argomento da riga di comando
         }
-        Region region = Region.EU_CENTRAL_1; // Esempio: Cambia con la tua regione preferita
+        Region region = DEFAULT_REGION; // Esempio: Cambia con la tua regione preferita
 
         S3Create s3Create=new S3Create();
         String bucketArn=s3Create.createBucket(bucketName,region,false,true,false);
@@ -54,17 +55,15 @@ public class S3Create {
         logger.info("S3 Main complete with {}",bucketArn);
     }
 
-    public String createBucket(String bucketName,Region region, boolean enableVersioning, boolean enableEventBridge, boolean enableServerSideEntryption) {
-        logger.info("Initializing S3Client for region: {} {}", bucketName,region.id());
-        // Configura la regione AWS. Assicurati che le tue credenziali siano configurate (es. variabili d'ambiente, ~/.aws/credentials)
+    public String createBucket(String bucketName,Region region, boolean enableVersioning, boolean enableEventBridge, boolean enableServerSideEncryption) throws S3Exception {
+        validateBucketName(bucketName);
+        
+        try (S3Client s3Client = S3Client.builder().region(region).build()) {
+            logger.info("Initializing S3Client for region: {} {}", bucketName,region.id());
+            // Configura la regione AWS. Assicurati che le tue credenziali siano configurate (es. variabili d'ambiente, ~/.aws/credentials)
  
-        S3Client s3Client = S3Client.builder()
-                .region(region)
-                .build();
+            logger.info("Attempting to create S3 bucket: " + bucketName);
 
-        logger.info("Attempting to create S3 bucket: " + bucketName);
-
-        try {
             // 1. Creazione del Bucket
             CreateBucketRequest createBucketRequest = CreateBucketRequest.builder()
                     .bucket(bucketName)
@@ -90,7 +89,7 @@ public class S3Create {
         }
 
             // 3. Configurazione della crittografia lato server (AES256)
-        if (enableServerSideEntryption){
+        if (enableServerSideEncryption){
             ServerSideEncryptionByDefault encryptionByDefault = ServerSideEncryptionByDefault.builder()
                     .sseAlgorithm(ServerSideEncryption.AES256)
                     .build();
@@ -142,14 +141,17 @@ public class S3Create {
             logger.info("StackName: N/A (concetto di CloudFormation, non SDK diretto)");
                 return bucketArn;
         } catch (S3Exception e) {
-            logger.error("Error creating S3 bucket or configuring it: " + e.awsErrorDetails().errorMessage());
-            logger.error("Error Code: " + e.awsErrorDetails().errorCode());
+            logger.error("Error creating S3 bucket: {}", e.getMessage(), e);
             throw e;
-        } finally {
-            s3Client.close(); // È importante chiudere il client
         }
     }
 
+    private void validateBucketName(String bucketName) {
+        if (bucketName == null || bucketName.isEmpty()) {
+            throw new IllegalArgumentException("Bucket name cannot be null or empty");
+        }
+        // Add more validation as per AWS bucket naming rules
+    }
 
     public String deleteBucketIfEmpty(String bucketName/* ,Region region*/) {
         logger.info("Initializing S3Client for region: {} ", bucketName /* ,region.id()*/);
@@ -166,7 +168,7 @@ public class S3Create {
         ListObjectsV2Response listResponse = s3Client.listObjectsV2(listRequest);
 
         if (!listResponse.contents().isEmpty()) {
-                return "Il bucket non è vuoto. Nessuna azione eseguita.";
+                return "Il bucket non \u00E8 vuoto. Nessuna azione eseguita.";
         }
 
         // Elimina il bucket
