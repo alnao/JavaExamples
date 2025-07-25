@@ -7,3 +7,12 @@ aws:
     region: ${AWS_REGION:eu-central-1}
     profile: ${AWS_PROFILE:}
     
+
+# Actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    health:
+      show-details: "always"

@@ -5,7 +5,7 @@ import software.amazon.awssdk.utils.StringUtils;
 
 public class RegionUtils {
     public static Region getRegionOrDefault(String region){
-        if (StringUtils.isBlank(region)) {
+        if (StringUtils.isBlank(region) || region==null ) {
             return Region.EU_CENTRAL_1;
         }
         return Region.of(region);

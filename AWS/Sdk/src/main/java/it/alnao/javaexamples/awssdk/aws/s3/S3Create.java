@@ -20,16 +20,7 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.model.ServerSideEncryption;
-
-/* - - - - 
-import software.amazon.awssdk.services.s3.model.GetBucketAclRequest;
-import software.amazon.awssdk.services.s3.model.GetBucketVersioningRequest;
-import software.amazon.awssdk.services.s3.model.GetBucketEncryptionRequest;
-import software.amazon.awssdk.services.s3.model.GetBucketNotificationConfigurationRequest;
-import software.amazon.awssdk.services.s3.model.Owner; // Per ottenere l'ARN del bucket, anche se indiretto
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-*/
+import it.alnao.javaexamples.awssdk.utils.RegionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -38,7 +29,7 @@ import org.springframework.stereotype.Component;
 public class S3Create {
     private static final Logger logger = LoggerFactory.getLogger(S3Create.class);
     private static final String DEFAULT_BUCKET_NAME = System.getenv("DEFAULT_BUCKET_NAME");
-    private static final Region DEFAULT_REGION = Region.of(System.getenv("AWS_REGION"));
+    private static final Region DEFAULT_REGION = RegionUtils.getRegionOrDefault(System.getenv("AWS_REGION"));
 
     public static void main(String[] args) throws Exception {
         logger.info("S3 Main started");

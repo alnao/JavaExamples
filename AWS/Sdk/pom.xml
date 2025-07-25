@@ -19,6 +19,13 @@
         <slf4j.version>2.0.7</slf4j.version>
         <springVersion>3.5.0</springVersion>
     </properties>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.0</version>
+        <relativePath/>
+    </parent>
+
 
     <dependencies>
         <!-- AWS SDK v2 -->
@@ -42,11 +49,22 @@
             <artifactId>regions</artifactId>
             <version>${aws.sdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>ec2</artifactId>
+            <version>${aws.sdk.version}</version>
+        </dependency>
         
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+            <version>LATEST</version>
         </dependency>
 <!--
         <dependency>
@@ -85,6 +103,15 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <version>${springVersion}</version>
             <exclusions>
@@ -107,18 +134,24 @@
             <version>3.26.1</version> 
         </dependency>-->        
 
-        <!-- SpringFox Swagger -->
+        <!-- SpringFox Swagger 
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
             <version>3.0.0</version>
-        </dependency>
-
-        <!-- Spring Boot Actuator -->
+        </dependency>-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <version>2.5.0</version> <!-- Controlla la versione più recente su Maven Central -->
         </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version> <!-- Controlla la versione più recente su Maven Central -->
+        </dependency>
+        
+        
     </dependencies>
 
     <build>
@@ -135,6 +168,21 @@
             </plugin>
 
             <!-- Assembly plugin per creare un jar eseguibile con dipendenze -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springVersion}</version> <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>it.alnao.javaexamples.awssdk.Application</mainClass>
+                </configuration>
+            </plugin>
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -159,6 +207,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
 
             <!-- Surefire plugin per i test -->
             <plugin>
