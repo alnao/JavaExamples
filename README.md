@@ -4,26 +4,33 @@
 </a>
 
 # Java Examples:
-- Aws 
-  - CDK
+- **Aws**: mini-progetti sui servizi di AWS 
+  - CDK: *progetti in revisione*
     - CDK01BucketS3
-  - S3Console
-  - Sdk
-    - S3
-- Corsi Vari
+    - CDK02istanzeEC2
+    - CDK02istanzeEC2metadata
+  - Lambda: *coming soon*
+  - S3Console: *progetto in revisione*
+  - Sdk: *progetto in revisione*
+- Corsi Vari: vecchi progetti di diversi tipo ma riguardanti Java
   - AwsLambdaDynamoExamples
   - CorsoSpringBoot25saluti
   - CorsoSpringBootCompleto
   - CorsoSpringBootReact
   - SouthAfricanMobileNumbers
-- Gaming
+- Gaming: vari mini-progetti e mini-giochi sviluppati con divese liberie
   - JGame
   - Minecraft 01
   - RockPaperScissors
 - Generic Java
+- **Spring boot old versions**: cartella contentente diversi mini-progetti sviluppati con Spring boot, i progetti fanno riferimento a vecchie versioni di spring boot o vecchi progetti poi diventati l'esempio disponibile nel respositoy
+  ```
+  https://github.com/alnao/JavaSpringBootExample
+  ```
 
 
 # Contenuti
+Questi sono contenuti che sono stati pubblicati in passato nella vecchia versione del blog alnao.it:
 - [Come creare e compilare un progetto con Maven](#Come-creare-e-compilare-un-progetto-con-Maven )
 - [Come gestire progetti Maven con Eclipse](#Come-gestire-progetti-Maven-con-Eclipse )
 - [Come creare applicazioni Web con servlet e JSP](#Come-creare-applicazioni-Web-con-servlet-e-JSP)
@@ -1704,9 +1711,18 @@ try (CSVReader reader = new CSVReaderBuilder(new FileReader(inputPath))
 
 
 # AlNao.it
-Nessun contenuto in questo repository è stato creato con IA o automaticamente, tutto il codice è stato scritto con molta pazienza da Alberto Nao. Se il codice è stato preso da altri siti/progetti è sempre indicata la fonte. Per maggior informazioni visitare il sito [alnao.it](https://www.alnao.it/).
+Tutti i codici sorgente e le informazioni presenti in questo repository sono frutto di un attento e paziente lavoro di sviluppo da parte di Alberto Nao, che si è impegnato a verificarne la correttezza nella misura massima possibile. Qualora parte del codice o dei contenuti sia stato tratto da fonti esterne, la relativa provenienza viene sempre citata, nel rispetto della trasparenza e della proprietà intellettuale. 
+
+
+Alcuni contenuti e porzioni di codice presenti in questo repository sono stati realizzati anche grazie al supporto di strumenti di intelligenza artificiale, il cui contributo ha permesso di arricchire e velocizzare la produzione del materiale. Ogni informazione e frammento di codice è stato comunque attentamente verificato e validato, con l’obiettivo di garantire la massima qualità e affidabilità dei contenuti offerti. 
+
+
+Per ulteriori dettagli, approfondimenti o richieste di chiarimento, si invita a consultare il sito [alnao.it](https://www.alnao.it/).
+
 
 ## License
 Public projects 
 <a href="https://it.wikipedia.org/wiki/GNU_General_Public_License"  valign="middle"><img src="https://img.shields.io/badge/License-GNU-blue" style="height:22px;"  valign="middle"></a> 
 *Free Software!*
+
+E' garantito il permesso di copiare, distribuire e/o modificare questo documento in base ai termini della GNU Free Documentation License, Versione 1.2 o ogni versione successiva pubblicata dalla Free Software Foundation. Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.2 or any later version published by the Free Software Foundation.
