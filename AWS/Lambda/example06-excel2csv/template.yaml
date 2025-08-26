@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  example06-excel2csv
+
+  Sample SAM Template for example06-excel2csv
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 900
+
+Resources:
+  Exc2CsvFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: Exc2CsvFunction
+      Handler: exc2Csv.App::handleRequest
+      Role: !GetAtt Exc2CsvIAMRole.Arn
+      Runtime: java8
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          PARAM1: VALUE
+          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 # More info about tiered compilation https://aws.amazon.com/blogs/compute/optimizing-aws-lambda-function-performance-for-java/
+      Events:
+        HelloWorld:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /hello
+            Method: get
+  Exc2CsvIAMRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:*'
+                Resource: 
+                  - 'arn:aws:s3:::alberto-input/*'
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: 'arn:aws:logs:*:*:*'
+  Exc2CsvEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      EventBusName: default
+      EventPattern: 
+        source: 
+          - "aws.s3"
+        detail-type:
+          - "Object Created"
+        detail: 
+          bucket:
+            name: 
+              - 'alberto-input'
+          object:
+            key:
+              - prefix: 'INPUT'
+      Targets:
+        - Id: id1
+          Arn: !GetAtt Exc2CsvFunction.Arn
+  Exc2CsvEventsToInvokeLambda: 
+    Type: AWS::Lambda::Permission
+    Properties: 
+      FunctionName: !Ref Exc2CsvFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt Exc2CsvEventRule.Arn
+Outputs:
+  Exc2Csv:
+    Description: "Exc2Csv Lambda Function ARN"
+    Value: !GetAtt Exc2CsvFunction.Arn

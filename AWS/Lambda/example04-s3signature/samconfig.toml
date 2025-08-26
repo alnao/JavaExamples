@@ -1,0 +1,48 @@
+# More information about the configuration file can be found here:
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-config.html
+version = 0.1
+
+[default]
+[default.global]
+[default.global.parameters]
+
+[default.build]
+[default.build.parameters]
+cached = true
+parallel = true
+
+[default.validate]
+[default.validate.parameters]
+lint = true
+
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "example04-s3signature"
+# s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-16f9te7yqqw7l"  # Commented out - let SAM create new bucket
+# Alternative: use your own bucket
+# s3_bucket = "cloudformation-alnao"
+s3_prefix = "example04-s3signature"
+region = "eu-central-1"  # Frankfurt instead of Ireland
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = []
+parameter_overrides = [
+    "S3BucketName=cloudformation-alnao", 
+    "Environment=dev"
+]
+
+[default.package]
+[default.package.parameters]
+resolve_s3 = true
+
+[default.sync]
+[default.sync.parameters]
+watch = true
+
+[default.local_start_api]
+[default.local_start_api.parameters]
+warm_containers = "EAGER"
+
+[default.local_start_lambda]
+[default.local_start_lambda.parameters]
+warm_containers = "EAGER"

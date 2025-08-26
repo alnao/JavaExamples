@@ -1,0 +1,21 @@
+{
+  "httpMethod": "GET",
+  "path": "/signature",
+  "queryStringParameters": {
+    "key": "test-file.pdf",
+    "expires": "2"
+  },
+  "headers": {
+    "Accept": "application/json",
+    "Content-Type": "application/json"
+  },
+  "body": null,
+  "isBase64Encoded": false,
+  "requestContext": {
+    "accountId": "123456789012",
+    "apiId": "test-api-id",
+    "httpMethod": "GET",
+    "requestId": "test-request-id",
+    "stage": "Prod"
+  }
+}

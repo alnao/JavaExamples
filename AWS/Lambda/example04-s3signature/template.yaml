@@ -1,0 +1,130 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: java-maven-s3signature - Generazione di pre-signed URLs per download sicuro da S3
+
+Parameters:
+  S3BucketName:
+    Type: String
+    Default: "my-s3-bucket"
+    Description: "Nome del bucket S3 da cui generare pre-signed URLs"
+    MinLength: 3
+    MaxLength: 63
+    AllowedPattern: ^[a-z0-9][a-z0-9-]*[a-z0-9]$
+    ConstraintDescription: "Il nome del bucket deve seguire le convenzioni di naming S3"
+  
+  Environment:
+    Type: String
+    Default: "dev"
+    AllowedValues: ["dev", "test", "prod"]
+    Description: "Ambiente di deployment"
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: java11
+    Tags:
+      StackName: !Ref AWS::StackName
+      Environment: !Ref Environment
+      Project: "java-maven-s3signature"
+    Environment:
+      Variables:
+        S3_BUCKET_NAME: !Ref S3BucketName
+        ENVIRONMENT: !Ref Environment
+        AWS_REGION_NAME: !Ref AWS::Region
+
+Resources:
+  S3SignatureFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}"
+      CodeUri: S3Signature
+      Handler: s3Signature.App::handleRequest
+      Role: !GetAtt S3SignatureIAMRole.Arn
+      Description: !Sub "Lambda per generare pre-signed URLs per bucket ${S3BucketName} - Stack: ${AWS::StackName}"
+      Tags:
+        StackName: !Ref AWS::StackName
+        Environment: !Ref Environment
+        Project: "java-maven-s3signature"
+      Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+        Variables:
+          S3_BUCKET_NAME: !Ref S3BucketName
+          ENVIRONMENT: !Ref Environment
+          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 # More info about tiered compilation https://aws.amazon.com/blogs/compute/optimizing-aws-lambda-function-performance-for-java/
+          AWS_REGION_NAME: !Ref AWS::Region
+      Events:
+        S3SignatureApi:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /signature
+            Method: get
+            
+  S3SignatureIAMRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Sub '${AWS::StackName}'
+      Tags:
+        - Key: StackName
+          Value: !Ref AWS::StackName
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: Project
+          Value: "java-maven-s3signature"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: S3BucketAccess
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:GetObject'
+                  - 's3:GetObjectVersion'
+                  - 's3:ListBucket'
+                Resource: 
+                  - !Sub 'arn:aws:s3:::${S3BucketName}'
+                  - !Sub 'arn:aws:s3:::${S3BucketName}/*'
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+                Resource: !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*'
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  S3SignatureApiUrl:
+    Description: "API Gateway endpoint URL per generare pre-signed URLs"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/signature/"
+    Export:
+      Name: !Sub "${AWS::StackName}-ApiUrl"
+      
+  S3SignatureFunctionArn:
+    Description: "ARN della Lambda Function S3Signature"
+    Value: !GetAtt S3SignatureFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-FunctionArn"
+      
+  S3BucketNameOutput:
+    Description: "Nome del bucket S3 configurato"
+    Value: !Ref S3BucketName
+    Export:
+      Name: !Sub "${AWS::StackName}-BucketName"
+      
+  S3SignatureRoleArn:
+    Description: "ARN del ruolo IAM per la Lambda Function"
+    Value: !GetAtt S3SignatureIAMRole.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-RoleArn"

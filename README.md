@@ -1,29 +1,28 @@
+# Java Examples:
 <a href="https://www.alnao.it/"> 
         <img src="https://img.shields.io/badge/Java-ED8B00?style=plastic&logo=openjdk&logoColor=white" height="25px"/>
         <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=plastic&logo=SpringBoot&logoColor=white" height="25px" />
 </a>
 
-# Java Examples:
-- **Aws**: mini-progetti sui servizi di AWS 
+In questo repository sono compresi diversi progetti di diverso tipo:
+- **Aws**: mini-progetti con tecnologie java per i servizi di AWS 
   - CDK: *progetti in revisione*
-    - CDK01BucketS3
-    - CDK02istanzeEC2
-    - CDK02istanzeEC2metadata
-  - Lambda: *coming soon*
+  - Lambda: semplici esempi di AWS-Lambda Function sviluppate con ``sam`` e non con ``CloudFormation``
   - S3Console: *progetto in revisione*
   - Sdk: *progetto in revisione*
-- Corsi Vari: vecchi progetti di diversi tipo ma riguardanti Java
+- **Corsi Vari**: vecchi progetti con diverse sorgenti riguardanti varie versioni di Java e Spring Boot
   - AwsLambdaDynamoExamples
   - CorsoSpringBoot25saluti
   - CorsoSpringBootCompleto
   - CorsoSpringBootReact
   - SouthAfricanMobileNumbers
-- Gaming: vari mini-progetti e mini-giochi sviluppati con divese liberie
+- **Gaming**: vari mini-progetti e mini-giochi sviluppati con divese liberie
   - JGame
   - Minecraft 01
   - RockPaperScissors
-- Generic Java
-- **Spring boot old versions**: cartella contentente diversi mini-progetti sviluppati con Spring boot, i progetti fanno riferimento a vecchie versioni di spring boot o vecchi progetti poi diventati l'esempio disponibile nel respositoy
+  - GuessTheNumber *coming soon*
+- **Generic Java**: vari esempi di progettini maven con varie librerie
+- **Spring boot old versions**: cartella contentente diversi mini-progetti sviluppati con Spring boot, i progetti fanno riferimento a vecchie versioni di spring boot o vecchi progetti poi diventati l'esempio completo disponibile nel respositoy
   ```
   https://github.com/alnao/JavaSpringBootExample
   ```
@@ -390,7 +389,7 @@ String valoreId=request.getParameter("id");
 session.setAttribute("id",valoreId);
 %>
 ```
-Usando le servlet introdotta prima è possibile visualizzare in una pagina le informazioni provenenti dalla servlet recuperando i valori dalla request o dalla sessione:
+Usando le servlet introdotta prima è possibile visualizzare in una pagina le informazioni provenienti dalla servlet recuperando i valori dalla request o dalla sessione:
 ```
 <%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
 <%
@@ -630,7 +629,7 @@ e al suo interno deve essere presente l'elenco degli attributi, cioè i parametr
 ```
 <%@ attribute name="oggetto" required="true" rtexprvalue="true" description="." %>
 ```
-e dopo si inserisce il codice HTML/Java del tag come se fosse un file jsp, per esempio
+e dopo si inserisce il codice HTML/Java del tag come se fosse un file jsp, per esempio::
 ```
 <DIV class="classeDiv">
   L'oggetto ha nome <%=request.getParameter("oggetto")%>
@@ -742,7 +741,7 @@ public class PrimoForm extends ActionForm {
   }
 }
 ```
-Il sistema di validazione dei dati viene attivato solo se nella pagina jsp viene essere usato un tag form previsto dalla libreria standard struts e gli input previsti dalla libreria standard del framework. Nel metodo presente nella classe ActionForm è possibile creare logiche di validazione come nell'esempio. Il form della pagina che invia dati:
+Il sistema di validazione dei dati viene attivato solo se nella pagina viene essere usato un tag form previsto dalla libreria standard struts e gli input previsti dalla libreria standard del framework. Nel metodo presente nella classe ActionForm è possibile creare logiche di validazione come nell'esempio. Il form della pagina che invia dati:
 ```
 <%@ taglib uri="http://struts.apache.org/tags-html" prefix="html"%>
 ...
@@ -967,7 +966,7 @@ fn:join unisce tutti gli elementi di un elenco in una stringa separati da un sep
 <c:set var = "string3" value = "${fn:join(string2, '-')}" />
 <p>${string3}< /p>
 fn:length calcola il numero di elementi in una lista (collection) oppure la lunghezza di una stringa
-fn:replace ritorna una stringa nella quale è stato sostituita tutte le occorrenze di una stringa con un'altra
+fn:replace ritorna una stringna nella quale è stato sostituita tutte le occorrenze di una stringa con un'altra
 fn:split divide una stringa in un array di sottostringhe
 fn:startsWith testa se una stringa inizia con una determinata stringa
 fn:substring estrae una stringa da una posizione ad un'altra (si comincia a contare da zero come in java), per esempio:

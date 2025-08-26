@@ -1,0 +1,156 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: java-maven-s3signature - Generazione di pre-signed URLs per download
+  sicuro da S3
+Parameters:
+  S3BucketName:
+    Type: String
+    Default: my-s3-bucket
+    Description: Nome del bucket S3 da cui generare pre-signed URLs
+    MinLength: 3
+    MaxLength: 63
+    AllowedPattern: ^[a-z0-9][a-z0-9-]*[a-z0-9]$
+    ConstraintDescription: Il nome del bucket deve seguire le convenzioni di naming
+      S3
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+    - dev
+    - test
+    - prod
+    Description: Ambiente di deployment
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: java11
+    Tags:
+      StackName:
+        Ref: AWS::StackName
+      Environment:
+        Ref: Environment
+      Project: java-maven-s3signature
+    Environment:
+      Variables:
+        S3_BUCKET_NAME:
+          Ref: S3BucketName
+        ENVIRONMENT:
+          Ref: Environment
+        AWS_REGION_NAME:
+          Ref: AWS::Region
+Resources:
+  S3SignatureFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName:
+        Fn::Sub: ${AWS::StackName}
+      CodeUri: S3SignatureFunction
+      Handler: s3Signature.App::handleRequest
+      Role:
+        Fn::GetAtt:
+        - S3SignatureIAMRole
+        - Arn
+      Description:
+        Fn::Sub: 'Lambda per generare pre-signed URLs per bucket ${S3BucketName} -
+          Stack: ${AWS::StackName}'
+      Tags:
+        StackName:
+          Ref: AWS::StackName
+        Environment:
+          Ref: Environment
+        Project: java-maven-s3signature
+      Environment:
+        Variables:
+          S3_BUCKET_NAME:
+            Ref: S3BucketName
+          ENVIRONMENT:
+            Ref: Environment
+          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1
+          AWS_REGION_NAME:
+            Ref: AWS::Region
+      Events:
+        S3SignatureApi:
+          Type: Api
+          Properties:
+            Path: /signature
+            Method: get
+    Metadata:
+      SamResourceId: S3SignatureFunction
+  S3SignatureIAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName:
+        Fn::Sub: ${AWS::StackName}
+      Tags:
+      - Key: StackName
+        Value:
+          Ref: AWS::StackName
+      - Key: Environment
+        Value:
+          Ref: Environment
+      - Key: Project
+        Value: java-maven-s3signature
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: S3BucketAccess
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - s3:ListBucket
+            Resource:
+            - Fn::Sub: arn:aws:s3:::${S3BucketName}
+            - Fn::Sub: arn:aws:s3:::${S3BucketName}/*
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource:
+              Fn::Sub: arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*
+Outputs:
+  S3SignatureApiUrl:
+    Description: API Gateway endpoint URL per generare pre-signed URLs
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/signature/
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-ApiUrl
+  S3SignatureFunctionArn:
+    Description: ARN della Lambda Function S3Signature
+    Value:
+      Fn::GetAtt:
+      - S3SignatureFunction
+      - Arn
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-FunctionArn
+  S3BucketNameOutput:
+    Description: Nome del bucket S3 configurato
+    Value:
+      Ref: S3BucketName
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-BucketName
+  S3SignatureRoleArn:
+    Description: ARN del ruolo IAM per la Lambda Function
+    Value:
+      Fn::GetAtt:
+      - S3SignatureIAMRole
+      - Arn
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-RoleArn
