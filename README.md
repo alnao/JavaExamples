@@ -5,16 +5,19 @@
 </a>
 
 In questo repository sono compresi diversi progetti di diverso tipo:
-- **Aws**: mini-progetti con tecnologie java per i servizi di AWS 
+- **Aws**: mini-progetti con tecnologie java per i servizi del Cloud AWS 
   - CDK: *progetti in revisione*
   - Lambda: semplici esempi di AWS-Lambda Function sviluppate con ``sam`` e non con ``CloudFormation``
-  - S3Console: *progetto in revisione*
+  - **ManagerFx**: semplice console per gestire e visualizzare le principali risorse in un cloud AWS
   - Sdk: *progetto in revisione*
+- **Azure**: mini-progetti con tecnologie java per i servizi del Cloud Azure
+  - **ManagerFx**: semplice console per gestire e visualizzare le principali risorse in un cloud Azure
 - **Corsi Vari**: vecchi progetti con diverse sorgenti riguardanti varie versioni di Java e Spring Boot
   - AwsLambdaDynamoExamples
   - CorsoSpringBoot25saluti
   - CorsoSpringBootCompleto
   - CorsoSpringBootReact
+  - **JavaFx**: dieci esempi della libreria JavaFX partendo da un semplice esempio fino ad esempi più complessi
   - SouthAfricanMobileNumbers
 - **Gaming**: vari mini-progetti e mini-giochi sviluppati con divese liberie
   - JGame

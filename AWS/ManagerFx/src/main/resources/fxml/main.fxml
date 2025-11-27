@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="it.alnao.aws.managerfx.controller.MainController"
+            stylesheets="@../css/style.css">
+    
+    <!-- Header -->
+    <top>
+        <VBox spacing="10" styleClass="header">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="AWS Console Manager" styleClass="title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Region:"/>
+                <ComboBox fx:id="regionComboBox" prefWidth="200"/>
+                <Label text="Profile:"/>
+                <ComboBox fx:id="profileComboBox" prefWidth="150"/>
+                <Button fx:id="refreshButton" text="Refresh" onAction="#loadResources"/>
+            </HBox>
+            
+            <Label fx:id="statusLabel" text="Ready" styleClass="status"/>
+        </VBox>
+    </top>
+    
+    <!-- Main Content: Sidebar + Content -->
+    <center>
+        <HBox>
+            <!-- Left Sidebar Menu -->
+            <VBox styleClass="sidebar" prefWidth="200" spacing="5">
+                <padding><Insets top="10" right="5" bottom="10" left="5"/></padding>
+                
+                <Label text="AWS Services" styleClass="sidebar-title"/>
+                <ListView fx:id="serviceListView" VBox.vgrow="ALWAYS"/>
+            </VBox>
+            
+            <!-- Content Area -->
+            <StackPane fx:id="contentPane" HBox.hgrow="ALWAYS">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                
+                <!-- VPC Panel -->
+                <VBox fx:id="vpcPanel" visible="true" spacing="10">
+                    <Label text="VPC Resources" styleClass="panel-title"/>
+                    <SplitPane orientation="VERTICAL" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="subnetsTable">
+                            <columns>
+                                <TableColumn fx:id="subnetIdColumn" text="Subnet ID" prefWidth="200"/>
+                                <TableColumn fx:id="subnetCidrColumn" text="CIDR" prefWidth="150"/>
+                                <TableColumn fx:id="subnetAzColumn" text="AZ" prefWidth="150"/>
+                            </columns>
+                        </TableView>
+                        <VBox>
+                            <Label text="VPC Details"/>
+                            <TextArea fx:id="vpcInfoTextArea" editable="false" VBox.vgrow="ALWAYS"/>
+                        </VBox>
+                    </SplitPane>
+                </VBox>
+                
+                <!-- EC2 Panel -->
+                <VBox fx:id="ec2Panel" visible="false" spacing="10">
+                    <Label text="EC2 Instances" styleClass="panel-title"/>
+                    <TableView fx:id="ec2Table" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="ec2IdColumn" text="Instance ID" prefWidth="150"/>
+                            <TableColumn fx:id="ec2NameColumn" text="Name" prefWidth="120"/>
+                            <TableColumn fx:id="ec2TypeColumn" text="Type" prefWidth="100"/>
+                            <TableColumn fx:id="ec2StateColumn" text="State" prefWidth="100"/>
+                            <TableColumn fx:id="ec2IpColumn" text="IP Address" prefWidth="130"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- S3 Panel -->
+                <VBox fx:id="s3Panel" visible="false" spacing="10">
+                    <Label text="S3 Buckets" styleClass="panel-title"/>
+                    <TableView fx:id="s3Table" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="s3NameColumn" text="Bucket Name" prefWidth="200"/>
+                            <TableColumn fx:id="s3CreationColumn" text="Creation Date" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- RDS Panel -->
+                <VBox fx:id="rdsPanel" visible="false" spacing="10">
+                    <Label text="RDS Databases" styleClass="panel-title"/>
+                    <TableView fx:id="rdsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="rdsIdColumn" text="DB Instance" prefWidth="150"/>
+                            <TableColumn fx:id="rdsEngineColumn" text="Engine" prefWidth="100"/>
+                            <TableColumn fx:id="rdsStatusColumn" text="Status" prefWidth="100"/>
+                            <TableColumn fx:id="rdsEndpointColumn" text="Endpoint" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- Security Groups Panel -->
+                <VBox fx:id="sgPanel" visible="false" spacing="10">
+                    <Label text="Security Groups" styleClass="panel-title"/>
+                    <TableView fx:id="sgTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="sgIdColumn" text="SG ID" prefWidth="200"/>
+                            <TableColumn fx:id="sgNameColumn" text="Name" prefWidth="200"/>
+                            <TableColumn fx:id="sgDescriptionColumn" text="Description" prefWidth="300"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- CloudFormation Panel -->
+                <VBox fx:id="cfnPanel" visible="false" spacing="10">
+                    <Label text="CloudFormation Stacks" styleClass="panel-title"/>
+                    <TableView fx:id="cfnTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="cfnNameColumn" text="Stack Name" prefWidth="300"/>
+                            <TableColumn fx:id="cfnStatusColumn" text="Status" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- Lambda Panel -->
+                <VBox fx:id="lambdaPanel" visible="false" spacing="10">
+                    <Label text="Lambda Functions" styleClass="panel-title"/>
+                    <TableView fx:id="lambdaTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="lambdaNameColumn" text="Function Name" prefWidth="300"/>
+                            <TableColumn fx:id="lambdaRuntimeColumn" text="Runtime" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- CloudFront Panel -->
+                <VBox fx:id="cloudFrontPanel" visible="false" spacing="10">
+                    <Label text="CloudFront Distributions" styleClass="panel-title"/>
+                    <TableView fx:id="cloudFrontTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="cloudFrontIdColumn" text="ID" prefWidth="200"/>
+                            <TableColumn fx:id="cloudFrontDomainColumn" text="Domain Name" prefWidth="300"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- DynamoDB Panel -->
+                <VBox fx:id="dynamoPanel" visible="false" spacing="10">
+                    <Label text="DynamoDB Tables" styleClass="panel-title"/>
+                    <TableView fx:id="dynamoTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="dynamoNameColumn" text="Table Name" prefWidth="400"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- EventBridge Panel -->
+                <VBox fx:id="eventBridgePanel" visible="false" spacing="10">
+                    <Label text="EventBridge Rules" styleClass="panel-title"/>
+                    <TableView fx:id="eventBridgeTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="eventBridgeNameColumn" text="Rule Name" prefWidth="300"/>
+                            <TableColumn fx:id="eventBridgeStateColumn" text="State" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- SNS Panel -->
+                <VBox fx:id="snsPanel" visible="false" spacing="10">
+                    <Label text="SNS Topics" styleClass="panel-title"/>
+                    <TableView fx:id="snsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="snsArnColumn" text="Topic ARN" prefWidth="400"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- SQS Panel -->
+                <VBox fx:id="sqsPanel" visible="false" spacing="10">
+                    <Label text="SQS Queues" styleClass="panel-title"/>
+                    <TableView fx:id="sqsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="sqsUrlColumn" text="Queue URL" prefWidth="400"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- SSM Panel -->
+                <VBox fx:id="ssmPanel" visible="false" spacing="10">
+                    <Label text="SSM Parameters" styleClass="panel-title"/>
+                    <TableView fx:id="ssmTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="ssmNameColumn" text="Parameter Name" prefWidth="300"/>
+                            <TableColumn fx:id="ssmTypeColumn" text="Type" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- Step Functions Panel -->
+                <VBox fx:id="stepFunctionsPanel" visible="false" spacing="10">
+                    <Label text="Step Functions State Machines" styleClass="panel-title"/>
+                    <TableView fx:id="stepFunctionsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="stepFunctionsNameColumn" text="Name" prefWidth="250"/>
+                            <TableColumn fx:id="stepFunctionsArnColumn" text="ARN" prefWidth="350"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- API Gateway Panel -->
+                <VBox fx:id="apiGatewayPanel" visible="false" spacing="10">
+                    <Label text="API Gateway REST APIs" styleClass="panel-title"/>
+                    <TableView fx:id="apiGatewayTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="apiGatewayIdColumn" text="API ID" prefWidth="200"/>
+                            <TableColumn fx:id="apiGatewayNameColumn" text="Name" prefWidth="300"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- IAM Panel -->
+                <VBox fx:id="iamPanel" visible="false" spacing="10">
+                    <Label text="IAM Resources" styleClass="panel-title"/>
+                    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                        <Tab text="Groups">
+                            <TableView fx:id="iamGroupsTable">
+                                <columns>
+                                    <TableColumn fx:id="iamGroupNameColumn" text="Group Name" prefWidth="200"/>
+                                    <TableColumn fx:id="iamGroupArnColumn" text="ARN" prefWidth="300"/>
+                                </columns>
+                            </TableView>
+                        </Tab>
+                        <Tab text="Users">
+                            <TableView fx:id="iamUsersTable">
+                                <columns>
+                                    <TableColumn fx:id="iamUserNameColumn" text="User Name" prefWidth="200"/>
+                                    <TableColumn fx:id="iamUserArnColumn" text="ARN" prefWidth="300"/>
+                                </columns>
+                            </TableView>
+                        </Tab>
+                        <Tab text="Roles">
+                            <TableView fx:id="iamRolesTable">
+                                <columns>
+                                    <TableColumn fx:id="iamRoleNameColumn" text="Role Name" prefWidth="200"/>
+                                    <TableColumn fx:id="iamRoleArnColumn" text="ARN" prefWidth="300"/>
+                                </columns>
+                            </TableView>
+                        </Tab>
+                    </TabPane>
+                </VBox>
+                
+            </StackPane>
+        </HBox>
+    </center>
+    
+</BorderPane>

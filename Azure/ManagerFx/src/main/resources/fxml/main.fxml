@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="it.alnao.azure.managerfx.controller.MainController"
+            stylesheets="@../css/style.css">
+    
+    <!-- Header -->
+    <top>
+        <VBox spacing="10" styleClass="header">
+            <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+            
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Azure Console Manager" styleClass="title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Subscription:"/>
+                <ComboBox fx:id="subscriptionComboBox" prefWidth="300"/>
+                <Button fx:id="refreshButton" text="Refresh" onAction="#loadResources"/>
+            </HBox>
+            
+            <Label fx:id="statusLabel" text="Ready" styleClass="status"/>
+        </VBox>
+    </top>
+    
+    <!-- Main Content: Sidebar + Content -->
+    <center>
+        <HBox>
+            <!-- Left Sidebar Menu -->
+            <VBox styleClass="sidebar" prefWidth="200" spacing="5">
+                <padding><Insets top="10" right="5" bottom="10" left="5"/></padding>
+                
+                <Label text="Azure Services" styleClass="sidebar-title"/>
+                <ListView fx:id="serviceListView" VBox.vgrow="ALWAYS"/>
+            </VBox>
+            
+            <!-- Content Area -->
+            <StackPane fx:id="contentPane" HBox.hgrow="ALWAYS">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                
+                <!-- Resource Groups Panel -->
+                <VBox fx:id="resourceGroupsPanel" visible="true" spacing="10">
+                    <Label text="Resource Groups" styleClass="panel-title"/>
+                    <TableView fx:id="resourceGroupsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="rgNameColumn" text="Name" prefWidth="300"/>
+                            <TableColumn fx:id="rgLocationColumn" text="Location" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- Virtual Machines Panel -->
+                <VBox fx:id="virtualMachinesPanel" visible="false" spacing="10">
+                    <Label text="Virtual Machines" styleClass="panel-title"/>
+                    <TableView fx:id="virtualMachinesTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="vmNameColumn" text="Name" prefWidth="200"/>
+                            <TableColumn fx:id="vmSizeColumn" text="Size" prefWidth="150"/>
+                            <TableColumn fx:id="vmStatusColumn" text="Status" prefWidth="150"/>
+                            <TableColumn fx:id="vmLocationColumn" text="Location" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- Virtual Networks Panel -->
+                <VBox fx:id="virtualNetworksPanel" visible="false" spacing="10">
+                    <Label text="Virtual Networks" styleClass="panel-title"/>
+                    <TableView fx:id="virtualNetworksTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="vnetNameColumn" text="Name" prefWidth="250"/>
+                            <TableColumn fx:id="vnetAddressColumn" text="Address Space" prefWidth="200"/>
+                            <TableColumn fx:id="vnetLocationColumn" text="Location" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- Storage Accounts Panel -->
+                <VBox fx:id="storageAccountsPanel" visible="false" spacing="10">
+                    <Label text="Storage Accounts" styleClass="panel-title"/>
+                    <TableView fx:id="storageAccountsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="storageNameColumn" text="Name" prefWidth="250"/>
+                            <TableColumn fx:id="storageLocationColumn" text="Location" prefWidth="150"/>
+                            <TableColumn fx:id="storageSkuColumn" text="SKU" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- SQL Servers Panel -->
+                <VBox fx:id="sqlServersPanel" visible="false" spacing="10">
+                    <Label text="SQL Servers" styleClass="panel-title"/>
+                    <TableView fx:id="sqlServersTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="sqlNameColumn" text="Name" prefWidth="250"/>
+                            <TableColumn fx:id="sqlLocationColumn" text="Location" prefWidth="150"/>
+                            <TableColumn fx:id="sqlVersionColumn" text="Version" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- Web Apps Panel -->
+                <VBox fx:id="webAppsPanel" visible="false" spacing="10">
+                    <Label text="Web Apps" styleClass="panel-title"/>
+                    <TableView fx:id="webAppsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="webAppNameColumn" text="Name" prefWidth="250"/>
+                            <TableColumn fx:id="webAppLocationColumn" text="Location" prefWidth="150"/>
+                            <TableColumn fx:id="webAppStateColumn" text="State" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- Function Apps Panel -->
+                <VBox fx:id="functionAppsPanel" visible="false" spacing="10">
+                    <Label text="Function Apps" styleClass="panel-title"/>
+                    <TableView fx:id="functionAppsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="functionAppNameColumn" text="Name" prefWidth="250"/>
+                            <TableColumn fx:id="functionAppLocationColumn" text="Location" prefWidth="150"/>
+                            <TableColumn fx:id="functionAppStateColumn" text="State" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- AKS Panel -->
+                <VBox fx:id="aksPanel" visible="false" spacing="10">
+                    <Label text="Azure Kubernetes Service (AKS)" styleClass="panel-title"/>
+                    <TableView fx:id="aksTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="aksNameColumn" text="Name" prefWidth="250"/>
+                            <TableColumn fx:id="aksLocationColumn" text="Location" prefWidth="150"/>
+                            <TableColumn fx:id="aksVersionColumn" text="Kubernetes Version" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+                <!-- Cosmos DB Panel -->
+                <VBox fx:id="cosmosDbPanel" visible="false" spacing="10">
+                    <Label text="Cosmos DB Accounts" styleClass="panel-title"/>
+                    <TableView fx:id="cosmosDbTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="cosmosNameColumn" text="Name" prefWidth="250"/>
+                            <TableColumn fx:id="cosmosLocationColumn" text="Location" prefWidth="150"/>
+                            <TableColumn fx:id="cosmosTypeColumn" text="Type" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+                
+            </StackPane>
+        </HBox>
+    </center>
+    
+</BorderPane>

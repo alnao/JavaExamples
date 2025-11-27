@@ -1,0 +1,83 @@
+/* Stile globale - ispirato a Bootstrap 5 */
+.root {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 30;
+}
+
+.title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0d6efd;
+}
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
+}
+
+.input-field {
+    -fx-background-color: white;
+    -fx-border-color: #ced4da;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 10 12;
+    -fx-font-size: 14px;
+    -fx-pref-width: 300;
+}
+
+.input-field:focused {
+    -fx-border-color: #0d6efd;
+}
+
+.search-button {
+    -fx-background-color: #0d6efd;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.search-button:hover {
+    -fx-background-color: #0b5ed7;
+}
+
+.search-button:disabled {
+    -fx-background-color: #6c757d;
+    -fx-opacity: 0.6;
+}
+
+.error-label {
+    -fx-text-fill: #dc3545;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.weather-data {
+    -fx-padding: 20 0 0 0;
+}
+
+.city-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0d6efd;
+}
+
+.temperature-label {
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0d6efd;
+}
+
+.condition-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: #6c757d;
+}
+
+.footer {
+    -fx-text-fill: #6c757d;
+    -fx-font-size: 12px;
+}

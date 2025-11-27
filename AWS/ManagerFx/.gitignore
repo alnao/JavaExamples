@@ -1,0 +1,30 @@
+# Ignore Maven target directory
+target/
+
+# Ignore IDE files
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*~
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore logs
+*.log
+
+# Ignore compiled class files
+*.class
+
+# Ignore package files
+*.jar
+*.war
+*.ear
+
+# AWS credentials (never commit!)
+.aws/
+credentials
+config
