@@ -18,6 +18,7 @@ In questo repository sono compresi diversi progetti di diverso tipo:
   - CorsoSpringBootCompleto
   - CorsoSpringBootReact
   - **JavaFx**: dieci esempi della libreria JavaFX partendo da un semplice esempio fino ad esempi più complessi
+    - Progetto **99-AlNaoEditor**: piccolo editor di testo, ispirato al molto famoso jEdit
   - SouthAfricanMobileNumbers
 - **Gaming**: vari mini-progetti e mini-giochi sviluppati con divese liberie
   - JGame
