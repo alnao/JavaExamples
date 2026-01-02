@@ -1,6 +1,6 @@
 # JavaFX Tutorial - 10 Progetti Progressivi
 
-Benvenuto nella serie completa di tutorial JavaFX! Questa raccolta di 10 progetti ti guiderà dall'apprendimento dei concetti base fino all'implementazione di architetture MVC complete.
+Benvenuto nella serie completa di tutorial JavaFX! Questa raccolta di progetti ti guiderà dall'apprendimento dei concetti base fino all'implementazione di architetture MVC complete.
 
 ## 📚 Panoramica
 
@@ -24,6 +24,7 @@ Ogni progetto introduce un **concetto chiave** di JavaFX, costruendo progressiva
 | [08](08-FileDownloader/) | File Downloader | Task + Concurrency | ⭐⭐⭐⭐ |
 | [09](09-MusicPlayer/) | Music Player | MediaPlayer | ⭐⭐⭐⭐ |
 | [10](10-WeatherApp/) | Weather App | MVC + FXML + CSS | ⭐⭐⭐⭐⭐ |
+
 
 ## 🚀 Come Iniziare
 
