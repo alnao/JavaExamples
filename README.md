@@ -21,9 +21,9 @@ In questo repository sono compresi diversi progetti di diverso tipo:
     - Progetto **99-AlNaoEditor**: piccolo editor di testo, ispirato al molto famoso jEdit
   - SouthAfricanMobileNumbers
 - **Gaming**: vari mini-progetti e mini-giochi sviluppati con divese liberie
-  - JGame
-  - Minecraft 01
-  - RockPaperScissors
+  - JGame: esempio di gioco RogueLike con base il video [Roguelike da zero](https://www.youtube.com/watch?v=kumZYVKhn6I)
+  - Minecraft 01 *in revisione, coming soon*
+  - RockPaperScissors *in revisione, coming soon*
   - GuessTheNumber *coming soon*
 - **Generic Java**: vari esempi di progettini maven con varie librerie
 - **Spring boot old versions**: cartella contentente diversi mini-progetti sviluppati con Spring boot, i progetti fanno riferimento a vecchie versioni di spring boot o vecchi progetti poi diventati l'esempio completo disponibile nel respositoy

@@ -9,13 +9,37 @@ public class Renderer {
     
     private PGraphics g ;
     private Spritesheet spritesheet;
+    private int offsetX;
+    private int offsetY;
     public Renderer ( PGraphics g,Spritesheet spritesheet){
         this.g=g;
         this.spritesheet=spritesheet;
+        this.offsetX = 0;
+        this.offsetY = 0;
     }
+
+    public void setOffset(int offsetX, int offsetY) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+    }
+
+    public int getOffsetX() {
+        return offsetX;
+    }
+
+    public int getOffsetY() {
+        return offsetY;
+    }
+
     public void drowSprite(String spriteName, int x, int y) {
         PImage sprite = spritesheet.getByName( spriteName ); 
-        g.image(sprite, FATTORE_SCALA * x * TILE_SIZE, FATTORE_SCALA * y * TILE_SIZE , FATTORE_SCALA * TILE_SIZE , FATTORE_SCALA * TILE_SIZE );
+        g.image(
+            sprite,
+            offsetX + FATTORE_SCALA * x * TILE_SIZE,
+            offsetY + FATTORE_SCALA * y * TILE_SIZE,
+            FATTORE_SCALA * TILE_SIZE,
+            FATTORE_SCALA * TILE_SIZE
+        );
     }
 
 }

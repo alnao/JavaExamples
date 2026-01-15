@@ -19,11 +19,11 @@ public class Grid {
     }
     public int getWidth(){return width; }
     public int getSite(){ return this.tiles.size();}
-    public void setTile(int col,int row,Tile t){
-        tiles.set ( col*width + row,t );
+    public void setTile(int col, int row, Tile t){
+        tiles.set(row * width + col, t);
     }
-    public Tile getTile(int row, int col){
-        return this.tiles.get( col * width + row);
+    public Tile getTile(int col, int row){
+        return this.tiles.get(row * width + col);
     }
     public void drow(Renderer renderer){ //PGraphics g, Spritesheet spritesheet){
         for (int i=0;i<tiles.size();i++){
