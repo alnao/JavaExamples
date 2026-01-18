@@ -26,9 +26,29 @@ Default:
 # Compila
 mvn clean compile
 
-# Esegui
+# Esegui in locale
 mvn javafx:run
+
+# Esecuzione comando completo 
+java --module-path target/lib \
+     --add-modules javafx.controls,javafx.fxml \
+     -jar target/photo-dispatcher-1.0-SNAPSHOT.jar
 ```
+
+## Esecuzione con icona
+- Creazione file `run.sh`
+    - Creazione icona per *gnome desktop* nel file `/home/alnao/.local/share/applications/alnaoPhotoDispatcher.desktop`:
+    ```
+    [Desktop Entry]
+    Encoding=UTF-8
+    Name=AlNao Photo Disparcher
+    Exec=/mnt/Dati4/Workspace/JavaExamples/CorsiVari/JavaFX/98-AlNaoPhotoDispatcher/run.sh
+    Icon=/usr/share/icons/hicolor/scalable/apps/org.gnome.Characters.svg
+    Terminal=false
+    Type=Application
+    Categories=Science;
+    ```
+
 
 
 
