@@ -1,17 +1,12 @@
-# Spring boot old versions
-Nota: il contenuto di questa cartalla proviene dalla vecchia versione del repository
-```
-https://github.com/alnao/JavaSpringBootExample
-```
-<a href="https://www.alnao.it/javaee/"> 
-        <img src="https://img.shields.io/badge/alnao-.it-blue?logo=amazoncloudwatch&logoColor=A6C9E2" height="25px">
-        <img src="https://img.shields.io/badge/Java-ED8B00?style=plastic&logo=openjdk&logoColor=white" height="25px"/>
+# Spring boot - old versions
+<p align="center">
+        <img src="https://img.shields.io/badge/Java-gold?style=plastic&logo=openjdk&logoColor=black" height="25px"/>
         <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=plastic&logo=SpringBoot&logoColor=white" height="25px" />
-</a>
+</p>
+
+Questi sono contenuti e progetti che sono stati pubblicati in passato nella vecchia versione del blog [alnao.it](https://www.alnao.it), alcuni sono *molto datati* ma li lascio per *nostalgia*!
 
 
-# Progetti:
-Questi sono tutti mini-progetti *più o meno funzionanti* di esempio, necessitano di essere revisionati e controllati:
 - **Esempio01base**: esempio base con singola API, Docker-file per eseguire il servizio in immagine docker e su Kubernetes/Minikube
 - **Esempio02db**: esempio di CRUD con una tabella *articoli* su MySql, Docker-compose per eseguire il micro-servizio e il DMBS su docker
 - **Esempio03dbDockerAWS**: esempio di CRUD con tabella *persone* su MySql, con microservizio e microfrontend in javascript di esempio
@@ -219,6 +214,3 @@ Public projects
 *Free Software!*
 
 E' garantito il permesso di copiare, distribuire e/o modificare questo documento in base ai termini della GNU Free Documentation License, Versione 1.2 o ogni versione successiva pubblicata dalla Free Software Foundation. Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.2 or any later version published by the Free Software Foundation.
-
-
-

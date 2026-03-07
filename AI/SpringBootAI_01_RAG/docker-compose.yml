@@ -1,0 +1,44 @@
+version: "3.9"
+
+# ──────────────────────────────────────────────────────────────────────────────
+#  Stack locale per SpringBootAI
+#  - PostgreSQL 16 con estensione pgvector
+#  - (opzionale) Ollama – se non hai Ollama installato nativamente
+# ──────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── PostgreSQL + pgvector ────────────────────────────────────────────────────
+  postgres:
+    image: pgvector/pgvector:pg16          # immagine ufficiale con pgvector preinstallato
+    container_name: springbootai-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       vectordb
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Se vuoi eseguire schema.sql automaticamente all'avvio:
+      # - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d vectordb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Ollama (opzionale – rimuovi questo servizio se Ollama gira in locale) ────
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: springbootai-ollama
+  #   restart: unless-stopped
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+
+volumes:
+  pgdata:
+  # ollama_data:

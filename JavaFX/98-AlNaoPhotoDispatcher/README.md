@@ -37,7 +37,7 @@ java --module-path target/lib \
 
 ## Esecuzione con icona
 - Creazione file `run.sh`
-    - Creazione icona per *gnome desktop* nel file `/home/alnao/.local/share/applications/alnaoPhotoDispatcher.desktop`:
+    - Creazione icona per *gnome desktop* nel file `~/.local/share/applications/alnaoPhotoDispatcher.desktop`:
     ```
     [Desktop Entry]
     Encoding=UTF-8
