@@ -9,6 +9,8 @@
 - Azure
     - iniziare progetto SDK con servizi base (blob storage e database)
 - JavaFX
+    - AlNao Sh Control Room
+        - perchè quando uno ha 100 progetti , perchè non iniziarne un 101-esimo ? 
     - AlNao Photo Dispatcher
         - modificare il viewer per accettare anche sorgenti html e file di testo
         - pensare se fare un deb e distribuirlo in qualche modo!

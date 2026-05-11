@@ -1,13 +1,13 @@
 # Java Examples:
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Java-gold?&logo=openjdk&logoColor=black" height="25px"/>
-  <img src="https://img.shields.io/badge/SpringBoot-6DB33F?logo=SpringBoot&logoColor=white" height="25px" />
-  <img src="https://img.shields.io/badge/AWS-FF9900?logo=AmazonAWS&logoColor=white"  height="25px"/>
-  <img src="https://img.shields.io/badge/Azure-0078D4?logo=microsoftazure&logoColor=white"  height="25px"/>        
-  <img src="https://img.shields.io/badge/Linux-BBCCEE?logo=Linux&logoColor=black"  height="25px"/>
-  <img src="https://img.shields.io/badge/Docker-2496ED?logo=Docker&logoColor=white"  height="25px"/>
-  <img src="https://img.shields.io/badge/ollama-522CA5?logo=ollama&logoColor=white" height="25"/>
+  <img src="https://img.shields.io/badge/Java-gold?&logo=openjdk&logoColor=black" height=32/>
+  <img src="https://img.shields.io/badge/SpringBoot-6DB33F?logo=SpringBoot&logoColor=white" height=32 />
+  <img src="https://img.shields.io/badge/AWS-FF9900?logo=AmazonAWS&logoColor=white"  height=32/>
+  <img src="https://img.shields.io/badge/Azure-0078D4?logo=microsoftazure&logoColor=white"  height=32/>        
+  <img src="https://img.shields.io/badge/Linux-BBCCEE?logo=Linux&logoColor=black"  height=32/>
+  <img src="https://img.shields.io/badge/Docker-2496ED?logo=Docker&logoColor=white"  height=32/>
+  <img src="https://img.shields.io/badge/ollama-522CA5?logo=ollama&logoColor=white" height=32/>
 </p>
 
 Benvenuti nella collezione di esempi in Java by [AlNao](https://www.alnao.it)!
@@ -20,14 +20,14 @@ Attività in corso e le prossime evoluzioni nel file [`ROADMAP.md`](./ROADMAP.md
 
 | Section |  | Description |
 |-----|----|----|
-| <img src="https://img.shields.io/badge/AI-522CA5?logo=ollama&logoColor=white" height="25"/>| [`📁`](./AI/) | - Progetti di esempio con SPring Boot AI per la costruzione di un RAG |
-| <img src="https://img.shields.io/badge/AWS-FF9900?logo=AmazonAWS&logoColor=white" height="25px"/> | [`📁`](./AWS/) | - CDK: *progetti in revisione* <br/>- Lambda: semplici esempi di AWS-Lambda Function sviluppate con ``sam``<br />- **ManagerFx**: semplice console per gestire e visualizzare le principali risorse in un cloud AWS<br />- Sdk: *progetto in revisione* |
-| <img src="https://img.shields.io/badge/Azure-0078D4?logo=microsoftazure&logoColor=white" height="25px"/> | [`📁`](./Azure/) | - **ManagerFx**: semplice console per gestire e visualizzare le principali risorse in un cloud Azure |
-| <img src="https://img.shields.io/badge/udemy-999999?logo=udemy&logoColor=white" height="25px"/> | [`📁`](./CorsiVari/) | - Sorgenti di vecchi corsi riguardanti vecchie versione di spring boot <br/>- SouthAfricanMobileNumbers |
-| <img src="https://img.shields.io/badge/Gaming-gray?logo=applearcade&logoColor=white" height="25px"/> | [`📁`](./Gaming/) | - **JGame**: esempio di gioco RogueLike con base il video [Roguelike da zero](https://www.youtube.com/watch?v=kumZYVKhn6I) <br /> - **Minecraft 01** *in revisione, coming soon* <br />- **LibGDX**: semplice esempio di gioco con libreria LigGDX <br />- RockPaperScissors *in revisione, coming soon* |
-| <img src="https://img.shields.io/badge/GenericJava-gold?&logo=openjdk&logoColor=black" height="25px"/> | [`📁`](./GenericJava/) | - Esempi di utilizzo di varie librerie java e Maven <br />- file [README](./GenericJava/README.md) con contenuti del vecchio blog [alnao.it](https://www.alnao.it) <br />- alcuni esempi sono *molto datati* ma li lascio per *nostalgia* |
-| <img src="https://img.shields.io/badge/JavaFX-gold?&logo=openjdk&logoColor=black" height="25px"/> | [`📁`](./JavaFX/) | - Esempi di progetti realizzati con JavaFX<br />- **PhotoDispatcher** progetto per gestire cartelle di immagini <br />- **AlNao Editor** progetto per un editor di testo |
-| <img src="https://img.shields.io/badge/SpringBoot-6DB33F?logo=SpringBoot&logoColor=white" height="25px"/> | [`📁`](./SpringBootOldVersions/) | - Esempi di vecchie versioni di SpringBoot <br />- file [README](./SpringBootOldVersions/README.md) con contenuti del vecchio blog [alnao.it](https://www.alnao.it)  <br />- alcuni esempi sono *molto datati* ma li lascio per *nostalgia* |
+| <img src="https://img.shields.io/badge/ollama-522CA5?logo=ollama&logoColor=white" height=24 /> <br />   <img src="https://img.shields.io/badge/SpringBoot-6DB33F?logo=SpringBoot&logoColor=white" height=24 /> | [`📁`](./AI/) | - Progetti di esempio che usano la libreria **Spring Boot AI** per l'implementazione di un sistema RAG <br /> - *coming soon*|
+| <img src="https://img.shields.io/badge/AWS-FF9900?logo=AmazonAWS&logoColor=white" height=24/> | [`📁`](./AWS/) | - CDK: *progetti in revisione* <br/>- Lambda: semplici esempi di AWS-Lambda Function sviluppate con ``sam``<br />- **ManagerFx**: console per gestire risorse in un cloud AWS<br />- Sdk: *progetto in revisione* |
+| <img src="https://img.shields.io/badge/Azure-0078D4?logo=microsoftazure&logoColor=white" height=24/> | [`📁`](./Azure/) | - **ManagerFx**: console per gestire risorse in un cloud Azure |
+| <img src="https://img.shields.io/badge/udemy-999999?logo=udemy&logoColor=white" height=24/> | [`📁`](./CorsiVari/) | - Sorgenti di vecchi corsi riguardanti vecchie versione di spring boot <br/>- SouthAfricanMobileNumbers |
+| <img src="https://img.shields.io/badge/Gaming-gray?logo=applearcade&logoColor=white" height=24/> | [`📁`](./Gaming/) | - **JGame**: esempio di gioco RogueLike con base il video [Roguelike da zero](https://www.youtube.com/watch?v=kumZYVKhn6I) <br /> - **Minecraft 01** *in revisione, coming soon* <br />- **LibGDX**: semplice esempio di gioco con libreria LigGDX <br />- RockPaperScissors *in revisione, coming soon* |
+| <img src="https://img.shields.io/badge/GenericJava-gold?&logo=openjdk&logoColor=black" height=24/> | [`📁`](./GenericJava/) | - Esempi di utilizzo di varie librerie java e Maven <br />- file [README](./GenericJava/README.md) con contenuti del vecchio blog [alnao.it](https://www.alnao.it) <br />- alcuni esempi sono *molto datati* ma li lascio per *nostalgia* |
+| <img src="https://img.shields.io/badge/JavaFX-gold?&logo=openjdk&logoColor=black" height=24/> | [`📁`](./JavaFX/) | - Esempi di progetti realizzati con JavaFX<br />- **AlNaoShControlRoom**: console per gestire script di shell, see [Readme](./JavaFX/97-AlNaoShControlRoom/README.md) <br />- **PhotoDispatcher** progetto per gestire cartelle di immagini, see [Readme](./JavaFX/98-AlNaoPhotoDispatcher/README.md) <br />- **AlNao Editor** progetto per un editor di testo, see [Readme](./JavaFX/99-AlNaoEditor/README.md) |
+| <img src="https://img.shields.io/badge/SpringBoot-6DB33F?logo=SpringBoot&logoColor=white" height=24/> | [`📁`](./SpringBootOldVersions/) | - Esempi di vecchie versioni di SpringBoot <br />- file [README](./SpringBootOldVersions/README.md) con contenuti del vecchio blog [alnao.it](https://www.alnao.it)  <br />- alcuni esempi sono *molto datati* ma li lascio per *nostalgia* |
 
 
 
