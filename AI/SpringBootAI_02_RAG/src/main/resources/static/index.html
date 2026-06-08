@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring Boot AI – RAG Chat</title>
+  <!-- Bootstrap 3 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <style>
+    body { background:#f5f5f5; }
+    .main-container { margin-top:30px; }
+
+    /* ── Sidebar documenti ─────────────────────── */
+    #sidebar { background:#fff; border-radius:6px; padding:20px;
+               box-shadow:0 1px 3px rgba(0,0,0,.15); }
+    #sidebar h4 { margin-top:0; border-bottom:1px solid #eee; padding-bottom:8px; }
+    #doc-list { list-style:none; padding:0; max-height:300px; overflow-y:auto; }
+    #doc-list li { padding:6px 0; border-bottom:1px solid #f0f0f0; font-size:13px; }
+    #doc-list li .badge { float:right; }
+
+    /* ── Upload area ────────────────────────────── */
+    #drop-zone {
+      border:2px dashed #aaa; border-radius:6px; padding:30px; text-align:center;
+      color:#999; cursor:pointer; transition:background .2s;
+    }
+    #drop-zone.drag-over { background:#e8f4fd; border-color:#337ab7; color:#337ab7; }
+    #drop-zone input[type=file] { display:none; }
+
+    /* ── Chat ───────────────────────────────────── */
+    #chat-box { background:#fff; border-radius:6px; padding:20px;
+                box-shadow:0 1px 3px rgba(0,0,0,.15); }
+    #messages { height:400px; overflow-y:auto; padding:10px;
+                border:1px solid #eee; border-radius:4px; background:#fafafa;
+                margin-bottom:15px; display:flex; flex-direction:column; gap:10px; }
+
+    .msg { max-width:80%; padding:10px 14px; border-radius:16px;
+           line-height:1.5; word-wrap:break-word; white-space:pre-wrap; }
+    .msg.user   { align-self:flex-end; background:#337ab7; color:#fff;
+                  border-bottom-right-radius:4px; }
+    .msg.bot    { align-self:flex-start; background:#e9ecef; color:#333;
+                  border-bottom-left-radius:4px; }
+    .msg.system { align-self:center; background:#fcf8e3; color:#8a6d3b;
+                  font-size:12px; border-radius:6px; padding:6px 12px; }
+
+    #input-area { display:flex; gap:8px; }
+    #question   { flex:1; }
+
+    /* ── Spinner ────────────────────────────────── */
+    .spinner { display:inline-block; width:16px; height:16px;
+               border:2px solid rgba(0,0,0,.2); border-top-color:#555;
+               border-radius:50%; animation:spin .7s linear infinite;
+               vertical-align:middle; margin-right:6px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ── Modalità RAG toggle ────────────────────── */
+    #rag-toggle { margin-bottom:10px; }
+  </style>
+</head>
+<body>
+<div class="container main-container">
+
+  <div class="page-header" style="margin-top:0">
+    <h2>🤖 Spring Boot AI
+      <small>Ollama + PGVector RAG</small>
+    </h2>
+  </div>
+
+  <div class="row">
+
+    <!-- ═══ SIDEBAR SINISTRA ════════════════════════════════════════ -->
+    <div class="col-md-4">
+      <div id="sidebar">
+        <h4><span class="glyphicon glyphicon-folder-open"></span> Documenti</h4>
+
+        <!-- Upload -->
+        <div id="drop-zone" onclick="document.getElementById('file-input').click()">
+          <input type="file" id="file-input" accept=".pdf,.docx,.txt,.html,.md">
+          <p><span class="glyphicon glyphicon-upload" style="font-size:28px"></span></p>
+          <p>Trascina qui un file oppure <strong>clicca</strong><br>
+             <small>PDF, DOCX, TXT, HTML, MD – max 50 MB</small></p>
+        </div>
+        <div id="upload-status" style="margin-top:10px"></div>
+
+        <hr>
+
+        <!-- Lista documenti indicizzati -->
+        <p><strong>File indicizzati:</strong>
+          <button class="btn btn-xs btn-default pull-right" onclick="loadDocuments()">
+            <span class="glyphicon glyphicon-refresh"></span>
+          </button>
+        </p>
+        <ul id="doc-list"><li class="text-muted">Caricamento…</li></ul>
+      </div>
+    </div>
+
+    <!-- ═══ CHAT DESTRA ══════════════════════════════════════════════ -->
+    <div class="col-md-8">
+      <div id="chat-box">
+        <div id="rag-toggle">
+          <label class="radio-inline">
+            <input type="radio" name="mode" value="rag" checked> 🔍 RAG (usa i documenti)
+          </label>
+          <label class="radio-inline">
+            <input type="radio" name="mode" value="plain"> 💬 Chat diretta (solo LLM)
+          </label>
+          <span class="pull-right">
+            Top-K documenti: <input type="number" id="topK" value="4" min="1" max="10"
+              style="width:55px;display:inline-block" class="form-control input-sm">
+          </span>
+        </div>
+
+        <div id="messages">
+          <div class="msg system">Ciao! Carica dei documenti a sinistra e poi fai le tue domande.</div>
+        </div>
+
+        <div id="input-area">
+          <input type="text" id="question" class="form-control"
+                 placeholder="Scrivi la tua domanda…"
+                 onkeydown="if(event.key==='Enter')sendMessage()">
+          <button class="btn btn-primary" onclick="sendMessage()" id="send-btn">
+            <span class="glyphicon glyphicon-send"></span> Invia
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /row -->
+</div><!-- /container -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script>
+const API = '';   // stesso origin
+
+// ── Drag & Drop ────────────────────────────────────────────────────
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+
+dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f) uploadFile(f);
+});
+fileInput.addEventListener('change', () => {
+  if (fileInput.files[0]) uploadFile(fileInput.files[0]);
+});
+
+async function uploadFile(file) {
+  const status = document.getElementById('upload-status');
+  status.innerHTML = '<span class="spinner"></span> Elaborazione di <strong>' + escHtml(file.name) + '</strong>…';
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const res  = await fetch(API + '/api/ai/documents/upload', { method:'POST', body: formData });
+    const data = await res.json();
+
+    if (res.ok) {
+      status.innerHTML = '<div class="alert alert-success" style="padding:8px 12px;margin:0">' +
+        '✅ <strong>' + escHtml(data.filename) + '</strong> indicizzato in ' +
+        data.chunks + ' chunk</div>';
+      appendMessage('system', '📄 File "' + escHtml(data.filename) + '" caricato (' + data.chunks + ' chunk). Ora puoi farmi domande!');
+      loadDocuments();
+    } else {
+      status.innerHTML = '<div class="alert alert-danger" style="padding:8px 12px;margin:0">❌ ' + escHtml(data.error || 'Errore') + '</div>';
+    }
+  } catch(e) {
+    status.innerHTML = '<div class="alert alert-danger" style="padding:8px 12px;margin:0">❌ Errore di rete</div>';
+  }
+  // Reset file input per permettere il re-upload dello stesso file
+  fileInput.value = '';
+}
+
+// ── Lista documenti ────────────────────────────────────────────────
+async function loadDocuments() {
+  const list = document.getElementById('doc-list');
+  list.innerHTML = '<li class="text-muted">Caricamento…</li>';
+  try {
+    const res  = await fetch(API + '/api/ai/documents');
+    const data = await res.json();
+    if (!data.length) {
+      list.innerHTML = '<li class="text-muted">Nessun documento ancora</li>';
+    } else {
+      list.innerHTML = data.map(d =>
+        '<li>' + escHtml(d.SOURCE || d.source || '—') +
+        ' <span class="badge">' + (d.CHUNKS || d.chunks || '?') + '</span></li>'
+      ).join('');
+    }
+  } catch(e) {
+    list.innerHTML = '<li class="text-danger">Errore caricamento</li>';
+  }
+}
+
+// ── Chat ───────────────────────────────────────────────────────────
+async function sendMessage() {
+  const input   = document.getElementById('question');
+  const question = input.value.trim();
+  if (!question) return;
+
+  input.value = '';
+  appendMessage('user', question);
+
+  const sendBtn = document.getElementById('send-btn');
+  sendBtn.disabled = true;
+  const thinking = appendMessage('bot', '<span class="spinner"></span> Sto elaborando…');
+
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+  const topK = parseInt(document.getElementById('topK').value) || 4;
+
+  const url  = mode === 'rag' ? API + '/api/ai/chat/rag' : API + '/api/ai/chat';
+  const body = mode === 'rag' ? { question, topK } : { question };
+
+  try {
+    const res  = await fetch(url, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(body)
+    });
+    const data = await res.json();
+
+    thinking.innerHTML = res.ok
+      ? escHtml(data.answer || '(risposta vuota)')
+      : '❌ ' + escHtml(data.error || 'Errore');
+    thinking.classList.toggle('msg', false);
+    thinking.classList.toggle('msg', true);   // re-apply
+
+  } catch(e) {
+    thinking.textContent = '❌ Errore di rete';
+  }
+  sendBtn.disabled = false;
+  input.focus();
+}
+
+// ── Helpers ────────────────────────────────────────────────────────
+function appendMessage(role, html) {
+  const msgs = document.getElementById('messages');
+  const div  = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = html;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Init ───────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', loadDocuments);
+</script>
+</body>
+</html>

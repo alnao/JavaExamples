@@ -78,7 +78,7 @@ public class ControlRoomController {
         HBox footer = buildFooter();
         root.setBottom(footer);
 
-        Scene scene = new Scene(root, 900, 700);
+        Scene scene = new Scene(root, 1000, 800);
         scene.getStylesheets().add(createInlineCSS());
 
         stage.setTitle("AlNao Sh Control Room");
@@ -355,6 +355,25 @@ public class ControlRoomController {
         statusLabel.setTextFill(Color.web(TEXT_SECONDARY));
         statusLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
 
+        // Input field and send button (declared here so stopBtn can reference them)
+        TextField inputField = new TextField();
+        inputField.setPromptText("Type input here and press Enter to send to script...");
+        inputField.setDisable(true);
+        HBox.setHgrow(inputField, Priority.ALWAYS);
+        inputField.setStyle(
+            "-fx-background-color: " + TEXTAREA_BG + ";" +
+            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
+            "-fx-font-family: 'Monospaced';" +
+            "-fx-border-color: " + ACCENT + ";" +
+            "-fx-border-width: 1;" +
+            "-fx-border-radius: 4;" +
+            "-fx-background-radius: 4;"
+        );
+
+        Button sendBtn = new Button("Send");
+        sendBtn.setDisable(true);
+        styleSmallButton(sendBtn);
+
         // Stop button
         Button stopBtn = new Button("⬛ Stop");
         stopBtn.setDisable(true);
@@ -364,6 +383,9 @@ public class ControlRoomController {
             statusLabel.setText("● Idle");
             statusLabel.setTextFill(Color.web(TEXT_SECONDARY));
             stopBtn.setDisable(true);
+            inputField.setDisable(true);
+            sendBtn.setDisable(true);
+            inputField.clear();
             setTabRunningStyle(tab, false);
             updateRunningWarning();
         });
@@ -389,6 +411,8 @@ public class ControlRoomController {
                 statusLabel.setText("● Running: " + script.label());
                 statusLabel.setTextFill(Color.web(GREEN_ON));
                 stopBtn.setDisable(false);
+                inputField.setDisable(false);
+                sendBtn.setDisable(false);
                 setTabRunningStyle(tab, true);
                 updateRunningWarning();
 
@@ -399,6 +423,9 @@ public class ControlRoomController {
                         statusLabel.setText("● Idle");
                         statusLabel.setTextFill(Color.web(TEXT_SECONDARY));
                         stopBtn.setDisable(true);
+                        inputField.setDisable(true);
+                        sendBtn.setDisable(true);
+                        inputField.clear();
                         setTabRunningStyle(tab, false);
                         updateRunningWarning();
                     }
@@ -413,12 +440,31 @@ public class ControlRoomController {
             buttonBar.getChildren().add(scriptBtn);
         }
 
+        // Input bar layout
+        HBox inputBar = new HBox(8);
+        inputBar.setAlignment(Pos.CENTER_LEFT);
+        Label inputLabel = new Label("Input:");
+        inputLabel.setTextFill(Color.web(TEXT_SECONDARY));
+        inputLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
+        inputBar.getChildren().addAll(inputLabel, inputField, sendBtn);
+
+        Runnable sendInputTask = () -> {
+            String text = inputField.getText();
+            if (text != null && !text.isEmpty()) {
+                runner.sendInput(text);
+                outputArea.appendText("> " + text + "\n");
+                inputField.clear();
+            }
+        };
+        inputField.setOnAction(e -> sendInputTask.run());
+        sendBtn.setOnAction(e -> sendInputTask.run());
+
         // Top control bar
         HBox controlBar = new HBox(12);
         controlBar.setAlignment(Pos.CENTER_LEFT);
         controlBar.getChildren().addAll(statusLabel, new Region() {{ HBox.setHgrow(this, Priority.ALWAYS); }}, stopBtn, clearBtn);
 
-        body.getChildren().addAll(buttonBar, controlBar, outputArea);
+        body.getChildren().addAll(buttonBar, controlBar, outputArea, inputBar);
         tab.setContent(body);
         return tab;
     }
@@ -511,12 +557,11 @@ public class ControlRoomController {
      */
     private void setTabRunningStyle(Tab tab, boolean running) {
         if (running) {
-            tab.setStyle(
-                "-fx-background-color: " + GREEN_ON + ";" +
-                "-fx-background-radius: 8 8 0 0;"
-            );
+            if (!tab.getStyleClass().contains("running-tab")) {
+                tab.getStyleClass().add("running-tab");
+            }
         } else {
-            tab.setStyle(""); // let CSS take over again
+            tab.getStyleClass().remove("running-tab");
         }
     }
 
@@ -629,6 +674,12 @@ public class ControlRoomController {
             .tab:selected {
                 -fx-background-color: #234d80;
             }
+            .tab.running-tab {
+                -fx-background-color: #2ecc71;
+            }
+            .tab.running-tab:selected {
+                -fx-background-color: #2ecc71;
+            }
             .tab .tab-label {
                 -fx-text-fill: #a0a0b0;
                 -fx-font-weight: bold;
@@ -636,6 +687,9 @@ public class ControlRoomController {
             }
             .tab:selected .tab-label {
                 -fx-text-fill: white;
+            }
+            .tab.running-tab .tab-label, .tab.running-tab:selected .tab-label {
+                -fx-text-fill: #16213e;
             }
             .scroll-bar {
                 -fx-background-color: #1a1a2e;

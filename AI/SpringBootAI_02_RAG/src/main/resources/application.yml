@@ -1,0 +1,97 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+# ── CORS ──────────────────────────────────────────────────────────────────────
+cors:
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5000,http://localhost:5500,http://127.0.0.1:5500,http://localhost:3000,http://localhost:8000,http://127.0.0.1:3000,http://127.0.0.1:8000}
+
+# ── Security ──────────────────────────────────────────────────────────────────
+security:
+  api-key: ${API_KEY:}            # vuoto = autenticazione disabilitata (dev)
+
+# ── RAG ───────────────────────────────────────────────────────────────────────
+rag:
+  similarity-threshold: ${RAG_SIMILARITY_THRESHOLD:0.30}
+  chunk-size:           ${RAG_CHUNK_SIZE:512}      # max token per chunk
+  chunk-overlap:        ${RAG_CHUNK_OVERLAP:64}    # min char per sentence prima dello split
+
+# ── OpenAPI / Swagger ─────────────────────────────────────────────────────────
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+
+spring:
+  application:
+    name: SpringBootAI
+
+  # ── MVC async ────────────────────────────────────────────────────────────────
+  # Timeout per le risposte streaming (Flux NDJSON). Generoso perché llama3.2 su
+  # CPU con contesto RAG può impiegare diversi minuti per la generazione completa.
+  mvc:
+    async:
+      request-timeout: 600000   # 10 minuti (ms)
+
+  # ── Database (PostgreSQL + pgvector) ─────────────────────────────────────────
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/vectordb}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none           # lo schema vector_store è gestito da Spring AI
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # ── Upload file ───────────────────────────────────────────────────────────────
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  # ── Spring AI ─────────────────────────────────────────────────────────────────
+  ai:
+
+    # Ollama (chat + embedding devono girare sullo stesso server)
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      chat:
+        options:
+          model: llama3.2          # modello chat: cambiare se necessario
+      embedding:
+        options:
+          model: nomic-embed-text  # modello embedding (768 dim)
+
+    # PGVector store
+    vectorstore:
+      pgvector:
+        initialize-schema: true    # crea automaticamente la tabella vector_store
+        dimensions: 768            # deve corrispondere al modello embedding
+        index-type: hnsw           # HNSW per ricerche veloci
+        distance-type: cosine_distance
+
+# ── Actuator ──────────────────────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+# ── Logging ───────────────────────────────────────────────────────────────────
+logging:
+  level:
+    com.example.springbootai: DEBUG
+    org.springframework.ai: INFO

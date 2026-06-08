@@ -1,0 +1,26 @@
+# ──────────────────────────────────────────────────────────────────────────────
+#  Override: usa Ollama installato sul PC fisico invece del container Docker
+#
+#  UTILIZZO:
+#    docker compose -f docker-compose.yml -f docker-compose.local-ollama.yml up -d
+#
+#  Prerequisiti:
+#    - Ollama deve girare in locale su localhost:11434
+#    - I modelli devono essere già stati scaricati:
+#        ollama pull llama3.2
+#        ollama pull nomic-embed-text
+# ──────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # Disabilita il container Ollama assegnandogli un profilo che non viene mai attivato
+  ollama:
+    profiles: [disabled]
+
+  # L'app punta a Ollama sul PC fisico tramite host.docker.internal
+  app:
+    environment:
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+    depends_on:
+      postgres:
+        condition: service_healthy

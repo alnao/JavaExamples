@@ -1,0 +1,83 @@
+version: "3.9"
+
+# ──────────────────────────────────────────────────────────────────────────────
+#  Stack completo SpringBootAI — PostgreSQL + Ollama + App
+#
+#  AVVIO DEFAULT (Ollama nel container):
+#    docker compose up -d
+#
+#  AVVIO CON OLLAMA SUL PC FISICO (Ollama su localhost:11434):
+#    docker compose -f docker-compose.yml -f docker-compose.local-ollama.yml up -d
+#
+#  Prima esecuzione — scarica i modelli nel container Ollama:
+#    docker compose exec ollama ollama pull llama3.2
+#    docker compose exec ollama ollama pull nomic-embed-text
+# ──────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── PostgreSQL + pgvector ────────────────────────────────────────────────────
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: springbootai-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       ${DB_NAME:-vectordb}
+      POSTGRES_USER:     ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-vectordb}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Ollama (default: gira nel container) ─────────────────────────────────────
+  # Per usare Ollama installato sul PC fisico usa docker-compose.local-ollama.yml
+  ollama:
+    image: ollama/ollama:latest
+    container_name: springbootai-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:11434/api/tags || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+
+  # ── App Spring Boot ───────────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: springbootai-app
+    restart: unless-stopped
+    ports:
+      - "${SERVER_PORT:-8081}:8081"
+    environment:
+      SERVER_PORT:               8081
+      DB_URL:                    jdbc:postgresql://postgres:5432/${DB_NAME:-vectordb}
+      DB_USERNAME:               ${DB_USERNAME:-postgres}
+      DB_PASSWORD:               ${DB_PASSWORD:-postgres}
+      OLLAMA_BASE_URL:           ${OLLAMA_BASE_URL:-http://ollama:11434}
+      CORS_ALLOWED_ORIGINS:      ${CORS_ALLOWED_ORIGINS:-http://localhost:5000,http://127.0.0.1:5500,http://localhost:3000}
+      API_KEY:                   ${API_KEY:-}
+      RAG_SIMILARITY_THRESHOLD:  ${RAG_SIMILARITY_THRESHOLD:-0.65}
+      RAG_CHUNK_SIZE:            ${RAG_CHUNK_SIZE:-512}
+      RAG_CHUNK_OVERLAP:         ${RAG_CHUNK_OVERLAP:-64}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  ollama_data:

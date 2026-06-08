@@ -97,8 +97,18 @@ public class ConfigService {
                     if (valParts.length == 2 || valParts.length == 3) {
                         TabConfig tab = tabs.get(tabIdx);
                         if (tab != null) {
-                            tab.addScript(new ScriptEntry(tabIdx, scriptIdx, valParts[0].trim(), valParts[1].trim(), 
-                                                            valParts.length > 2 ? valParts[2].trim() : ""));
+                            String scriptPath = valParts[1].trim();
+                            String params = valParts.length > 2 ? valParts[2].trim() : "";
+                            
+                            if (params.isEmpty()) {
+                                int firstSpace = scriptPath.indexOf(' ');
+                                if (firstSpace > 0) {
+                                    params = scriptPath.substring(firstSpace + 1).trim();
+                                    scriptPath = scriptPath.substring(0, firstSpace).trim();
+                                }
+                            }
+                            
+                            tab.addScript(new ScriptEntry(tabIdx, scriptIdx, valParts[0].trim(), scriptPath, params));
                         }
                     }
                 } catch (NumberFormatException ignored) {

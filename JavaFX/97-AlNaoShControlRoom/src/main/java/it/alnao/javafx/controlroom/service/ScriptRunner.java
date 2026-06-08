@@ -42,7 +42,14 @@ public class ScriptRunner {
                 Platform.runLater(() -> outputCallback.accept("▶ Params: " + scriptParams + "\n"));
                 Platform.runLater(() -> outputCallback.accept("─".repeat(60) + "\n"));
 
-                ProcessBuilder pb = new ProcessBuilder("bash", scriptPath, scriptParams.isEmpty() ? " " : scriptParams);
+                java.util.List<String> command = new java.util.ArrayList<>();
+                command.add("bash");
+                command.add(scriptPath);
+                if (!scriptParams.isEmpty()) {
+                    command.addAll(parseParams(scriptParams));
+                }
+
+                ProcessBuilder pb = new ProcessBuilder(command);
                 pb.redirectErrorStream(true);
                 currentProcess = pb.start();
                 
@@ -87,6 +94,54 @@ public class ScriptRunner {
             runnerThread.interrupt();
         }
         running = false;
+    }
+
+    /**
+     * Sends input to the running process stdin.
+     */
+    public synchronized void sendInput(String input) {
+        if (running && currentProcess != null && currentProcess.isAlive()) {
+            try {
+                java.io.OutputStream os = currentProcess.getOutputStream();
+                os.write((input + "\n").getBytes());
+                os.flush();
+            } catch (Exception e) {
+                System.err.println("[ScriptRunner] Failed to send input: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Parses the parameter string into a list of individual arguments,
+     * respecting single and double quotes.
+     */
+    private java.util.List<String> parseParams(String params) {
+        java.util.List<String> list = new java.util.ArrayList<>();
+        if (params == null || params.isBlank()) {
+            return list;
+        }
+        StringBuilder current = new StringBuilder();
+        boolean inDoubleQuotes = false;
+        boolean inSingleQuotes = false;
+        for (int i = 0; i < params.length(); i++) {
+            char c = params.charAt(i);
+            if (c == '\"' && !inSingleQuotes) {
+                inDoubleQuotes = !inDoubleQuotes;
+            } else if (c == '\'' && !inDoubleQuotes) {
+                inSingleQuotes = !inSingleQuotes;
+            } else if (Character.isWhitespace(c) && !inDoubleQuotes && !inSingleQuotes) {
+                if (current.length() > 0) {
+                    list.add(current.toString());
+                    current.setLength(0);
+                }
+            } else {
+                current.append(c);
+            }
+        }
+        if (current.length() > 0) {
+            list.add(current.toString());
+        }
+        return list;
     }
 
     /**
