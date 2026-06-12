@@ -146,6 +146,15 @@ public class ControlRoomController {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         header.getChildren().add(spacer);
 
+        // Settings button
+        Button settingsBtn = new Button("⚙ Settings");
+        styleSmallButton(settingsBtn);
+        settingsBtn.setOnAction(e -> {
+            SettingsController settingsController = new SettingsController(configService);
+            settingsController.showSettingsWindow();
+        });
+        header.getChildren().add(settingsBtn);
+
         // Refresh button
         Button refreshBtn = new Button("🔄 Refresh");
         styleSmallButton(refreshBtn);
@@ -169,7 +178,8 @@ public class ControlRoomController {
             "-fx-background-color: rgba(255,255,255,0.05);" +
             "-fx-background-radius: 20;" +
             "-fx-border-color: rgba(255,255,255,0.1);" +
-            "-fx-border-radius: 20;"
+            "-fx-border-radius: 20;" +
+            "-fx-cursor: hand;"
         );
 
 
@@ -178,7 +188,7 @@ public class ControlRoomController {
         label.setTextFill(Color.web(TEXT_PRIMARY));
 
         // Tooltip with URL
-        Tooltip tip = new Tooltip(monitor.url());
+        Tooltip tip = new Tooltip(monitor.url() + " (Click to open if green)");
         tip.setStyle("-fx-font-size: 11;");
         Tooltip.install(box, tip);
 
@@ -191,32 +201,15 @@ public class ControlRoomController {
 
         box.getChildren().add(label);
 
-        // --- Play button: open URL in browser ---
-        Button playBtn = new Button("▶");
-        styleIconButton(playBtn, "#FFFFFF");
-        Tooltip.install(playBtn, new Tooltip("Open in browser: " + monitor.url()));
-        playBtn.setOnAction(e -> openInBrowser(monitor.url()));
-        box.getChildren().add(playBtn);
+        box.setOnMouseClicked(e -> {
+            Boolean isAlive = (Boolean) box.getProperties().get("isAlive");
+            if (Boolean.TRUE.equals(isAlive)) {
+                openInBrowser(monitor.url());
+            }
+        });
 
-        // --- Stop button: kill process on port (localhost only) ---
-        boolean isLocalhost = monitor.url().contains("localhost") || monitor.url().contains("127.0.0.1");
-        if (isLocalhost) {
-            Button stopBtn = new Button("⬛");
-            styleIconButton(stopBtn, RED_OFF);
-            int port = extractPort(monitor.url());
-            Tooltip.install(stopBtn, new Tooltip("Kill process on port " + port));
-            stopBtn.setOnAction(e -> {
-                if (port > 0) {
-                    killProcessOnPort(port);
-                    // Trigger a status re-check after a short delay
-                    new Thread(() -> {
-                        try { Thread.sleep(1500); } catch (InterruptedException ignored) {}
-                        if (statusChecker != null) statusChecker.checkAll();
-                    }, "post-kill-refresh").start();
-                }
-            });
-            box.getChildren().add(stopBtn);
-        }
+        // --- Play button: removed as requested ---
+        // --- Stop button: removed as requested ---
 
         return box;
     }
@@ -265,6 +258,7 @@ public class ControlRoomController {
     /**
      * Kills the process listening on the given port using `fuser -k`.
      */
+    /*
     private void killProcessOnPort(int port) {
         new Thread(() -> {
             try {
@@ -285,6 +279,7 @@ public class ControlRoomController {
             }
         }, "kill-port-" + port).start();
     }
+    */
 
     // ====================== TAB PANE ======================
 
@@ -513,6 +508,7 @@ public class ControlRoomController {
                     Label label = indicatorLabels.get(entry.getKey().index());
                     if (box != null) {
                         boolean alive = entry.getValue();
+                        box.getProperties().put("isAlive", alive);
                         applyIndicatorStyle(box, alive ? GREEN_ON : null);
                         if (label != null) {
                             label.setTextFill(Color.web(alive ? TEXT_PRIMARY : TEXT_SECONDARY));

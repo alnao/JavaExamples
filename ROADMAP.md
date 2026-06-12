@@ -1,5 +1,7 @@
 # Java Repository AlNao Roadmap
 - IA
+    - Inizio progetto AI SpringBootAI 02 RAG con ollama locale - prova con tutto in docker
+        - salviamo le conversazioni da qualche parte e il db?
     - SprinbBootAI: altri esempio di RAG usando Ollama
     - SprinbBootAI: Interfacciamento con altri modelli
     - Studio di altre librerie

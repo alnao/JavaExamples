@@ -7,9 +7,12 @@ import java.util.List;
  * Represents a tab configuration: a tab label and its list of scripts.
  */
 public class TabConfig {
-    private final int index;
-    private final String label;
-    private final List<ScriptEntry> scripts = new ArrayList<>();
+    private int index;
+    private String label;
+    private List<ScriptEntry> scripts = new ArrayList<>();
+
+    public TabConfig() {
+    }
 
     public TabConfig(int index, String label) {
         this.index = index;
@@ -20,12 +23,24 @@ public class TabConfig {
         return index;
     }
 
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public String getLabel() {
         return label;
     }
 
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
     public List<ScriptEntry> getScripts() {
         return scripts;
+    }
+
+    public void setScripts(List<ScriptEntry> scripts) {
+        this.scripts = scripts;
     }
 
     public void addScript(ScriptEntry script) {

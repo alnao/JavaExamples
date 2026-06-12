@@ -10,7 +10,7 @@ A JavaFX **Control Room** application for monitoring server environments and exe
 - **Concurrent Tabs**: Each tab runs independently — you can run scripts in multiple tabs simultaneously
 - **Single-script per Tab**: Prevents accidental double-execution within the same tab
 - **Stop Button**: Forcibly kills a running script and its child processes
-- **Configurable**: All monitors, tabs, and scripts defined in a simple `.env` file
+- **Configurable**: Manage monitors, tabs, and scripts via the built-in Settings UI (saved to `~/.alnaoShControlRoom/config.json`).
 
 ## Requirements
 
@@ -20,35 +20,16 @@ A JavaFX **Control Room** application for monitoring server environments and exe
 
 ## Configuration
 
-Edit the `.env` file in the project root:
+Configuration is now managed directly from the application's interface. 
+Click the **⚙ Settings** button in the top right corner to open the Settings UI.
 
-```env
-# Status monitors (header indicators)
-MONITOR_1=Backend|http://localhost:8042
-MONITOR_2=Admin|http://localhost:5172
-MONITOR_3=Website|http://localhost:5174
-MONITOR_4=Cloud API|http://api.test.games.paths
+From there you can:
+- **Monitors**: Add, update, or remove status indicators (HTTP health checks).
+- **Tabs & Scripts**: Manage your tabs and the shell scripts associated with them.
+- **General**: Update global settings like the polling refresh interval in seconds.
 
-# Refresh interval
-MONITOR_REFRESH_SECONDS=30
-
-# Tabs and scripts
-TAB_1=Backend Services
-TAB_1_SCRIPT_1=Start Backend|/path/to/start_backend.sh
-TAB_1_SCRIPT_2=Stop Backend|/path/to/stop_backend.sh
-
-TAB_2=Frontend
-TAB_2_SCRIPT_1=Start Admin|/path/to/start_admin.sh
-```
-
-### Format Rules
-
-| Key Pattern | Description |
-|---|---|
-| `MONITOR_<N>=<label>\|<url>` | Add a health-check indicator |
-| `MONITOR_REFRESH_SECONDS=<int>` | How often to poll monitors |
-| `TAB_<N>=<label>` | Define a tab (must appear before its scripts) |
-| `TAB_<N>_SCRIPT_<M>=<label>\|<path>` | Add a script button to a tab |
+Your configuration is automatically saved in JSON format at:
+`~/.alnaoShControlRoom/config.json`
 
 ## Build & Run
 
