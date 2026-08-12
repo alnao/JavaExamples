@@ -1,0 +1,150 @@
+.root {
+    -color-brown-deep: #1a0a02;
+    -color-brown-dark: #2e1508;
+    -color-brown-mid: #5c3317;
+    -color-brown-warm: #7a4520;
+    -color-brown-light: #a0622e;
+    -color-brown-tan: #c08040;
+    -color-brown-super-tan: #d9a060;
+    -color-brown-extra-tan: #e0b080;
+
+    -fx-font-family: "Georgia";
+    -fx-background-color: linear-gradient(to bottom right, -color-brown-deep, -color-brown-dark 38%, -color-brown-mid 100%);
+}
+
+.book-shell {
+    -fx-background-color: linear-gradient(to bottom, rgba(255, 238, 214, 0.96), rgba(222, 190, 150, 0.95));
+    -fx-background-radius: 26;
+    -fx-padding: 24;
+    -fx-border-color: -color-brown-super-tan;
+    -fx-border-width: 2;
+    -fx-border-radius: 26;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.45), 36, 0.28, 0, 14);
+}
+
+.page-title {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-brown-deep;
+}
+
+.page-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(26, 10, 2, 0.82);
+}
+
+.page {
+    -fx-background-color: linear-gradient(to bottom, #fdf6ec, #f0dfc6);
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+    -fx-border-color: rgba(92, 51, 23, 0.35);
+    -fx-padding: 20;
+}
+
+.page-left {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.20), 20, 0.18, -2, 6);
+}
+
+.page-right {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.16), 18, 0.18, 1, 5);
+}
+
+.book-spine {
+    -fx-background-color: linear-gradient(to bottom, -color-brown-mid, -color-brown-dark 55%, -color-brown-deep);
+    -fx-background-radius: 12;
+    -fx-pref-width: 18;
+    -fx-opacity: 0.92;
+}
+
+.card-large {
+    -fx-background-color: linear-gradient(to bottom right, rgba(255, 251, 244, 0.98), rgba(232, 205, 168, 0.96));
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: rgba(122, 69, 32, 0.38);
+    -fx-border-width: 1.4;
+    -fx-padding: 18;
+    -fx-min-height: 440;
+    -fx-pref-height: 440;
+}
+
+.card-large-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-brown-deep;
+}
+
+.card-large-tag {
+    -fx-font-size: 12px;
+    -fx-text-fill: -color-brown-mid;
+    -fx-font-style: italic;
+}
+
+.card-large-desc {
+    -fx-font-size: 15px;
+    -fx-text-fill: #3c1f0e;
+    -fx-wrap-text: true;
+}
+
+.card-small {
+    -fx-background-color: linear-gradient(to bottom right, rgba(255, 245, 230, 0.97), rgba(224, 176, 128, 0.84));
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: rgba(122, 69, 32, 0.28);
+    -fx-border-width: 1.1;
+    -fx-padding: 10;
+}
+
+.card-small-selected {
+    -fx-border-color: -color-brown-dark;
+    -fx-border-width: 2.0;
+    -fx-background-color: linear-gradient(to bottom right, rgba(255, 252, 245, 1.0), rgba(217, 160, 96, 0.92));
+    -fx-effect: dropshadow(gaussian, rgba(92, 51, 23, 0.28), 14, 0.25, 0, 5);
+}
+
+.small-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-brown-deep;
+}
+
+.small-desc {
+    -fx-font-size: 12px;
+    -fx-text-fill: #4a2711;
+}
+
+.info-button {
+    -fx-background-color: linear-gradient(to bottom, -color-brown-light, -color-brown-mid);
+    -fx-text-fill: #fff5e8;
+    -fx-font-weight: bold;
+    -fx-background-radius: 999;
+    -fx-min-width: 28;
+    -fx-min-height: 28;
+    -fx-cursor: hand;
+}
+
+.action-button {
+    -fx-background-color: linear-gradient(to bottom, -color-brown-mid, -color-brown-deep);
+    -fx-text-fill: -color-brown-extra-tan;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 18 10 18;
+    -fx-background-radius: 999;
+    -fx-cursor: hand;
+}
+
+.action-button:disabled {
+    -fx-opacity: 0.55;
+    -fx-cursor: default;
+}
+
+.hint-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(46, 21, 8, 0.74);
+}
+
+.section-caption {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-brown-mid;
+}

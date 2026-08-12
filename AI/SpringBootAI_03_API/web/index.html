@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Agent Demo</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>AI Agent Demo</h1>
+      <p>Chat con orchestrazione tool e sessione locale</p>
+    </header>
+
+    <section class="panel">
+      <div id="chat" class="chat" aria-live="polite"></div>
+
+      <div class="controls">
+        <label for="sessionId">Session ID</label>
+        <input id="sessionId" type="text" value="demo-session" />
+
+        <label for="message">Messaggio</label>
+        <textarea id="message" rows="4" placeholder="Scrivi un prompt...">calcola 12*7 e riassumilo</textarea>
+
+        <button id="sendBtn">Invia</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

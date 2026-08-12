@@ -11,6 +11,8 @@
 - Azure
     - iniziare progetto SDK con servizi base (blob storage e database)
 - JavaFX
+    - Paths book cards
+        - esempio di libro-game ispirato al paths.games
     - AlNao Sh Control Room
         - perchè quando uno ha 100 progetti , perchè non iniziarne un 101-esimo ? 
     - AlNao Photo Dispatcher

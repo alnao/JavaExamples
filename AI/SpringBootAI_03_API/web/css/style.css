@@ -1,0 +1,84 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+.container {
+  max-width: 980px;
+  margin: 40px auto;
+  padding: 20px;
+}
+header {
+  margin-bottom: 20px;
+}
+header h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+}
+.panel {
+  background: #111827;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+.chat {
+  min-height: 260px;
+  padding: 16px;
+  border-radius: 10px;
+  background: #020817;
+  border: 1px solid #1e293b;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.message {
+  max-width: 80%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.message.user {
+  align-self: flex-end;
+  background: #2563eb;
+}
+.message.agent {
+  align-self: flex-start;
+  background: #1f2937;
+  border: 1px solid #374151;
+}
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+label {
+  font-weight: bold;
+}
+input, textarea, button {
+  font: inherit;
+}
+input, textarea {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #475569;
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 12px;
+}
+button {
+  background: #22c55e;
+  color: #052e16;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover {
+  filter: brightness(1.06);
+}

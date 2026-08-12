@@ -19,8 +19,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.*;
 
@@ -31,21 +29,10 @@ import java.util.*;
  */
 public class ControlRoomController {
 
-    // -- Color palette --
-    private static final String BG_DARK       = "#1a1a2e";
-    private static final String BG_HEADER     = "#16213e";
-    private static final String BG_TAB_PANE   = "#0f3460";
-    private static final String BG_TAB_BODY   = "#1a1a2e";
-    private static final String ACCENT        = "#ff6b35";
-    private static final String ACCENT_HOVER  = "#ff6b81";
-    private static final String BTN_BG        = "#0f3460";
-    private static final String BTN_HOVER     = "#1a5276";
-    private static final String TEXT_PRIMARY   = "#eaeaea";
-    private static final String TEXT_SECONDARY = "#a0a0b0";
-    private static final String GREEN_ON      = "#268c22";
-    private static final String RED_OFF       = "#f44336";
-    private static final String YELLOW_WAIT   = "#f39c12";
-    private static final String TEXTAREA_BG   = "#0d1117";
+    // -- Bootstrap-like palette --
+    private static final String TEXT_SECONDARY = "#6c757d";
+    private static final String TEXT_SUCCESS = "#198754";
+    private static final String YELLOW_WAIT = "#ffc107";
 
     private final ConfigService configService = new ConfigService();
     private StatusChecker statusChecker;
@@ -64,7 +51,7 @@ public class ControlRoomController {
         configService.load();
 
         BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color: " + BG_DARK + ";");
+        root.getStyleClass().addAll("control-room-root");
 
         // --- Header ---
         HBox header = buildHeader();
@@ -79,7 +66,9 @@ public class ControlRoomController {
         root.setBottom(footer);
 
         Scene scene = new Scene(root, 1000, 800);
-        scene.getStylesheets().add(createInlineCSS());
+        scene.getStylesheets().add(Objects.requireNonNull(
+            getClass().getResource("/it/alnao/javafx/controlroom/control-room-bootstrap.css")
+        ).toExternalForm());
 
         stage.setTitle("AlNao Sh Control Room");
         stage.setScene(scene);
@@ -100,40 +89,16 @@ public class ControlRoomController {
         HBox header = new HBox(16);
         header.setAlignment(Pos.CENTER_LEFT);
         header.setPadding(new Insets(12, 20, 12, 20));
-        header.setStyle(
-            "-fx-background-color: " + BG_HEADER + ";" +
-            "-fx-border-color: " + ACCENT + ";" +
-            "-fx-border-width: 0 0 2 0;" +
-            "-fx-effect: dropshadow(gaussian, rgba(233,69,96,0.3), 12, 0, 0, 3);"
-        );
-
-        // Title
-        Label title = new Label("⚡");// Control Room
-        title.setFont(Font.font("System", FontWeight.BOLD, 18));
-        title.setTextFill(Color.web(ACCENT));
-        title.setPadding(new Insets(0, 8, 0, 0));
+        header.getStyleClass().add("header-bar");
 
         // Running warning label (hidden by default)
-        runningWarningLabel = new Label("⚠");// Something is running
+        runningWarningLabel = new Label("Something is running");
         runningWarningLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
-        runningWarningLabel.setTextFill(Color.web(YELLOW_WAIT));
-        runningWarningLabel.setStyle(
-            "-fx-background-color: rgba(243,156,18,0.15);" +
-            "-fx-padding: 3 10;" +
-            "-fx-background-radius: 12;" +
-            "-fx-border-color: " + YELLOW_WAIT + ";" +
-            "-fx-border-radius: 12;" +
-            "-fx-border-width: 1;"
-        );
+        runningWarningLabel.getStyleClass().add("warning-pill");
         runningWarningLabel.setVisible(false);
         runningWarningLabel.setManaged(false);
 
-        Separator sep = new Separator();
-        sep.setOrientation(javafx.geometry.Orientation.VERTICAL);
-        sep.setStyle("-fx-background-color: " + TEXT_SECONDARY + ";");
-        sep.setPrefHeight(30);
-
-        header.getChildren().addAll(title, runningWarningLabel, sep);
+        header.getChildren().add(runningWarningLabel);
 
         // Indicators
         for (MonitorEntry monitor : configService.getMonitors()) {
@@ -147,8 +112,9 @@ public class ControlRoomController {
         header.getChildren().add(spacer);
 
         // Settings button
-        Button settingsBtn = new Button("⚙ Settings");
+        Button settingsBtn = new Button("⚙");
         styleSmallButton(settingsBtn);
+        settingsBtn.setTooltip(new Tooltip("Settings"));
         settingsBtn.setOnAction(e -> {
             SettingsController settingsController = new SettingsController(configService);
             settingsController.showSettingsWindow();
@@ -156,8 +122,9 @@ public class ControlRoomController {
         header.getChildren().add(settingsBtn);
 
         // Refresh button
-        Button refreshBtn = new Button("🔄 Refresh");
+        Button refreshBtn = new Button("🔄");
         styleSmallButton(refreshBtn);
+        refreshBtn.setTooltip(new Tooltip("Refresh"));
         refreshBtn.setOnAction(e -> {
             // Set all to yellow (checking)
             indicatorBoxes.values().forEach(b -> applyIndicatorStyle(b, YELLOW_WAIT));
@@ -174,18 +141,12 @@ public class ControlRoomController {
         HBox box = new HBox(5);
         box.setAlignment(Pos.CENTER);
         box.setPadding(new Insets(4, 10, 4, 10));
-        box.setStyle(
-            "-fx-background-color: rgba(255,255,255,0.05);" +
-            "-fx-background-radius: 20;" +
-            "-fx-border-color: rgba(255,255,255,0.1);" +
-            "-fx-border-radius: 20;" +
-            "-fx-cursor: hand;"
-        );
+        box.getStyleClass().add("indicator-chip");
 
 
         Label label = new Label(monitor.label());
         label.setFont(Font.font("System", FontWeight.BOLD, 12));
-        label.setTextFill(Color.web(TEXT_PRIMARY));
+    label.getStyleClass().add("indicator-label");
 
         // Tooltip with URL
         Tooltip tip = new Tooltip(monitor.url() + " (Click to open if green)");
@@ -236,26 +197,6 @@ public class ControlRoomController {
     }
 
     /**
-     * Extracts port number from a URL string like "http://localhost:8042/path".
-     */
-    private int extractPort(String urlStr) {
-        try {
-            String full = urlStr;
-            if (!full.startsWith("http://") && !full.startsWith("https://")) {
-                full = "http://" + full;
-            }
-            URI uri = URI.create(full);
-            int port = uri.getPort();
-            if (port > 0) return port;
-            // default ports
-            if (full.startsWith("https")) return 443;
-            return 80;
-        } catch (Exception e) {
-            return -1;
-        }
-    }
-
-    /**
      * Kills the process listening on the given port using `fuser -k`.
      */
     /*
@@ -286,9 +227,7 @@ public class ControlRoomController {
     private TabPane buildTabPane() {
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        tabPane.setStyle(
-            "-fx-background-color: " + BG_TAB_PANE + ";"
-        );
+        tabPane.getStyleClass().add("tab-pane-bs");
         tabPane.setPadding(new Insets(8));
 
         List<TabConfig> tabs = configService.getTabs();
@@ -301,7 +240,7 @@ public class ControlRoomController {
             placeholder.setFont(Font.font("System", 14));
             VBox content = new VBox(placeholder);
             content.setAlignment(Pos.CENTER);
-            content.setStyle("-fx-background-color: " + BG_TAB_BODY + ";");
+            content.getStyleClass().add("tab-body");
             emptyTab.setContent(content);
             tabPane.getTabs().add(emptyTab);
         } else {
@@ -320,7 +259,7 @@ public class ControlRoomController {
         // Main layout: left = buttons, right/bottom = output
         VBox body = new VBox(10);
         body.setPadding(new Insets(14));
-        body.setStyle("-fx-background-color: " + BG_TAB_BODY + ";");
+        body.getStyleClass().add("tab-body");
 
         // Script runner for this tab
         ScriptRunner runner = new ScriptRunner();
@@ -332,42 +271,28 @@ public class ControlRoomController {
         outputArea.setEditable(false);
         outputArea.setWrapText(true);
         outputArea.setFont(Font.font("Monospaced", 13));
-        outputArea.setStyle(
-            "-fx-control-inner-background: " + TEXTAREA_BG + ";" +
-            "-fx-text-fill: " + GREEN_ON + ";" +
-            "-fx-font-family: 'Monospaced';" +
-            "-fx-border-color: " + ACCENT + ";" +
-            "-fx-border-width: 1;" +
-            "-fx-border-radius: 6;" +
-            "-fx-background-radius: 6;"
-        );
+        outputArea.getStyleClass().add("terminal-area");
         outputArea.setPrefRowCount(25);
         outputArea.setText("Ready. Select a script to run.\n");
         VBox.setVgrow(outputArea, Priority.ALWAYS);
 
         // Running status label
         Label statusLabel = new Label("● Idle");
-        statusLabel.setTextFill(Color.web(TEXT_SECONDARY));
         statusLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
+        statusLabel.getStyleClass().add("status-label");
 
         // Input field and send button (declared here so stopBtn can reference them)
         TextField inputField = new TextField();
         inputField.setPromptText("Type input here and press Enter to send to script...");
         inputField.setDisable(true);
         HBox.setHgrow(inputField, Priority.ALWAYS);
-        inputField.setStyle(
-            "-fx-background-color: " + TEXTAREA_BG + ";" +
-            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-            "-fx-font-family: 'Monospaced';" +
-            "-fx-border-color: " + ACCENT + ";" +
-            "-fx-border-width: 1;" +
-            "-fx-border-radius: 4;" +
-            "-fx-background-radius: 4;"
-        );
+        inputField.getStyleClass().add("terminal-input");
 
         Button sendBtn = new Button("Send");
         sendBtn.setDisable(true);
         styleSmallButton(sendBtn);
+        sendBtn.getStyleClass().remove("btn-outline-light");
+        sendBtn.getStyleClass().add("btn-secondary");
 
         // Stop button
         Button stopBtn = new Button("⬛ Stop");
@@ -376,7 +301,7 @@ public class ControlRoomController {
         stopBtn.setOnAction(e -> {
             runner.stop();
             statusLabel.setText("● Idle");
-            statusLabel.setTextFill(Color.web(TEXT_SECONDARY));
+            statusLabel.getStyleClass().remove("status-label-running");
             stopBtn.setDisable(true);
             inputField.setDisable(true);
             sendBtn.setDisable(true);
@@ -388,6 +313,8 @@ public class ControlRoomController {
         // Clear button
         Button clearBtn = new Button("🗑 Clear");
         styleSmallButton(clearBtn);
+        clearBtn.getStyleClass().remove("btn-outline-light");
+        clearBtn.getStyleClass().add("btn-outline-secondary");
         clearBtn.setOnAction(e -> outputArea.clear());
 
         // Script buttons row
@@ -404,7 +331,9 @@ public class ControlRoomController {
                     return;
                 }
                 statusLabel.setText("● Running: " + script.label());
-                statusLabel.setTextFill(Color.web(GREEN_ON));
+                if (!statusLabel.getStyleClass().contains("status-label-running")) {
+                    statusLabel.getStyleClass().add("status-label-running");
+                }
                 stopBtn.setDisable(false);
                 inputField.setDisable(false);
                 sendBtn.setDisable(false);
@@ -416,7 +345,7 @@ public class ControlRoomController {
                     line -> outputArea.appendText(line),
                     () -> {
                         statusLabel.setText("● Idle");
-                        statusLabel.setTextFill(Color.web(TEXT_SECONDARY));
+                        statusLabel.getStyleClass().remove("status-label-running");
                         stopBtn.setDisable(true);
                         inputField.setDisable(true);
                         sendBtn.setDisable(true);
@@ -481,11 +410,7 @@ public class ControlRoomController {
         HBox footer = new HBox();
         footer.setAlignment(Pos.CENTER_RIGHT);
         footer.setPadding(new Insets(6, 16, 6, 16));
-        footer.setStyle(
-            "-fx-background-color: " + BG_HEADER + ";" +
-            "-fx-border-color: " + ACCENT + ";" +
-            "-fx-border-width: 1 0 0 0;"
-        );
+        footer.getStyleClass().add("footer-bar");
 
         Label info = new Label("AlNao Control Room v1.0 │ Refresh: " + configService.getRefreshSeconds() + "s");
         info.setTextFill(Color.web(TEXT_SECONDARY));
@@ -509,9 +434,9 @@ public class ControlRoomController {
                     if (box != null) {
                         boolean alive = entry.getValue();
                         box.getProperties().put("isAlive", alive);
-                        applyIndicatorStyle(box, alive ? GREEN_ON : null);
+                        applyIndicatorStyle(box, alive ? TEXT_SUCCESS : null);
                         if (label != null) {
-                            label.setTextFill(Color.web(alive ? TEXT_PRIMARY : TEXT_SECONDARY));
+                            label.setTextFill(Color.web(TEXT_SECONDARY));
                         }
                     }
                 }
@@ -527,24 +452,13 @@ public class ControlRoomController {
      * Pass null to reset to transparent (service not reachable).
      */
     private void applyIndicatorStyle(HBox box, String colorHex) {
+        box.getStyleClass().removeAll("indicator-up", "indicator-down", "indicator-checking");
         if (colorHex == null) {
-            // Not reachable: transparent, dim border
-            box.setStyle(
-                "-fx-background-color: transparent;" +
-                "-fx-background-radius: 20;" +
-                "-fx-border-color: rgba(255,255,255,0.12);" +
-                "-fx-border-radius: 20;" +
-                "-fx-border-width: 1;"
-            );
+            box.getStyleClass().add("indicator-down");
+        } else if (YELLOW_WAIT.equals(colorHex)) {
+            box.getStyleClass().add("indicator-checking");
         } else {
-            // Reachable or checking: solid color + glow
-            box.setStyle(
-                "-fx-background-color: " + colorHex + ";" +
-                "-fx-background-radius: 20;" +
-                "-fx-border-color: " + colorHex + ";" +
-                "-fx-border-radius: 20;" +
-                "-fx-effect: dropshadow(gaussian, " + colorHex + ", 8, 0.3, 0, 0);"
-            );
+            box.getStyleClass().add("indicator-up");
         }
     }
 
@@ -562,164 +476,15 @@ public class ControlRoomController {
     }
 
     private void styleScriptButton(Button btn) {
-        btn.setStyle(
-            "-fx-background-color: " + BTN_BG + ";" +
-            "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-            "-fx-font-size: 13;" +
-            "-fx-font-weight: bold;" +
-            "-fx-padding: 8 18;" +
-            "-fx-background-radius: 8;" +
-            "-fx-border-color: " + ACCENT + ";" +
-            "-fx-border-radius: 8;" +
-            "-fx-border-width: 1;" +
-            "-fx-cursor: hand;"
-        );
-        btn.setOnMouseEntered(e -> btn.setStyle(
-            "-fx-background-color: " + BTN_HOVER + ";" +
-            "-fx-text-fill: white;" +
-            "-fx-font-size: 13;" +
-            "-fx-font-weight: bold;" +
-            "-fx-padding: 8 18;" +
-            "-fx-background-radius: 8;" +
-            "-fx-border-color: " + ACCENT_HOVER + ";" +
-            "-fx-border-radius: 8;" +
-            "-fx-border-width: 1.5;" +
-            "-fx-cursor: hand;" +
-            "-fx-effect: dropshadow(gaussian, rgba(233,69,96,0.4), 8, 0, 0, 2);"
-        ));
-        btn.setOnMouseExited(e -> styleScriptButton(btn));
+        btn.getStyleClass().addAll("btn", "btn-primary", "script-btn");
     }
 
     private void styleStopButton(Button btn) {
-        btn.setStyle(
-            "-fx-background-color: " + RED_OFF + ";" +
-            "-fx-text-fill: white;" +
-            "-fx-font-size: 12;" +
-            "-fx-font-weight: bold;" +
-            "-fx-padding: 6 16;" +
-            "-fx-background-radius: 6;" +
-            "-fx-cursor: hand;"
-        );
-    }
-
-    private void styleIconButton(Button btn, String color) {
-        btn.setMinSize(22, 22);
-        btn.setMaxSize(22, 22);
-        btn.setPadding(Insets.EMPTY);
-        btn.setStyle(
-            "-fx-background-color: transparent;" +
-            "-fx-text-fill: " + color + ";" +
-            "-fx-font-size: 11;" +
-            "-fx-padding: 0;" +
-            "-fx-cursor: hand;" +
-            "-fx-background-radius: 12;"
-        );
-        btn.setOnMouseEntered(e -> btn.setStyle(
-            "-fx-background-color: rgba(255,255,255,0.15);" +
-            "-fx-text-fill: white;" +
-            "-fx-font-size: 11;" +
-            "-fx-padding: 0;" +
-            "-fx-cursor: hand;" +
-            "-fx-background-radius: 12;"
-        ));
-        btn.setOnMouseExited(e -> styleIconButton(btn, color));
+        btn.getStyleClass().addAll("btn", "btn-danger", "btn-sm");
     }
 
     private void styleSmallButton(Button btn) {
-        btn.setStyle(
-            "-fx-background-color: transparent;" +
-            "-fx-text-fill: " + TEXT_SECONDARY + ";" +
-            "-fx-font-size: 12;" +
-            "-fx-padding: 6 12;" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: " + TEXT_SECONDARY + ";" +
-            "-fx-border-radius: 6;" +
-            "-fx-border-width: 1;" +
-            "-fx-cursor: hand;"
-        );
-        btn.setOnMouseEntered(e -> btn.setStyle(
-            "-fx-background-color: rgba(255,255,255,0.1);" +
-            "-fx-text-fill: white;" +
-            "-fx-font-size: 12;" +
-            "-fx-padding: 6 12;" +
-            "-fx-background-radius: 6;" +
-            "-fx-border-color: white;" +
-            "-fx-border-radius: 6;" +
-            "-fx-border-width: 1;" +
-            "-fx-cursor: hand;"
-        ));
-        btn.setOnMouseExited(e -> styleSmallButton(btn));
-    }
-
-    /**
-     * Inline CSS stylesheet as a data URI for the tab pane styling.
-     */
-    private String createInlineCSS() {//quiquiqui
-        String css = """
-            .tab-pane > .tab-header-area {
-                -fx-padding: 4 8 0 8;
-            }
-            .tab-pane > .tab-header-area > .tab-header-background {
-                -fx-background-color: #16213e;
-            }
-            .tab {
-                -fx-background-color: #0f3460;
-                -fx-background-radius: 8 8 0 0;
-                -fx-padding: 6 18;
-            }
-            .tab:selected {
-                -fx-background-color: #234d80;
-            }
-            .tab.running-tab {
-                -fx-background-color: #2ecc71;
-            }
-            .tab.running-tab:selected {
-                -fx-background-color: #2ecc71;
-            }
-            .tab .tab-label {
-                -fx-text-fill: #a0a0b0;
-                -fx-font-weight: bold;
-                -fx-font-size: 13;
-            }
-            .tab:selected .tab-label {
-                -fx-text-fill: white;
-            }
-            .tab.running-tab .tab-label, .tab.running-tab:selected .tab-label {
-                -fx-text-fill: #16213e;
-            }
-            .scroll-bar {
-                -fx-background-color: #1a1a2e;
-            }
-            .scroll-bar .thumb {
-                -fx-background-color: #234d80;
-                -fx-background-radius: 4;
-            }
-            .scroll-bar .increment-button, .scroll-bar .decrement-button {
-                -fx-background-color: transparent;
-                -fx-padding: 0;
-            }
-            .scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
-                -fx-shape: " ";
-                -fx-padding: 0;
-            }
-            .text-area .content {
-                -fx-background-color: #0d1117;
-            }
-            .text-area {
-                -fx-background-color: #0d1117;
-            }
-            """;
-
-        // Write CSS to a temp file and return its URL
-        try {
-            java.nio.file.Path tmpCss = java.nio.file.Files.createTempFile("controlroom-", ".css");
-            tmpCss.toFile().deleteOnExit();
-            java.nio.file.Files.writeString(tmpCss, css);
-            return tmpCss.toUri().toString();
-        } catch (Exception e) {
-            System.err.println("[ControlRoom] Failed to create CSS file: " + e.getMessage());
-            return "";
-        }
+        btn.getStyleClass().addAll("btn", "btn-outline-light", "btn-sm");
     }
 
     // ====================== SHUTDOWN ======================

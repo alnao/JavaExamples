@@ -1,0 +1,12 @@
+package com.example.springbootai;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SpringBootAiAgentApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootAiAgentApplication.class, args);
+    }
+}

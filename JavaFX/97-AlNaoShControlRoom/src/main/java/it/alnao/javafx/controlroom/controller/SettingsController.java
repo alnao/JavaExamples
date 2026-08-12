@@ -14,6 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class SettingsController {
 
@@ -37,14 +38,16 @@ public class SettingsController {
     public void showSettingsWindow() {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setMinHeight(600);
-        stage.setMinWidth(600);
+        stage.setMinHeight(760);
+        stage.setMinWidth(980);
         stage.setTitle("Settings - Configure UI");
 
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
+        root.getStyleClass().addAll("control-room-root", "settings-root");
 
         TabPane tabPane = new TabPane();
+        tabPane.getStyleClass().add("tab-pane-bs");
 
         Tab monitorsTab = new Tab("Monitors");
         monitorsTab.setClosable(false);
@@ -62,7 +65,7 @@ public class SettingsController {
         root.setCenter(tabPane);
 
         Button saveBtn = new Button("Save & Close");
-        saveBtn.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;");
+        saveBtn.getStyleClass().addAll("btn", "btn-primary");
         saveBtn.setOnAction(e -> {
             try {
                 configService.setRefreshSeconds(Integer.parseInt(refreshField.getText()));
@@ -81,21 +84,27 @@ public class SettingsController {
         });
 
         Button cancelBtn = new Button("Cancel");
+        cancelBtn.getStyleClass().addAll("btn", "btn-outline-secondary");
         cancelBtn.setOnAction(e -> stage.close());
 
         HBox bottomBox = new HBox(10, saveBtn, cancelBtn);
         bottomBox.setPadding(new Insets(10, 0, 0, 0));
         root.setBottom(bottomBox);
 
-        Scene scene = new Scene(root, 900, 600);
-        scene.getRoot().setStyle("-fx-font-family: 'System'; -fx-font-size: 13px;");
+        Scene scene = new Scene(root, 1220, 820);
+        scene.getStylesheets().add(Objects.requireNonNull(
+            getClass().getResource("/it/alnao/javafx/controlroom/control-room-bootstrap.css")
+        ).toExternalForm());
         stage.setScene(scene);
         stage.showAndWait();
     }
 
-    private BorderPane buildMonitorsPane() {
-        BorderPane pane = new BorderPane();
-        pane.setPadding(new Insets(10));
+    private SplitPane buildMonitorsPane() {
+        SplitPane split = new SplitPane();
+
+        BorderPane left = new BorderPane();
+        left.setPadding(new Insets(10));
+        left.getStyleClass().add("panel-card");
 
         ListView<MonitorEntry> listView = new ListView<>(monitors);
         listView.setCellFactory(param -> new ListCell<>() {
@@ -109,25 +118,40 @@ public class SettingsController {
                 }
             }
         });
+        left.setCenter(listView);
+
+        BorderPane right = new BorderPane();
+        right.setPadding(new Insets(10));
+        right.getStyleClass().add("panel-card");
 
         GridPane form = new GridPane();
         form.setHgap(10);
         form.setVgap(10);
-        form.setPadding(new Insets(0, 0, 0, 10));
 
         TextField indexField = new TextField();
         TextField labelField = new TextField();
         TextField urlField = new TextField();
 
-        form.addRow(0, new Label("Index:"), indexField);
-        form.addRow(1, new Label("Label:"), labelField);
-        form.addRow(2, new Label("URL:"), urlField);
+        Label indexLabel = new Label("Index:");
+        indexLabel.getStyleClass().add("form-label");
+        Label textLabel = new Label("Label:");
+        textLabel.getStyleClass().add("form-label");
+        Label urlLabel = new Label("URL:");
+        urlLabel.getStyleClass().add("form-label");
+
+        form.addRow(0, indexLabel, indexField);
+        form.addRow(1, textLabel, labelField);
+        form.addRow(2, urlLabel, urlField);
 
         Button addBtn = new Button("Add / Update");
+        addBtn.getStyleClass().addAll("btn", "btn-primary", "btn-sm");
         Button removeBtn = new Button("Remove");
+        removeBtn.getStyleClass().addAll("btn", "btn-danger", "btn-sm");
 
         HBox buttons = new HBox(10, addBtn, removeBtn);
         form.add(buttons, 1, 3);
+
+        right.setTop(form);
 
         listView.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
             if (newV != null) {
@@ -164,9 +188,9 @@ public class SettingsController {
                 monitors.remove(sel);
         });
 
-        pane.setLeft(listView);
-        pane.setCenter(form);
-        return pane;
+        split.getItems().addAll(left, right);
+        split.setDividerPositions(0.52);
+        return split;
     }
 
     private SplitPane buildTabsPane() {
@@ -175,6 +199,7 @@ public class SettingsController {
         // TABS
         BorderPane left = new BorderPane();
         left.setPadding(new Insets(10));
+        left.getStyleClass().add("panel-card");
         ListView<TabConfig> tabList = new ListView<>(tabs);
         tabList.setCellFactory(param -> new ListCell<>() {
             @Override
@@ -190,10 +215,16 @@ public class SettingsController {
         tabForm.setPadding(new Insets(10, 0, 0, 0));
         TextField tabIndexField = new TextField();
         TextField tabLabelField = new TextField();
-        tabForm.addRow(0, new Label("Tab Index:"), tabIndexField);
-        tabForm.addRow(1, new Label("Tab Label:"), tabLabelField);
+        Label tabIndexLabel = new Label("Tab Index:");
+        tabIndexLabel.getStyleClass().add("form-label");
+        Label tabTextLabel = new Label("Tab Label:");
+        tabTextLabel.getStyleClass().add("form-label");
+        tabForm.addRow(0, tabIndexLabel, tabIndexField);
+        tabForm.addRow(1, tabTextLabel, tabLabelField);
         Button addTabBtn = new Button("Add / Update Tab");
+        addTabBtn.getStyleClass().addAll("btn", "btn-primary", "btn-sm");
         Button remTabBtn = new Button("Remove Tab");
+        remTabBtn.getStyleClass().addAll("btn", "btn-danger", "btn-sm");
         tabForm.add(new HBox(10, addTabBtn, remTabBtn), 1, 2);
 
         left.setCenter(tabList);
@@ -202,6 +233,7 @@ public class SettingsController {
         // SCRIPTS
         BorderPane right = new BorderPane();
         right.setPadding(new Insets(10));
+        right.getStyleClass().add("panel-card");
         ObservableList<ScriptEntry> currentScripts = FXCollections.observableArrayList();
         ListView<ScriptEntry> scriptList = new ListView<>(currentScripts);
         scriptList.setCellFactory(param -> new ListCell<>() {
@@ -221,12 +253,23 @@ public class SettingsController {
         TextField scrLabelField = new TextField();
         TextField scrPathField = new TextField();
         TextField scrParamsField = new TextField();
-        scriptForm.addRow(0, new Label("Script Idx:"), scrIndexField);
-        scriptForm.addRow(1, new Label("Script Lbl:"), scrLabelField);
-        scriptForm.addRow(2, new Label("Path:"), scrPathField);
-        scriptForm.addRow(3, new Label("Params:"), scrParamsField);
+        Label scriptIndexLabel = new Label("Script Idx:");
+        scriptIndexLabel.getStyleClass().add("form-label");
+        Label scriptTextLabel = new Label("Script Lbl:");
+        scriptTextLabel.getStyleClass().add("form-label");
+        Label scriptPathLabel = new Label("Path:");
+        scriptPathLabel.getStyleClass().add("form-label");
+        Label scriptParamsLabel = new Label("Params:");
+        scriptParamsLabel.getStyleClass().add("form-label");
+
+        scriptForm.addRow(0, scriptIndexLabel, scrIndexField);
+        scriptForm.addRow(1, scriptTextLabel, scrLabelField);
+        scriptForm.addRow(2, scriptPathLabel, scrPathField);
+        scriptForm.addRow(3, scriptParamsLabel, scrParamsField);
         Button addScrBtn = new Button("Add/Upd Script");
+        addScrBtn.getStyleClass().addAll("btn", "btn-primary", "btn-sm");
         Button remScrBtn = new Button("Remove Script");
+        remScrBtn.getStyleClass().addAll("btn", "btn-danger", "btn-sm");
         scriptForm.add(new HBox(10, addScrBtn, remScrBtn), 1, 4);
 
         right.setCenter(scriptList);
@@ -323,8 +366,11 @@ public class SettingsController {
     private VBox buildGeneralPane() {
         VBox box = new VBox(10);
         box.setPadding(new Insets(10));
+        box.getStyleClass().add("panel-card");
         HBox row = new HBox(10);
-        row.getChildren().add(new Label("Monitor Refresh Seconds:"));
+        Label refreshLabel = new Label("Monitor Refresh Seconds:");
+        refreshLabel.getStyleClass().add("form-label");
+        row.getChildren().add(refreshLabel);
         refreshField = new TextField(String.valueOf(configService.getRefreshSeconds()));
         row.getChildren().add(refreshField);
         box.getChildren().add(row);
