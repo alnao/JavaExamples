@@ -15,15 +15,19 @@ Ogni progetto introduce un **concetto chiave** di JavaFX, costruendo progressiva
 | # | Nome | Concetto Chiave | Difficoltà |
 |---|------|----------------|------------|
 | [01](01-ClickCounter/) | Click Counter | Event Handling | ⭐ |
-| [02](02-UnitConverter/) | Unit Converter | Property Binding | ⭐⭐ |
-| [03](03-TodoList/) | To-Do List | ObservableList | ⭐⭐ |
-| [04](04-EmployeeTable/) | Employee Table | TableView + CRUD | ⭐⭐⭐ |
-| [05](05-TextEditor/) | Text Editor | MenuBar + FileChooser | ⭐⭐⭐ |
-| [06](06-DrawingCanvas/) | Drawing Canvas | Canvas + GraphicsContext | ⭐⭐⭐ |
-| [07](07-Dashboard/) | Interactive Dashboard | Charts API | ⭐⭐⭐⭐ |
-| [08](08-FileDownloader/) | File Downloader | Task + Concurrency | ⭐⭐⭐⭐ |
-| [09](09-MusicPlayer/) | Music Player | MediaPlayer | ⭐⭐⭐⭐ |
-| [10](10-WeatherApp/) | Weather App | MVC + FXML + CSS | ⭐⭐⭐⭐⭐ |
+| [02](02-UnitConverter/) | Unit Converter | Property Binding | ⭐ |
+| [03](03-TodoList/) | To-Do List | ObservableList | ⭐ |
+| [04](04-EmployeeTable/) | Employee Table | TableView + CRUD | ⭐⭐ |
+| [05](05-TextEditor/) | Text Editor | MenuBar + FileChooser | ⭐⭐ |
+| [06](06-DrawingCanvas/) | Drawing Canvas | Canvas + GraphicsContext | ⭐⭐ |
+| [07](07-Dashboard/) | Interactive Dashboard | Charts API | ⭐⭐ |
+| [08](08-FileDownloader/) | File Downloader | Task + Concurrency | ⭐⭐ |
+| [09](09-MusicPlayer/) | Music Player | MediaPlayer | ⭐⭐ |
+| [10](10-WeatherApp/) | Weather App | MVC + FXML + CSS | ⭐⭐⭐ |
+| [96](96-PhotoCarousel/) | Photo Carousel | Fullscreen + JSON Config + Animation | ⭐⭐⭐⭐⭐ |
+| [97](97-AlNaoShControlRoom/) | Control Room | Process Monitor + Tabs | ⭐⭐⭐⭐⭐ |
+| [98](98-AlNaoPhotoDispatcher/) | Photo Dispatcher | Image Organizer | ⭐⭐⭐⭐⭐ |
+| [99](99-AlNaoEditor/) | AlNao Editor | Code/Text Editor | ⭐⭐⭐⭐⭐ |
 
 
 ## 🚀 Come Iniziare

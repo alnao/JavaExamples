@@ -31,6 +31,7 @@
     - pensare se fare versione **Paths.games** usando libreria grafica
 
 ## Completed 2026
+- ✅ 20/08 JavaFX 96-PhotoCarousel carosello fotografico a schermo intero con configurazione JSON e animazioni
 - ✅ 07/03 IA SprinbBoot IA RAG primo esempio
 - ✅ 05/03 Creare la Table of examples con i dettagli degli esempi presenti nel repository!
 - ✅ 05/03 Sistemare il repository mettendo in ordine le cartelle, creare un file roadmap con i primi appunti

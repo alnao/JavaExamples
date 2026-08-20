@@ -23,6 +23,11 @@ public class SettingsController {
     private final ObservableList<MonitorEntry> monitors = FXCollections.observableArrayList();
     private final ObservableList<TabConfig> tabs = FXCollections.observableArrayList();
     private TextField refreshField;
+    private TextField windowXField;
+    private TextField windowYField;
+    private TextField windowWidthField;
+    private TextField windowHeightField;
+    private CheckBox windowMaximizedCheck;
 
     public SettingsController(ConfigService configService) {
         this.configService = configService;
@@ -71,6 +76,14 @@ public class SettingsController {
                 configService.setRefreshSeconds(Integer.parseInt(refreshField.getText()));
             } catch (Exception ignored) {
             }
+
+            Double x = parseDoubleOrNull(windowXField.getText());
+            Double y = parseDoubleOrNull(windowYField.getText());
+            Double width = parseDoubleOrNull(windowWidthField.getText());
+            Double height = parseDoubleOrNull(windowHeightField.getText());
+            boolean maximized = windowMaximizedCheck.isSelected();
+
+            configService.setWindowConfig(x, y, width, height, maximized);
 
             configService.setMonitors(new ArrayList<>(monitors));
             configService.setTabs(new ArrayList<>(tabs));
@@ -367,13 +380,58 @@ public class SettingsController {
         VBox box = new VBox(10);
         box.setPadding(new Insets(10));
         box.getStyleClass().add("panel-card");
+        var window = configService.getWindowConfig();
+
         HBox row = new HBox(10);
         Label refreshLabel = new Label("Monitor Refresh Seconds:");
         refreshLabel.getStyleClass().add("form-label");
         row.getChildren().add(refreshLabel);
         refreshField = new TextField(String.valueOf(configService.getRefreshSeconds()));
         row.getChildren().add(refreshField);
-        box.getChildren().add(row);
+
+        GridPane windowGrid = new GridPane();
+        windowGrid.setHgap(10);
+        windowGrid.setVgap(10);
+
+        Label xLabel = new Label("Window X:");
+        xLabel.getStyleClass().add("form-label");
+        windowXField = new TextField(formatDouble(window.getX()));
+
+        Label yLabel = new Label("Window Y:");
+        yLabel.getStyleClass().add("form-label");
+        windowYField = new TextField(formatDouble(window.getY()));
+
+        Label widthLabel = new Label("Window Width:");
+        widthLabel.getStyleClass().add("form-label");
+        windowWidthField = new TextField(formatDouble(window.getWidth()));
+
+        Label heightLabel = new Label("Window Height:");
+        heightLabel.getStyleClass().add("form-label");
+        windowHeightField = new TextField(formatDouble(window.getHeight()));
+
+        windowMaximizedCheck = new CheckBox("Start Maximized");
+        windowMaximizedCheck.setSelected(window.isMaximized());
+
+        windowGrid.addRow(0, xLabel, windowXField, yLabel, windowYField);
+        windowGrid.addRow(1, widthLabel, windowWidthField, heightLabel, windowHeightField);
+        windowGrid.add(windowMaximizedCheck, 0, 2, 4, 1);
+
+        box.getChildren().addAll(row, new Separator(), windowGrid);
         return box;
+    }
+
+    private String formatDouble(Double value) {
+        return value == null ? "" : String.valueOf(value);
+    }
+
+    private Double parseDoubleOrNull(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        try {
+            return Double.parseDouble(value.trim());
+        } catch (NumberFormatException ex) {
+            return null;
+        }
     }
 }

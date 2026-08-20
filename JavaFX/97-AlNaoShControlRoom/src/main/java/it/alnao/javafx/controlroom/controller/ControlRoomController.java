@@ -44,8 +44,8 @@ public class ControlRoomController {
     private final Map<Integer, ScriptRunner> tabRunners = new LinkedHashMap<>();
     // Map tab index -> Tab node (to update tab header style)
     private final Map<Integer, Tab> indicatorTabs = new LinkedHashMap<>();
-    // Warning label shown in header when any script is running
-    private Label runningWarningLabel;
+    // Warning icon shown in header when any script is running
+    private Label runningWarningIcon;
 
     public void start(Stage stage) {
         configService.load();
@@ -74,13 +74,18 @@ public class ControlRoomController {
         stage.setScene(scene);
         stage.setMinWidth(800);
         stage.setMinHeight(500);
+
+        applyWindowConfig(stage);
         stage.show();
 
         // Start monitoring
         startStatusChecker();
 
         // Cleanup on close
-        stage.setOnCloseRequest(e -> shutdown());
+        stage.setOnCloseRequest(e -> {
+            persistWindowConfig(stage);
+            shutdown();
+        });
     }
 
     // ====================== HEADER ======================
@@ -91,14 +96,15 @@ public class ControlRoomController {
         header.setPadding(new Insets(12, 20, 12, 20));
         header.getStyleClass().add("header-bar");
 
-        // Running warning label (hidden by default)
-        runningWarningLabel = new Label("Something is running");
-        runningWarningLabel.setFont(Font.font("System", FontWeight.BOLD, 12));
-        runningWarningLabel.getStyleClass().add("warning-pill");
-        runningWarningLabel.setVisible(false);
-        runningWarningLabel.setManaged(false);
+        // Running warning icon (hidden by default)
+        runningWarningIcon = new Label("⚠");
+        runningWarningIcon.setFont(Font.font("System", FontWeight.BOLD, 18));
+        runningWarningIcon.getStyleClass().add("warning-icon");
+        runningWarningIcon.setTooltip(new Tooltip("Something is running"));
+        runningWarningIcon.setVisible(false);
+        runningWarningIcon.setManaged(false);
 
-        header.getChildren().add(runningWarningLabel);
+        header.getChildren().add(runningWarningIcon);
 
         // Indicators
         for (MonitorEntry monitor : configService.getMonitors()) {
@@ -270,7 +276,8 @@ public class ControlRoomController {
         TextArea outputArea = new TextArea();
         outputArea.setEditable(false);
         outputArea.setWrapText(true);
-        outputArea.setFont(Font.font("Monospaced", 13));
+        outputArea.setFont(Font.font("DejaVu Sans Mono", 13));
+        outputArea.setStyle("-fx-font-family: 'DejaVu Sans Mono', 'Liberation Mono', 'Courier New', monospace; -fx-font-size: 12px;");
         outputArea.getStyleClass().add("terminal-area");
         outputArea.setPrefRowCount(25);
         outputArea.setText("Ready. Select a script to run.\n");
@@ -400,8 +407,8 @@ public class ControlRoomController {
      */
     private void updateRunningWarning() {
         boolean anyRunning = tabRunners.values().stream().anyMatch(ScriptRunner::isRunning);
-        runningWarningLabel.setVisible(anyRunning);
-        runningWarningLabel.setManaged(anyRunning);
+        runningWarningIcon.setVisible(anyRunning);
+        runningWarningIcon.setManaged(anyRunning);
     }
 
     // ====================== FOOTER ======================
@@ -485,6 +492,31 @@ public class ControlRoomController {
 
     private void styleSmallButton(Button btn) {
         btn.getStyleClass().addAll("btn", "btn-outline-light", "btn-sm");
+    }
+
+    private void applyWindowConfig(Stage stage) {
+        var window = configService.getWindowConfig();
+
+        if (window.getWidth() != null && window.getWidth() >= 800) {
+            stage.setWidth(window.getWidth());
+        }
+        if (window.getHeight() != null && window.getHeight() >= 500) {
+            stage.setHeight(window.getHeight());
+        }
+        if (window.getX() != null) {
+            stage.setX(window.getX());
+        }
+        if (window.getY() != null) {
+            stage.setY(window.getY());
+        }
+        if (window.isMaximized()) {
+            stage.setMaximized(true);
+        }
+    }
+
+    private void persistWindowConfig(Stage stage) {
+        configService.setWindowConfig(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight(), stage.isMaximized());
+        configService.save();
     }
 
     // ====================== SHUTDOWN ======================

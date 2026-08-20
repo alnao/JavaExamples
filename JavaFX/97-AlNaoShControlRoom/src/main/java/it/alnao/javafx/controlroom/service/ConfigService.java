@@ -3,7 +3,6 @@ package it.alnao.javafx.controlroom.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.alnao.javafx.controlroom.model.AppConfig;
 import it.alnao.javafx.controlroom.model.MonitorEntry;
-import it.alnao.javafx.controlroom.model.ScriptEntry;
 import it.alnao.javafx.controlroom.model.TabConfig;
 
 import java.io.IOException;
@@ -82,5 +81,21 @@ public class ConfigService {
 
     public void setRefreshSeconds(int seconds) {
         appConfig.setRefreshSeconds(seconds);
+    }
+
+    public AppConfig.WindowConfig getWindowConfig() {
+        if (appConfig.getWindow() == null) {
+            appConfig.setWindow(new AppConfig.WindowConfig());
+        }
+        return appConfig.getWindow();
+    }
+
+    public void setWindowConfig(Double x, Double y, Double width, Double height, boolean maximized) {
+        AppConfig.WindowConfig window = getWindowConfig();
+        window.setX(x);
+        window.setY(y);
+        window.setWidth(width);
+        window.setHeight(height);
+        window.setMaximized(maximized);
     }
 }
