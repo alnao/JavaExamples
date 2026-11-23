@@ -96,6 +96,10 @@ mvn javafx:run
 5. **ComboBox** per selezione multipla
 
 
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

@@ -192,6 +192,10 @@ Ora sei pronto per:
 6. **SceneBuilder**: Tool visuale per FXML
 
 
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

@@ -80,7 +80,10 @@ Progetto creato con i prompt:
 - torniamo indietro, cioè nel caso di centrale grande può sbordare dai borti ma deve essere centata verticalmente cioè deve sbordare della stessa % sia sopra che sotto (così da essere centrata) ce la fai? fai un flag "permetti sbordo" che abilita questa cosa oppure imposta altezza massima come ora
 
 
-
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

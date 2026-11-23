@@ -29,8 +29,17 @@ Attività in corso e le prossime evoluzioni nel file [`ROADMAP.md`](./ROADMAP.md
 | <img src="https://img.shields.io/badge/JavaFX-gold?&logo=openjdk&logoColor=black" height=24/> | [`📁`](./JavaFX/) | - Esempi di progetti realizzati con JavaFX<br />- **AlNaoShControlRoom**: console per gestire script di shell, see [Readme](./JavaFX/97-AlNaoShControlRoom/README.md) <br />- **PhotoDispatcher** progetto per gestire cartelle di immagini, see [Readme](./JavaFX/98-AlNaoPhotoDispatcher/README.md) <br />- **AlNao Editor** progetto per un editor di testo, see [Readme](./JavaFX/99-AlNaoEditor/README.md) |
 | <img src="https://img.shields.io/badge/SpringBoot-6DB33F?logo=SpringBoot&logoColor=white" height=24/> | [`📁`](./SpringBootOldVersions/) | - Esempi di vecchie versioni di SpringBoot <br />- file [README](./SpringBootOldVersions/README.md) con contenuti del vecchio blog [alnao.it](https://www.alnao.it)  <br />- alcuni esempi sono *molto datati* ma li lascio per *nostalgia* |
 
+# Credenziali AWS
+Le credenziali AWS usate dagli esempi sono in un unico file `.env` nella root del repository (non versionato, modello in [`.env.example`](./.env.example)) con le variabili standard `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`. Per caricarle nella shell prima di lanciare `sam`, `cdk` o un esempio:
+```bash
+set -a; source .env; set +a
+```
 
 
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog e aggiunto .env generale con le credenziali AWS |
 
 
 # AlNao.it

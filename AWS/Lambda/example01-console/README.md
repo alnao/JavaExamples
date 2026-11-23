@@ -189,6 +189,19 @@ aws logs describe-log-streams --log-group-name "/aws/lambda/example01"
 - [Bootstrapping Java Lambda](https://aws.amazon.com/it/blogs/developer/bootstrapping-a-java-lambda-application-with-minimal-aws-java-sdk-startup-time-using-maven/)
 - [AWS SAM Deploying Guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-deploying.html)
 
+## Tag
+Le risorse hanno i tag standard (vedi [AWS/README.md](../../README.md#convenzione-dei-tag)): nel template (`Globals.Function.Tags` con `PropagateTags`, ruoli IAM) e come tag dello stack in `samconfig.toml`, che CloudFormation propaga anche alle risorse implicite (es. API Gateway).
+
+Credenziali dal `.env` nella root del repository: `set -a; source ../../../.env; set +a` prima dei comandi `sam`.
+
+
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
+| 2026-11-23 | Aggiunti tag standard al template SAM e samconfig |
+
+
 # AlNao.it
 Tutti i codici sorgente e le informazioni presenti in questo repository sono frutto di un attento e paziente lavoro di sviluppo da parte di Alberto Nao, che si è impegnato a verificarne la correttezza nella misura massima possibile. Qualora parte del codice o dei contenuti sia stato tratto da fonti esterne, la relativa provenienza viene sempre citata, nel rispetto della trasparenza e della proprietà intellettuale. 
 

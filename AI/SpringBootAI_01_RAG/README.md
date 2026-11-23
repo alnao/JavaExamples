@@ -174,9 +174,10 @@ Utente ──► POST /chat/rag
 ```
 
 
-
-
-
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

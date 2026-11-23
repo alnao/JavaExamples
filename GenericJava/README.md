@@ -1683,6 +1683,10 @@ try (CSVReader reader = new CSVReaderBuilder(new FileReader(inputPath))
 ```
 
 
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

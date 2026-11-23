@@ -215,6 +215,10 @@ java -jar target/app.jar  ❌
 - [TilesFX](https://github.com/HanSolo/tilesfx) - Dashboard tiles library
 
 
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

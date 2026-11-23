@@ -297,9 +297,10 @@ Questa modalità disabilita il container `ollama` e punta l'app verso `host.dock
 | `GET` | `/api/ai/search` | Ricerca semantica |
 
 
-
-
-
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

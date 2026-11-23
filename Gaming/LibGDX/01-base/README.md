@@ -82,6 +82,12 @@ Il progetto usa LibGDX con il backend LWJGL3 per il rendering grafico. La UI è 
 La skin per i bottoni e le label è creata programmaticamente nel codice, non richiede file esterni come texture o font bitmap.
 
 
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
+
+
 # AlNao.it
 Tutti i codici sorgente e le informazioni presenti in questo repository sono frutto di un attento e paziente lavoro di sviluppo da parte di Alberto Nao, che si è impegnato a verificarne la correttezza nella misura massima possibile. Qualora parte del codice o dei contenuti sia stato tratto da fonti esterne, la relativa provenienza viene sempre citata, nel rispetto della trasparenza e della proprietà intellettuale. 
 

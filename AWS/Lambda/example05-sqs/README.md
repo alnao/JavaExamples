@@ -469,7 +469,17 @@ See the [AWS SAM developer guide](https://docs.aws.amazon.com/serverless-applica
 
 Next, you can use AWS Serverless Application Repository to deploy ready to use Apps that go beyond hello world samples and learn how authors developed their applications: [AWS Serverless Application Repository main page](https://aws.amazon.com/serverless/serverlessrepo/)
 
+## Tag
+Le risorse hanno i tag standard (vedi [AWS/README.md](../../README.md#convenzione-dei-tag)): nel template (`Globals.Function.Tags` con `PropagateTags`, ruoli IAM) e come tag dello stack in `samconfig.toml`, che CloudFormation propaga anche alle risorse implicite (es. API Gateway).
 
+Credenziali dal `.env` nella root del repository: `set -a; source ../../../.env; set +a` prima dei comandi `sam`.
+
+
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
+| 2026-11-23 | Aggiunti tag standard al template SAM e samconfig |
 
 
 # AlNao.it

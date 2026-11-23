@@ -142,7 +142,10 @@ Questo esempio è una base perfetta per estensioni future:
 ---
 
 
-
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

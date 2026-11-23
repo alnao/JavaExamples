@@ -182,6 +182,10 @@ aws s3 cp target/example02-eclipse-1.0-SNAPSHOT.jar s3://your-bucket/
 - [AWS Lambda Java Development](https://docs.aws.amazon.com/lambda/latest/dg/java-package.html)
 
 
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

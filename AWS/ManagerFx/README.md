@@ -245,8 +245,29 @@ Questo progetto è stato creato come esempio di integrazione tra JavaFX e AWS SD
 
 Il progetto è in fase di sviluppo attivo e nuove funzionalità verranno aggiunte nel tempo.
 
+## Tag standard nelle tabelle
+Tutte le tabelle mostrano, dopo le colonne della risorsa, una colonna per ogni tag standard (`Name`, `Environment`, `Project`, `Owner`, `CostCenter`, `ManagedBy`, vedi [AWS/README.md](../README.md#convenzione-dei-tag)); anche il pannello VPC riporta i tag della VPC di default.
+
+| Cella | Significato |
+|---|---|
+| valore | tag presente |
+| ⚠ (arancione) | tag mancante sulla risorsa |
+| `?` (rosso) | tag non leggibili (permessi o errore) |
+| `n/d` (grigio) | la risorsa non supporta i tag (gruppi IAM) |
+
+Origine dei tag:
+- EC2, Security Group, subnet, VPC e RDS: già presenti nelle risposte delle API di elenco
+- CloudFormation, Lambda, DynamoDB, EventBridge, SNS, SQS, SSM, Step Functions, API Gateway: una sola lettura paginata con la **Resource Groups Tagging API** della regione selezionata
+- S3, CloudFront, utenti e ruoli IAM: una chiamata per risorsa, eseguite in parallelo
+
+Permessi IAM aggiuntivi in sola lettura: `tag:GetResources`, `s3:GetBucketLocation`, `s3:GetBucketTagging`, `cloudfront:ListTagsForResource`, `iam:ListUserTags`, `iam:ListRoleTags`. Se manca `tag:GetResources` la barra di stato lo segnala e le colonne dei servizi coinvolti mostrano `?`.
 
 
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
+| 2026-11-23 | Colonne tag standard con avviso se mancanti |
 
 
 # AlNao.it

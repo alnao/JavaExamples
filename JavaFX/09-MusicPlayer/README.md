@@ -135,6 +135,10 @@ mvn javafx:run
 **Nota**: Per testare, carica un file MP3 usando il pulsante "📁 Carica MP3".
 
 
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

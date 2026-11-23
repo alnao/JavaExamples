@@ -88,7 +88,10 @@ Contiene la lista dei file aperti (uno per riga):
 - Se un file nella lista non esiste più, viene ignorato silenziosamente
 
 
-
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

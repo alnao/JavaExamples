@@ -194,7 +194,10 @@ Questo progetto è stato creato come esempio di integrazione tra JavaFX e Azure 
 - [ ] Azure Service Bus
 
 
-
+## Changelog
+| Data | Descrizione |
+|------|-------------|
+| 2026-11-23 | Aggiunta sezione changelog |
 
 
 # AlNao.it

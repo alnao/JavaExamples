@@ -53,3 +53,5 @@ MyWebDBeaver/.dbeaver/project-settings.json
 MyWebDBeaver/Diagrams/MyWeb.erd
 
 .vscode
+
+AWS/CDK/bootstrap-template-java.yaml
