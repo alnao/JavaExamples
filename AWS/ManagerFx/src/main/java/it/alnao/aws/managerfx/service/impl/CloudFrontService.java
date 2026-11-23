@@ -6,7 +6,11 @@ import software.amazon.awssdk.services.cloudfront.CloudFrontClient;
 import software.amazon.awssdk.services.cloudfront.model.DistributionSummary;
 import software.amazon.awssdk.services.cloudfront.model.ListDistributionsResponse;
 
+import it.alnao.aws.managerfx.model.DefaultTags;
+import software.amazon.awssdk.services.cloudfront.model.Tag;
+
 import java.util.List;
+import java.util.Map;
 
 /**
  * Servizio per la gestione delle distribuzioni CloudFront
@@ -35,6 +39,21 @@ public class CloudFrontService {
     public List<DistributionSummary> getDistributions() {
         ListDistributionsResponse response = cloudFrontClient.listDistributions();
         return response.distributionList().items();
+    }
+
+    /**
+     * Tag di una distribuzione (permesso IAM richiesto: cloudfront:ListTagsForResource).
+     * Restituisce {@link DefaultTags#ERROR} in caso di errore.
+     */
+    public Map<String, String> getDistributionTags(String distributionArn) {
+        try {
+            return DefaultTags.toMap(
+                cloudFrontClient.listTagsForResource(r -> r.resource(distributionArn)).tags().items(),
+                Tag::key, Tag::value);
+        } catch (Exception e) {
+            System.err.println("[CloudFrontService] tag non leggibili per " + distributionArn + ": " + e.getMessage());
+            return DefaultTags.ERROR;
+        }
     }
 
     public void close() {

@@ -2,6 +2,7 @@ package it.alnao.cdk02istanzeEc2;
 
 import software.constructs.Construct;
 import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.Tags;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.ec2.*;
 import software.amazon.awscdk.CfnParameter;
@@ -11,6 +12,11 @@ import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Istanza EC2 con web server Apache nella VPC di default dell'account/regione.
+ * Richiede un env esplicito (account/regione) nello stack per il lookup della VPC di default.
+ * Tipo di istanza da context: cdk deploy -c instanceType=t2.small (default t2.micro).
+ */
 public class Cdk02IstanzeEc2Stack extends Stack {
     public Cdk02IstanzeEc2Stack(final Construct scope, final String id) {
         this(scope, id, null);
@@ -19,14 +25,7 @@ public class Cdk02IstanzeEc2Stack extends Stack {
     public Cdk02IstanzeEc2Stack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
-        // Define parameters
-        CfnParameter instanceTypeParam = CfnParameter.Builder.create(this, "InstanceType")
-                .type("String")
-                .defaultValue("t2.micro")
-                .allowedValues(java.util.Arrays.asList("t2.micro", "t2.small", "t2.medium"))
-                .description("Enter t2.micro, t2.small, or t2.medium. Default is t2.micro.")
-                .build();
-
+        // Parametri CloudFormation (valori risolti al deploy)
         CfnParameter keyNameParam = CfnParameter.Builder.create(this, "KeyName")
                 .type("AWS::EC2::KeyPair::KeyName")
                 .description("Name of an existing EC2 KeyPair to enable SSH access to the instance")
@@ -38,30 +37,12 @@ public class Cdk02IstanzeEc2Stack extends Stack {
                 .description("The IP address range that can be used to access the EC2 instance")
                 .build();
 
-        CfnParameter vpcIdParam = CfnParameter.Builder.create(this, "VpcId")
-                .type("AWS::EC2::VPC::Id")
-                .description("VPC to launch the instance into")
-                .build();
+        // Tipo di istanza da context: deve essere un valore concreto al synth (non un CfnParameter)
+        String instanceType = (String) java.util.Optional.ofNullable(this.getNode().tryGetContext("instanceType")).orElse("t2.micro");
 
-        CfnParameter amiIdParam = CfnParameter.Builder.create(this, "AmiId")
-                .type("AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>")
-                .defaultValue("/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2")
-                .description("AMI ID for the instance (default is latest Amazon Linux 2)")
-                .build();
-
-        CfnParameter regionAZParam = CfnParameter.Builder.create(this, "RegionAZ")
-                .type("AWS::EC2::AvailabilityZone::Name")
-                .defaultValue("eu-central-1a")
-                .description("Availability Zone for the instance")
-                .build();
-
-        CfnParameter subnetIdParam = CfnParameter.Builder.create(this, "SubnetId")
-                .type("AWS::EC2::Subnet::Id")
-                .description("Subnet to launch the instance into")
-                .build();
-
+        // VPC di default dell'account/regione (lookup al synth, risultato salvato in cdk.context.json)
         IVpc vpc = Vpc.fromLookup(this, "VPC", VpcLookupOptions.builder()
-                .vpcId(vpcIdParam.getValueAsString())
+                .isDefault(true)
                 .build());
 
         // Create the security group
@@ -70,6 +51,7 @@ public class Cdk02IstanzeEc2Stack extends Stack {
                 .description("Enable SSH and HTTP access")
                 .allowAllOutbound(true)
                 .build();
+        Tags.of(instanceSecurityGroup).add("Name", "aws-j-cdk02-sg");
 
         instanceSecurityGroup.addIngressRule(Peer.ipv4(allowedCidrParam.getValueAsString()), Port.tcp(22), "Allow SSH access");
         instanceSecurityGroup.addIngressRule(Peer.ipv4(allowedCidrParam.getValueAsString()), Port.tcp(80), "Allow HTTP access");
@@ -83,18 +65,19 @@ public class Cdk02IstanzeEc2Stack extends Stack {
                 throw new RuntimeException("Unable to read user data script", e);
         }
 
-        // Create the EC2 instance
+        // Create the EC2 instance in a public subnet of the default VPC
         @SuppressWarnings("deprecation")
         Instance ec2Instance = Instance.Builder.create(this, "EC2Instance")
-                .instanceType(parseInstanceType(instanceTypeParam.getValueAsString()))
-                .machineImage(MachineImage.fromSsmParameter(amiIdParam.getValueAsString()))
+                .instanceType(parseInstanceType(instanceType))
+                .machineImage(MachineImage.latestAmazonLinux2())
                 .securityGroup(instanceSecurityGroup)
                 .keyName(keyNameParam.getValueAsString())
                 .vpc(vpc)
-                .availabilityZone(regionAZParam.getValueAsString())
-                .vpcSubnets(SubnetSelection.builder().subnets(java.util.Arrays.asList(Subnet.fromSubnetId(this, "Subnet", subnetIdParam.getValueAsString()))).build())
+                .vpcSubnets(SubnetSelection.builder().subnetType(SubnetType.PUBLIC).build())
                 .userData(UserData.custom(userData))
                 .build();
+        Tags.of(ec2Instance).add("Name", "aws-j-cdk02-ec2");
+        Tags.of(ec2Instance.getRole()).add("Name", "aws-j-cdk02-role");
 
         // Add outputs
         CfnOutput.Builder.create(this, "InstanceId")

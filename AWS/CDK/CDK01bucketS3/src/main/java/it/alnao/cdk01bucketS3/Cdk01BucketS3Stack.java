@@ -2,6 +2,7 @@ package it.alnao.cdk01bucketS3;
 
 import software.constructs.Construct;
 import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.Tags;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.s3.Bucket;
 import software.amazon.awscdk.services.s3.BucketProps;
@@ -17,9 +18,11 @@ public class Cdk01BucketS3Stack extends Stack {
 
         // Create S3 bucket
         Bucket bucket = new Bucket(this, "S3Bucket", BucketProps.builder()
-                .bucketName(this.getStackName() + "-bucket")
+                // i nomi dei bucket S3 accettano solo minuscole, numeri, '.' e '-'
+                .bucketName(this.getStackName().toLowerCase() + "-bucket")
                 .versioned(true)
                 .build());
+        Tags.of(bucket).add("Name", "aws-j-cdk01-bucket");
 
         // Output
         CfnOutput.Builder.create(this, "BucketName")

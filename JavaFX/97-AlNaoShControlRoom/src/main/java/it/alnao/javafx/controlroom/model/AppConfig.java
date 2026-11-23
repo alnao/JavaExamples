@@ -5,6 +5,8 @@ import java.util.List;
 
 public class AppConfig {
     private int refreshSeconds = 30;
+    public static final int DEFAULT_MAX_OUTPUT_LINES = 5000;
+    private int maxOutputLines = DEFAULT_MAX_OUTPUT_LINES;
     private List<MonitorEntry> monitors = new ArrayList<>();
     private List<TabConfig> tabs = new ArrayList<>();
     private WindowConfig window = new WindowConfig();
@@ -13,6 +15,9 @@ public class AppConfig {
 
     public int getRefreshSeconds() { return refreshSeconds; }
     public void setRefreshSeconds(int refreshSeconds) { this.refreshSeconds = refreshSeconds; }
+
+    public int getMaxOutputLines() { return maxOutputLines; }
+    public void setMaxOutputLines(int maxOutputLines) { this.maxOutputLines = maxOutputLines; }
 
     public List<MonitorEntry> getMonitors() { return monitors; }
     public void setMonitors(List<MonitorEntry> monitors) { this.monitors = monitors; }

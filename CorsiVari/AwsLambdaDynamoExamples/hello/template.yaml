@@ -12,6 +12,15 @@ Resources:
       Timeout: 25
       Handler: it.alnao.lambda.Saluti::handler
       CodeUri: target/lambda.jar
+      # Tag standard (vedi AWS/README.md#convenzione-dei-tag)
+      PropagateTags: true
+      Tags:
+        Name: "aws-j-CorsiVari.AwsLambdaDynamoExamples.hello"
+        Environment: "dev"
+        Project: "Development.aws.j-CorsiVari.AwsLambdaDynamoExamples.hello"
+        Owner: "AlNao"
+        CostCenter: "dev"
+        ManagedBy: "Sh"
 
       
 # info: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html

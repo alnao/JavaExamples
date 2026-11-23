@@ -1,5 +1,18 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    # Tag standard (vedi AWS/README.md#convenzione-dei-tag), propagati anche al ruolo IAM generato da SAM
+    PropagateTags: true
+    Tags:
+      Name: "aws-j-Lambda.example01-console"
+      Environment: "dev"
+      Project: "Development.aws.j-Lambda.example01-console"
+      Owner: "AlNao"
+      CostCenter: "dev"
+      ManagedBy: "Sh"
+
 Resources:
   # See https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
   # for more info to see how to tune the lambda function configs based on your use case.

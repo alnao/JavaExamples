@@ -9,7 +9,7 @@ if [ ! -f "target/sh-control-room-1.0-SNAPSHOT.jar" ]; then
     mvn -q clean install package -DskipTests
 fi
 
-mvn -q clean install package -DskipTests
+#mvn -q clean install package -DskipTests
 
 java --module-path target/lib \
      --add-modules javafx.controls \

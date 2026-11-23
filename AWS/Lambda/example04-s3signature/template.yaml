@@ -24,10 +24,16 @@ Globals:
     Timeout: 30
     MemorySize: 512
     Runtime: java11
+    # Tag standard (vedi AWS/README.md#convenzione-dei-tag), propagati anche al ruolo IAM generato da SAM
+    PropagateTags: true
     Tags:
       StackName: !Ref AWS::StackName
+      Name: "aws-j-Lambda.example04-s3signature"
       Environment: !Ref Environment
-      Project: "java-maven-s3signature"
+      Project: "Development.aws.j-Lambda.example04-s3signature"
+      Owner: "AlNao"
+      CostCenter: "dev"
+      ManagedBy: "Sh"
     Environment:
       Variables:
         S3_BUCKET_NAME: !Ref S3BucketName
@@ -45,8 +51,12 @@ Resources:
       Description: !Sub "Lambda per generare pre-signed URLs per bucket ${S3BucketName} - Stack: ${AWS::StackName}"
       Tags:
         StackName: !Ref AWS::StackName
+        Name: "aws-j-Lambda.example04-s3signature"
         Environment: !Ref Environment
-        Project: "java-maven-s3signature"
+        Project: "Development.aws.j-Lambda.example04-s3signature"
+        Owner: "AlNao"
+        CostCenter: "dev"
+        ManagedBy: "Sh"
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
           S3_BUCKET_NAME: !Ref S3BucketName
@@ -67,10 +77,18 @@ Resources:
       Tags:
         - Key: StackName
           Value: !Ref AWS::StackName
+        - Key: Name
+          Value: "aws-j-Lambda.example04-s3signature"
         - Key: Environment
           Value: !Ref Environment
         - Key: Project
-          Value: "java-maven-s3signature"
+          Value: "Development.aws.j-Lambda.example04-s3signature"
+        - Key: Owner
+          Value: "AlNao"
+        - Key: CostCenter
+          Value: "dev"
+        - Key: ManagedBy
+          Value: "Sh"
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:

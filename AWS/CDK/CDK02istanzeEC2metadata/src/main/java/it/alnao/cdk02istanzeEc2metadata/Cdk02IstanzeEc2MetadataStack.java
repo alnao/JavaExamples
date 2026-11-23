@@ -7,6 +7,7 @@ import software.amazon.awscdk.CfnParameter;
 import software.amazon.awscdk.CfnWaitCondition;
 import software.amazon.awscdk.CfnWaitConditionHandle;
 import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.Tags;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.ec2.*;
 import software.amazon.awscdk.services.iam.ManagedPolicy;
@@ -27,28 +28,17 @@ public class Cdk02IstanzeEc2MetadataStack extends Stack {
         super(scope, id, props);
         Cdk02IstanzeEc2MetadataUtils utils=new Cdk02IstanzeEc2MetadataUtils();
 
-        // Parameters
-        CfnParameter subnetId = CfnParameter.Builder.create(this, "SubnetId")
-                .type("AWS::EC2::Subnet::Id")
-                .description("Please choose a Subnet Id")
-                .build();
-
-        CfnParameter vpcId = CfnParameter.Builder.create(this, "VpcId")
-                .type("AWS::EC2::VPC::Id")
-                .description("Id of Vpc")
-                .build();
-
+        // Parameters (valori risolti al deploy)
         CfnParameter keyName = CfnParameter.Builder.create(this, "KeyName")
                 .type("AWS::EC2::KeyPair::KeyName")
                 .description("Name of an existing EC2 KeyPair to enable SSH access to the instance")
                 .build();
 
-        CfnParameter instanceType = CfnParameter.Builder.create(this, "InstanceType")
-                .type("String")
-                .description("WebServer EC2 instance type")
-                .defaultValue("t2.micro")
-                .allowedValues(Arrays.asList("t2.nano", "t2.micro", "t2.small"))
-                .build();
+        // Tipo di istanza da context (valore concreto al synth): cdk deploy -c instanceType=t2.small
+        String instanceType = (String) java.util.Optional.ofNullable(this.getNode().tryGetContext("instanceType")).orElse("t2.micro");
+        if (!Arrays.asList("t2.nano", "t2.micro", "t2.small").contains(instanceType)) {
+                throw new IllegalArgumentException("instanceType ammessi: t2.nano, t2.micro, t2.small (ricevuto: " + instanceType + ")");
+        }
 
         CfnParameter sshLocation = CfnParameter.Builder.create(this, "SSHLocation")
                 .type("String")
@@ -57,10 +47,12 @@ public class Cdk02IstanzeEc2MetadataStack extends Stack {
                 .allowedPattern("(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})")
                 .build();
 
-        // VPC
+        // VPC di default dell'account/regione (lookup al synth, risultato salvato in cdk.context.json)
+        // e prima subnet pubblica, usata per l'istanza e passata allo user data
         IVpc vpc = Vpc.fromLookup(this, "VPC", VpcLookupOptions.builder()
-                .vpcId(vpcId.getValueAsString())
+                .isDefault(true)
                 .build());
+        ISubnet subnet = vpc.getPublicSubnets().get(0);
 
         // Security Group
         SecurityGroup securityGroup = SecurityGroup.Builder.create(this, "InstanceSecurityGroup")
@@ -68,6 +60,7 @@ public class Cdk02IstanzeEc2MetadataStack extends Stack {
                 .description("Enable SSH and HTTP access")
                 .allowAllOutbound(true)
                 .build();
+        Tags.of(securityGroup).add("Name", "aws-j-cdk02metadata-sg");
 
         securityGroup.addIngressRule(Peer.ipv4(sshLocation.getValueAsString()), Port.tcp(22), "SSH access");
         securityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(80), "HTTP access");
@@ -80,6 +73,7 @@ public class Cdk02IstanzeEc2MetadataStack extends Stack {
                         ManagedPolicy.fromAwsManagedPolicyName("CloudWatchAgentServerPolicy")
                 ))
                 .build();
+        Tags.of(ec2Role).add("Name", "aws-j-cdk02metadata-role");
 
         // Wait Condition Handle - DEVE essere definito prima di essere usato nel User Data
         CfnWaitConditionHandle waitConditionHandle = CfnWaitConditionHandle.Builder.create(this, "SampleWaitConditionHandle")
@@ -99,8 +93,8 @@ public class Cdk02IstanzeEc2MetadataStack extends Stack {
                 "exit $INIT_STATUS"
         );*/
         String userDataScript = utils.loadUserDataFromFile(
-                vpc.getVpcId(), 
-                subnetId.getValueAsString(), 
+                vpc.getVpcId(),
+                subnet.getSubnetId(),
                 this.getStackName(), 
                 this.getRegion(), 
                 waitConditionHandle.getRef()
@@ -108,19 +102,20 @@ public class Cdk02IstanzeEc2MetadataStack extends Stack {
         UserData userData = UserData.custom(userDataScript);
 
         // EC2 Instance
-        InstanceType ec2InstanceType = utils.parseInstanceType(instanceType.getValueAsString());
+        InstanceType ec2InstanceType = utils.parseInstanceType(instanceType);
 
         @SuppressWarnings("deprecation")
         Instance ec2Instance = Instance.Builder.create(this, "EC2Instance")
                 .instanceType(ec2InstanceType)
                 .machineImage(MachineImage.latestAmazonLinux2())
                 .vpc(vpc)
-                .vpcSubnets(SubnetSelection.builder().subnets(Arrays.asList(Subnet.fromSubnetId(this, "ImportedSubnet", subnetId.getValueAsString()))).build())
+                .vpcSubnets(SubnetSelection.builder().subnets(Arrays.asList(subnet)).build())
                 .securityGroup(securityGroup)
                 .keyName(keyName.getValueAsString())
                 .userData(userData)
                 .role(ec2Role)
                 .build();
+        Tags.of(ec2Instance).add("Name", "aws-j-cdk02metadata-ec2");
 
         // Metadata
         // Sostituisci la parte dei metadata con:
@@ -149,6 +144,8 @@ public class Cdk02IstanzeEc2MetadataStack extends Stack {
         }}));*/
 
         CfnInstance cfnInstance = (CfnInstance) ec2Instance.getNode().getDefaultChild();
+        // logical id fisso: lo user data esegue "cfn-init --resource EC2Instance"
+        cfnInstance.overrideLogicalId("EC2Instance");
         cfnInstance.addMetadata("AWS::CloudFormation::Init", metadata.get("AWS::CloudFormation::Init"));
 
         // Wait Condition - aspetta che l'istanza segnali il completamento
@@ -164,23 +161,23 @@ public class Cdk02IstanzeEc2MetadataStack extends Stack {
         // Outputs
         new CfnOutput(this, "InstanceIdOutput", CfnOutputProps.builder()
                 .value(ec2Instance.getInstanceId())
-                .exportName("InstanceId")
+                .exportName(this.getStackName() + "-InstanceId")
                 .build());
         new CfnOutput(this, "AZOutput", CfnOutputProps.builder()
                 .value(ec2Instance.getInstanceAvailabilityZone())
-                .exportName("AZ")
+                .exportName(this.getStackName() + "-AZ")
                 .build());
         new CfnOutput(this, "PublicDNSOutput", CfnOutputProps.builder()
                 .value(ec2Instance.getInstancePublicDnsName())
-                .exportName("PublicDNS")
+                .exportName(this.getStackName() + "-PublicDNS")
                 .build());
         new CfnOutput(this, "PublicIPOutput", CfnOutputProps.builder()
                 .value(ec2Instance.getInstancePublicIp())
-                .exportName("PublicIP")
+                .exportName(this.getStackName() + "-PublicIP")
                 .build());
         new CfnOutput(this, "StackNameOutput", CfnOutputProps.builder()
                 .value(this.getStackName())
-                .exportName("StackName")
+                .exportName(this.getStackName() + "-StackName")
                 .build());
     }
 

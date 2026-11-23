@@ -8,4 +8,6 @@ s3_prefix = "Es06"
 region = "eu-west-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
+# tag standard dello stack, vedi AWS/README.md#convenzione-dei-tag
+tags = "Name=aws-j-Lambda.example06-excel2csv Environment=dev Project=Development.aws.j-Lambda.example06-excel2csv Owner=AlNao CostCenter=dev ManagedBy=Sh"
 image_repositories = []

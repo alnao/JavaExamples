@@ -8,6 +8,20 @@ Resources:
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: clienti2
+      # Tag standard (vedi AWS/README.md#convenzione-dei-tag)
+      Tags:
+        - Key: Name
+          Value: "aws-j-CorsiVari.AwsLambdaDynamoExamples.hello"
+        - Key: Environment
+          Value: "dev"
+        - Key: Project
+          Value: "Development.aws.j-CorsiVari.AwsLambdaDynamoExamples.hello"
+        - Key: Owner
+          Value: "AlNao"
+        - Key: CostCenter
+          Value: "dev"
+        - Key: ManagedBy
+          Value: "CloudFormation"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5

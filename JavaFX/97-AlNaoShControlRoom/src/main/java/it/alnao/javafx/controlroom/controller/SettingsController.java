@@ -23,6 +23,7 @@ public class SettingsController {
     private final ObservableList<MonitorEntry> monitors = FXCollections.observableArrayList();
     private final ObservableList<TabConfig> tabs = FXCollections.observableArrayList();
     private TextField refreshField;
+    private TextField maxOutputLinesField;
     private TextField windowXField;
     private TextField windowYField;
     private TextField windowWidthField;
@@ -74,6 +75,10 @@ public class SettingsController {
         saveBtn.setOnAction(e -> {
             try {
                 configService.setRefreshSeconds(Integer.parseInt(refreshField.getText()));
+            } catch (Exception ignored) {
+            }
+            try {
+                configService.setMaxOutputLines(Integer.parseInt(maxOutputLinesField.getText().trim()));
             } catch (Exception ignored) {
             }
 
@@ -389,6 +394,13 @@ public class SettingsController {
         refreshField = new TextField(String.valueOf(configService.getRefreshSeconds()));
         row.getChildren().add(refreshField);
 
+        HBox outputRow = new HBox(10);
+        Label maxOutputLinesLabel = new Label("Max Console Output Lines:");
+        maxOutputLinesLabel.getStyleClass().add("form-label");
+        outputRow.getChildren().add(maxOutputLinesLabel);
+        maxOutputLinesField = new TextField(String.valueOf(configService.getMaxOutputLines()));
+        outputRow.getChildren().add(maxOutputLinesField);
+
         GridPane windowGrid = new GridPane();
         windowGrid.setHgap(10);
         windowGrid.setVgap(10);
@@ -416,7 +428,7 @@ public class SettingsController {
         windowGrid.addRow(1, widthLabel, windowWidthField, heightLabel, windowHeightField);
         windowGrid.add(windowMaximizedCheck, 0, 2, 4, 1);
 
-        box.getChildren().addAll(row, new Separator(), windowGrid);
+        box.getChildren().addAll(row, outputRow, new Separator(), windowGrid);
         return box;
     }
 

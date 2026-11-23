@@ -1,10 +1,10 @@
 
 # ==============================================================
-# = Parametri Sicurezza AWS DynamoDb 
+# = Parametri AWS DynamoDb: regione da AWS_REGION, credenziali dalla
+# = default provider chain (vedi .env nella root del repository)
 # ==============================================================
-sicurezza:
-    key: AKIAWAUHRQF3EA4WGGG6
-    secret: XXXXXXXXXXXXXXXXXXXX
+aws:
+    region: ${AWS_REGION:eu-west-3}
 
 # ==============================================================
 # = Nome Bucket AWS S3 in uso

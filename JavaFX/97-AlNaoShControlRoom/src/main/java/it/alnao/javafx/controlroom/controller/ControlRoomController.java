@@ -91,7 +91,7 @@ public class ControlRoomController {
     // ====================== HEADER ======================
 
     private HBox buildHeader() {
-        HBox header = new HBox(16);
+        HBox header = new HBox(1);
         header.setAlignment(Pos.CENTER_LEFT);
         header.setPadding(new Insets(12, 20, 12, 20));
         header.getStyleClass().add("header-bar");
@@ -144,7 +144,7 @@ public class ControlRoomController {
     }
 
     private HBox buildIndicator(MonitorEntry monitor) {
-        HBox box = new HBox(5);
+        HBox box = new HBox(1);
         box.setAlignment(Pos.CENTER);
         box.setPadding(new Insets(4, 10, 4, 10));
         box.getStyleClass().add("indicator-chip");
@@ -334,7 +334,7 @@ public class ControlRoomController {
 
             scriptBtn.setOnAction(e -> {
                 if (runner.isRunning()) {
-                    outputArea.appendText("⚠ A script is already running. Stop it first.\n");
+                    appendOutput(outputArea, "⚠ A script is already running. Stop it first.\n");
                     return;
                 }
                 statusLabel.setText("● Running: " + script.label());
@@ -349,7 +349,7 @@ public class ControlRoomController {
 
                 runner.run(
                     script,
-                    line -> outputArea.appendText(line),
+                    text -> appendOutput(outputArea, text),
                     () -> {
                         statusLabel.setText("● Idle");
                         statusLabel.getStyleClass().remove("status-label-running");
@@ -383,7 +383,7 @@ public class ControlRoomController {
             String text = inputField.getText();
             if (text != null && !text.isEmpty()) {
                 runner.sendInput(text);
-                outputArea.appendText("> " + text + "\n");
+                appendOutput(outputArea, "> " + text + "\n");
                 inputField.clear();
             }
         };
@@ -488,6 +488,24 @@ public class ControlRoomController {
 
     private void styleStopButton(Button btn) {
         btn.getStyleClass().addAll("btn", "btn-danger", "btn-sm");
+    }
+
+    /**
+     * Appends text to the output area keeping at most maxOutputLines lines:
+     * the oldest lines are removed so memory does not grow with huge outputs.
+     */
+    private void appendOutput(TextArea outputArea, String text) {
+        outputArea.appendText(text);
+        int maxLines = configService.getMaxOutputLines();
+        String content = outputArea.getText();
+        int lines = 0;
+        for (int i = content.length() - 1; i >= 0; i--) {
+            if (content.charAt(i) == '\n' && ++lines > maxLines) {
+                outputArea.deleteText(0, i + 1);
+                outputArea.positionCaret(outputArea.getLength());
+                return;
+            }
+        }
     }
 
     private void styleSmallButton(Button btn) {

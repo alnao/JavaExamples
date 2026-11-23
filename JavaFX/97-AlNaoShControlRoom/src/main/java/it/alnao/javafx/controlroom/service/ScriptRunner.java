@@ -19,6 +19,10 @@ public class ScriptRunner {
     private Thread runnerThread;
     private volatile boolean running = false;
 
+    // Output buffered off the FX thread and flushed in batches (one pending runLater at a time)
+    private final StringBuilder pendingOutput = new StringBuilder();
+    private boolean flushScheduled = false;
+
     /**
      * Runs the given shell script asynchronously.
      *
@@ -57,10 +61,10 @@ public class ScriptRunner {
                         new InputStreamReader(currentProcess.getInputStream()))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        final String l = line;
-                        Platform.runLater(() -> outputCallback.accept(l + "\n"));
+                        enqueueOutput(line + "\n", outputCallback);
                     }
                 }
+                flushOutput(outputCallback);
 
                 int exitCode = currentProcess.waitFor();
                 Platform.runLater(() -> {
@@ -80,6 +84,42 @@ public class ScriptRunner {
         }, "script-runner");
         runnerThread.setDaemon(true);
         runnerThread.start();
+    }
+
+    /**
+     * Appends text to the pending buffer and schedules a single flush on the FX thread.
+     * Avoids flooding the FX event queue with one runLater per line.
+     */
+    private void enqueueOutput(String text, Consumer<String> outputCallback) {
+        synchronized (pendingOutput) {
+            pendingOutput.append(text);
+            if (flushScheduled) {
+                return;
+            }
+            flushScheduled = true;
+        }
+        Platform.runLater(() -> flushOutput(outputCallback));
+    }
+
+    /**
+     * Delivers all buffered output to the callback. Must run on the FX thread
+     * (or be followed by FX-thread delivery, as at end of process).
+     */
+    private void flushOutput(Consumer<String> outputCallback) {
+        String chunk;
+        synchronized (pendingOutput) {
+            flushScheduled = false;
+            if (pendingOutput.length() == 0) {
+                return;
+            }
+            chunk = pendingOutput.toString();
+            pendingOutput.setLength(0);
+        }
+        if (Platform.isFxApplicationThread()) {
+            outputCallback.accept(chunk);
+        } else {
+            Platform.runLater(() -> outputCallback.accept(chunk));
+        }
     }
 
     /**

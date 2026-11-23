@@ -11,7 +11,16 @@ Globals:
     Runtime: java8
     MemorySize: 512
     Timeout: 25
-    
+    # Tag standard (vedi AWS/README.md#convenzione-dei-tag)
+    PropagateTags: true
+    Tags:
+      Name: "aws-j-CorsiVari.AwsLambdaDynamoExamples.insert-user"
+      Environment: "dev"
+      Project: "Development.aws.j-CorsiVari.AwsLambdaDynamoExamples.insert-user"
+      Owner: "AlNao"
+      CostCenter: "dev"
+      ManagedBy: "Sh"
+
 Resources:
   ClientiTable:
     Type: AWS::Serverless::SimpleTable
@@ -20,12 +29,26 @@ Resources:
       PrimaryKey:
         Name: userId
         Type: String
+      Tags:
+        Name: "aws-j-CorsiVari.AwsLambdaDynamoExamples.insert-user"
+        Environment: "dev"
+        Project: "Development.aws.j-CorsiVari.AwsLambdaDynamoExamples.insert-user"
+        Owner: "AlNao"
+        CostCenter: "dev"
+        ManagedBy: "Sh"
   ClientiAPI:
     Type: AWS::Serverless::Api
     Properties:
       Name: clienti-api
       EndpointConfiguration: REGIONAL
       StageName: dev
+      Tags:
+        Name: "aws-j-CorsiVari.AwsLambdaDynamoExamples.insert-user"
+        Environment: "dev"
+        Project: "Development.aws.j-CorsiVari.AwsLambdaDynamoExamples.insert-user"
+        Owner: "AlNao"
+        CostCenter: "dev"
+        ManagedBy: "Sh"
       
   InsertClienteJavaConApi:
     Type: AWS::Serverless::Function

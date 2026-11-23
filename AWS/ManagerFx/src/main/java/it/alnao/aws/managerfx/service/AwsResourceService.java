@@ -1,5 +1,6 @@
 package it.alnao.aws.managerfx.service;
 
+import it.alnao.aws.managerfx.model.TagIndex;
 import it.alnao.aws.managerfx.service.impl.*;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cloudformation.model.StackSummary;
@@ -18,6 +19,7 @@ import software.amazon.awssdk.services.ssm.model.ParameterMetadata;
 import software.amazon.awssdk.services.apigateway.model.RestApi;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Servizio centrale per l'interazione con le risorse AWS
@@ -46,6 +48,7 @@ public class AwsResourceService {
     private SsmService ssmService;
     private StepFunctionsService stepFunctionsService;
     private ApiGatewayService apiGatewayService;
+    private TagService tagService;
 
     public AwsResourceService() {
         this(Region.EU_CENTRAL_1, "default");
@@ -72,6 +75,7 @@ public class AwsResourceService {
         ssmService = new SsmService(region, profile);
         stepFunctionsService = new StepFunctionsService(region, profile);
         apiGatewayService = new ApiGatewayService(region, profile);
+        tagService = new TagService(region, profile);
     }
 
     public void updateConfiguration(Region newRegion, String newProfile) {
@@ -98,6 +102,7 @@ public class AwsResourceService {
         if (ssmService != null) ssmService.close();
         if (stepFunctionsService != null) stepFunctionsService.close();
         if (apiGatewayService != null) apiGatewayService.close();
+        if (tagService != null) tagService.close();
     }
 
     // EC2 Methods
@@ -188,6 +193,28 @@ public class AwsResourceService {
     // API Gateway Methods
     public List<RestApi> getApiGatewayApis() {
         return apiGatewayService.getApis();
+    }
+
+    // Tag Methods
+    /** Indice dei tag di tutte le risorse della regione corrente (Resource Groups Tagging API) */
+    public TagIndex getRegionalTagIndex() {
+        return tagService.loadTagIndex();
+    }
+
+    public Map<String, String> getS3BucketTags(String bucketName) {
+        return s3Service.getBucketTags(bucketName);
+    }
+
+    public Map<String, String> getCloudFrontDistributionTags(String distributionArn) {
+        return cloudFrontService.getDistributionTags(distributionArn);
+    }
+
+    public Map<String, String> getIamUserTags(String userName) {
+        return iamService.getUserTags(userName);
+    }
+
+    public Map<String, String> getIamRoleTags(String roleName) {
+        return iamService.getRoleTags(roleName);
     }
 
     public void close() {

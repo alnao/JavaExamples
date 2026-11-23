@@ -83,6 +83,16 @@ public class ConfigService {
         appConfig.setRefreshSeconds(seconds);
     }
 
+    public int getMaxOutputLines() {
+        return appConfig.getMaxOutputLines() > 0 ? appConfig.getMaxOutputLines() : AppConfig.DEFAULT_MAX_OUTPUT_LINES;
+    }
+
+    public void setMaxOutputLines(int maxOutputLines) {
+        if (maxOutputLines > 0) {
+            appConfig.setMaxOutputLines(maxOutputLines);
+        }
+    }
+
     public AppConfig.WindowConfig getWindowConfig() {
         if (appConfig.getWindow() == null) {
             appConfig.setWindow(new AppConfig.WindowConfig());

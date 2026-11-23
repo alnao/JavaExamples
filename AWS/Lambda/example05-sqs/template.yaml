@@ -7,6 +7,15 @@ Globals:
   Function:
     Timeout: 20
     MemorySize: 128
+    # Tag standard (vedi AWS/README.md#convenzione-dei-tag), propagati anche al ruolo IAM generato da SAM
+    PropagateTags: true
+    Tags:
+      Name: "aws-j-Lambda.example05-sqs"
+      Environment: "dev"
+      Project: "Development.aws.j-Lambda.example05-sqs"
+      Owner: "AlNao"
+      CostCenter: "dev"
+      ManagedBy: "Sh"
 
 Resources:
   SqsGet:
@@ -32,6 +41,19 @@ Resources:
   SqsGetIAMRole:
     Type: 'AWS::IAM::Role'
     Properties:
+      Tags:
+        - Key: Name
+          Value: "aws-j-Lambda.example05-sqs"
+        - Key: Environment
+          Value: "dev"
+        - Key: Project
+          Value: "Development.aws.j-Lambda.example05-sqs"
+        - Key: Owner
+          Value: "AlNao"
+        - Key: CostCenter
+          Value: "dev"
+        - Key: ManagedBy
+          Value: "Sh"
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:

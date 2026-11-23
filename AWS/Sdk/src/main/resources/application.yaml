@@ -2,8 +2,9 @@ server:
   port: 8042
 
 aws:
-    accessKey: ${AWS_ACCESS_KEY:}
-    secretKey: ${AWS_SECRET_KEY:}
+    # credenziali dal .env nella root del repository (set -a; source ../../.env; set +a)
+    accessKey: ${AWS_ACCESS_KEY_ID:${AWS_ACCESS_KEY:}}
+    secretKey: ${AWS_SECRET_ACCESS_KEY:${AWS_SECRET_KEY:}}
     region: ${AWS_REGION:eu-central-1}
     profile: ${AWS_PROFILE:}
     

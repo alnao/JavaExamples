@@ -137,6 +137,11 @@
             <artifactId>sfn</artifactId>
             <version>${aws.sdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>resourcegroupstaggingapi</artifactId>
+            <version>${aws.sdk.version}</version>
+        </dependency>
 
         <!-- Logging -->
         <dependency>

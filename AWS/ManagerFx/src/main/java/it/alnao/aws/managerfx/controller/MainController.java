@@ -1,5 +1,7 @@
 package it.alnao.aws.managerfx.controller;
 
+import it.alnao.aws.managerfx.model.DefaultTags;
+import it.alnao.aws.managerfx.model.TagIndex;
 import it.alnao.aws.managerfx.service.AwsResourceService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -25,6 +27,7 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -156,6 +159,14 @@ public class MainController {
     @FXML private TableColumn<software.amazon.awssdk.services.iam.model.Role, String> iamRoleNameColumn;
     @FXML private TableColumn<software.amazon.awssdk.services.iam.model.Role, String> iamRoleArnColumn;
     
+    // Colonne dei tag standard: valori per riga salvati nelle properties di ogni TableView
+    private static final String TAGS_PROPERTY = "defaultTags";
+    private static final String TAG_ERROR = "\u0000error";
+    private static final String TAG_UNSUPPORTED = "\u0000unsupported";
+
+    // Indice dei tag della regione, ricaricato a ogni refresh (Resource Groups Tagging API)
+    private volatile TagIndex tagIndex = new TagIndex();
+
     private AwsResourceService awsService;
     private ObservableList<String> availableRegions;
     private ObservableList<String> availableProfiles;
@@ -433,6 +444,107 @@ public class MainController {
             new javafx.beans.property.SimpleStringProperty(cellData.getValue().roleName()));
         iamRoleArnColumn.setCellValueFactory(cellData -> 
             new javafx.beans.property.SimpleStringProperty(cellData.getValue().arn()));
+
+        // Colonne dei tag standard su tutte le tabelle
+        addTagColumns(subnetsTable);
+        addTagColumns(ec2Table);
+        addTagColumns(s3Table);
+        addTagColumns(rdsTable);
+        addTagColumns(sgTable);
+        addTagColumns(cfnTable);
+        addTagColumns(lambdaTable);
+        addTagColumns(cloudFrontTable);
+        addTagColumns(dynamoTable);
+        addTagColumns(eventBridgeTable);
+        addTagColumns(snsTable);
+        addTagColumns(sqsTable);
+        addTagColumns(ssmTable);
+        addTagColumns(stepFunctionsTable);
+        addTagColumns(apiGatewayTable);
+        addTagColumns(iamGroupsTable);
+        addTagColumns(iamUsersTable);
+        addTagColumns(iamRolesTable);
+    }
+
+    /**
+     * Aggiunge alla tabella una colonna per ogni tag standard ({@link DefaultTags#KEYS}):
+     * valore del tag se presente, icona di avviso se manca.
+     */
+    private <T> void addTagColumns(TableView<T> table) {
+        for (String key : DefaultTags.KEYS) {
+            TableColumn<T, String> column = new TableColumn<>(key);
+            column.setPrefWidth("Project".equals(key) || "Name".equals(key) ? 200 : 110);
+            column.setCellValueFactory(cellData ->
+                new javafx.beans.property.SimpleStringProperty(tagValue(table, cellData.getValue(), key)));
+            column.setCellFactory(c -> new TagCell<>(key));
+            table.getColumns().add(column);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> String tagValue(TableView<T> table, T item, String key) {
+        Map<T, Map<String, String>> allTags = (Map<T, Map<String, String>>) table.getProperties().get(TAGS_PROPERTY);
+        Map<String, String> tags = allTags == null ? null : allTags.get(item);
+        if (tags == null || tags == DefaultTags.ERROR) {
+            return TAG_ERROR;
+        }
+        if (tags == DefaultTags.UNSUPPORTED) {
+            return TAG_UNSUPPORTED;
+        }
+        String value = tags.get(key);
+        return value == null || value.isBlank() ? null : value;
+    }
+
+    /** Calcola i tag di ogni riga (da chiamare nel thread di background: può fare chiamate AWS) */
+    private <T> Map<T, Map<String, String>> collectTags(List<T> items, Function<T, Map<String, String>> tagsOf, boolean parallel) {
+        return (parallel ? items.parallelStream() : items.stream())
+            .collect(Collectors.toMap(Function.identity(), tagsOf, (a, b) -> a));
+    }
+
+    /** Mostra righe e relativi tag nella tabella (da chiamare nel thread JavaFX) */
+    private <T> void showItems(TableView<T> table, List<T> items, Map<T, Map<String, String>> tags) {
+        table.getProperties().put(TAGS_PROPERTY, tags);
+        table.setItems(FXCollections.observableArrayList(items));
+        table.refresh();
+    }
+
+    /** Cella di un tag standard: valore, icona di avviso se manca, "n/d" se non supportato, "?" se non leggibile */
+    private static class TagCell<T> extends TableCell<T, String> {
+        private final String key;
+
+        TagCell(String key) {
+            this.key = key;
+        }
+
+        @Override
+        protected void updateItem(String value, boolean empty) {
+            super.updateItem(value, empty);
+            getStyleClass().removeAll("tag-missing", "tag-error", "tag-unsupported");
+            setText(null);
+            setGraphic(null);
+            setTooltip(null);
+            if (empty) {
+                return;
+            }
+            if (TAG_ERROR.equals(value)) {
+                setText("?");
+                getStyleClass().add("tag-error");
+                setTooltip(new Tooltip("Impossibile leggere i tag della risorsa (permessi o errore di rete)"));
+            } else if (TAG_UNSUPPORTED.equals(value)) {
+                setText("n/d");
+                getStyleClass().add("tag-unsupported");
+                setTooltip(new Tooltip("Questo tipo di risorsa non supporta i tag"));
+            } else if (value == null) {
+                Label icon = new Label("\u26A0");
+                icon.getStyleClass().add("tag-missing-icon");
+                setGraphic(icon);
+                getStyleClass().add("tag-missing");
+                setTooltip(new Tooltip("Tag " + key + " mancante"));
+            } else {
+                setText(value);
+                setTooltip(new Tooltip(key + " = " + value));
+            }
+        }
     }
 
     /**
@@ -468,6 +580,7 @@ public class MainController {
             @Override
             protected Void call() {
                 try {
+                    tagIndex = awsService.getRegionalTagIndex();
                     loadVpcInfo();
                     loadEc2Instances();
                     loadS3Buckets();
@@ -486,7 +599,9 @@ public class MainController {
                     loadIamResources();
                     
                     Platform.runLater(() -> {
-                        statusLabel.setText("Risorse caricate con successo");
+                        statusLabel.setText(tagIndex.isAvailable()
+                            ? "Risorse caricate con successo"
+                            : "Risorse caricate, tag non disponibili: " + tagIndex.getError());
                         refreshButton.setDisable(false);
                     });
                 } catch (Exception e) {
@@ -509,7 +624,9 @@ public class MainController {
     private void loadVpcInfo() {
         try {
             Vpc defaultVpc = awsService.getDefaultVpc();
-            List<Subnet> subnets = awsService.getSubnets(defaultVpc.vpcId());
+            List<Subnet> subnets = defaultVpc != null ? awsService.getSubnets(defaultVpc.vpcId()) : List.of();
+            Map<Subnet, Map<String, String>> subnetTags = collectTags(subnets,
+                s -> DefaultTags.toMap(s.tags(), t -> t.key(), t -> t.value()), false);
             
             Platform.runLater(() -> {
                 if (defaultVpc != null) {
@@ -517,9 +634,16 @@ public class MainController {
                     info.append("VPC ID: ").append(defaultVpc.vpcId()).append("\n");
                     info.append("CIDR Block: ").append(defaultVpc.cidrBlock()).append("\n");
                     info.append("State: ").append(defaultVpc.state()).append("\n");
+                    info.append("\nTag standard:\n");
+                    Map<String, String> vpcTags = DefaultTags.toMap(defaultVpc.tags(), t -> t.key(), t -> t.value());
+                    for (String key : DefaultTags.KEYS) {
+                        String value = vpcTags.get(key);
+                        info.append("  ").append(key).append(": ")
+                            .append(value == null || value.isBlank() ? "\u26A0 mancante" : value).append("\n");
+                    }
                     vpcInfoTextArea.setText(info.toString());
                     
-                    subnetsTable.setItems(FXCollections.observableArrayList(subnets));
+                    showItems(subnetsTable, subnets, subnetTags);
                 } else {
                     vpcInfoTextArea.setText("Nessuna VPC di default trovata");
                 }
@@ -535,9 +659,8 @@ public class MainController {
     private void loadEc2Instances() {
         try {
             List<Instance> instances = awsService.getEc2Instances();
-            Platform.runLater(() -> 
-                ec2Table.setItems(FXCollections.observableArrayList(instances))
-            );
+            Map<Instance, Map<String, String>> tags = collectTags(instances, i -> DefaultTags.toMap(i.tags(), t -> t.key(), t -> t.value()), false);
+            Platform.runLater(() -> showItems(ec2Table, instances, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -549,9 +672,8 @@ public class MainController {
     private void loadS3Buckets() {
         try {
             List<Bucket> buckets = awsService.getS3Buckets();
-            Platform.runLater(() -> 
-                s3Table.setItems(FXCollections.observableArrayList(buckets))
-            );
+            Map<Bucket, Map<String, String>> tags = collectTags(buckets, b -> awsService.getS3BucketTags(b.name()), true);
+            Platform.runLater(() -> showItems(s3Table, buckets, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -563,9 +685,8 @@ public class MainController {
     private void loadRdsInstances() {
         try {
             List<DBInstance> instances = awsService.getRdsInstances();
-            Platform.runLater(() -> 
-                rdsTable.setItems(FXCollections.observableArrayList(instances))
-            );
+            Map<DBInstance, Map<String, String>> tags = collectTags(instances, d -> DefaultTags.toMap(d.tagList(), t -> t.key(), t -> t.value()), false);
+            Platform.runLater(() -> showItems(rdsTable, instances, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -577,9 +698,8 @@ public class MainController {
     private void loadSecurityGroups() {
         try {
             List<SecurityGroup> securityGroups = awsService.getSecurityGroups();
-            Platform.runLater(() -> 
-                sgTable.setItems(FXCollections.observableArrayList(securityGroups))
-            );
+            Map<SecurityGroup, Map<String, String>> tags = collectTags(securityGroups, sg -> DefaultTags.toMap(sg.tags(), t -> t.key(), t -> t.value()), false);
+            Platform.runLater(() -> showItems(sgTable, securityGroups, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -591,9 +711,8 @@ public class MainController {
     private void loadCloudFormationStacks() {
         try {
             List<StackSummary> stacks = awsService.getCloudFormationStacks();
-            Platform.runLater(() -> 
-                cfnTable.setItems(FXCollections.observableArrayList(stacks))
-            );
+            Map<StackSummary, Map<String, String>> tags = collectTags(stacks, s -> tagIndex.byArn(s.stackId()), false);
+            Platform.runLater(() -> showItems(cfnTable, stacks, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -605,9 +724,8 @@ public class MainController {
     private void loadLambdaFunctions() {
         try {
             List<FunctionConfiguration> functions = awsService.getLambdaFunctions();
-            Platform.runLater(() -> 
-                lambdaTable.setItems(FXCollections.observableArrayList(functions))
-            );
+            Map<FunctionConfiguration, Map<String, String>> tags = collectTags(functions, f -> tagIndex.byArn(f.functionArn()), false);
+            Platform.runLater(() -> showItems(lambdaTable, functions, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -619,9 +737,8 @@ public class MainController {
     private void loadCloudFrontDistributions() {
         try {
             List<DistributionSummary> distributions = awsService.getCloudFrontDistributions();
-            Platform.runLater(() -> 
-                cloudFrontTable.setItems(FXCollections.observableArrayList(distributions))
-            );
+            Map<DistributionSummary, Map<String, String>> tags = collectTags(distributions, d -> awsService.getCloudFrontDistributionTags(d.arn()), true);
+            Platform.runLater(() -> showItems(cloudFrontTable, distributions, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -633,9 +750,8 @@ public class MainController {
     private void loadDynamoDbTables() {
         try {
             List<String> tables = awsService.getDynamoDbTables();
-            Platform.runLater(() -> 
-                dynamoTable.setItems(FXCollections.observableArrayList(tables))
-            );
+            Map<String, Map<String, String>> tags = collectTags(tables, name -> tagIndex.byResource("dynamodb", "table/" + name), false);
+            Platform.runLater(() -> showItems(dynamoTable, tables, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -647,9 +763,8 @@ public class MainController {
     private void loadEventBridgeRules() {
         try {
             List<Rule> rules = awsService.getEventBridgeRules();
-            Platform.runLater(() -> 
-                eventBridgeTable.setItems(FXCollections.observableArrayList(rules))
-            );
+            Map<Rule, Map<String, String>> tags = collectTags(rules, r -> tagIndex.byArn(r.arn()), false);
+            Platform.runLater(() -> showItems(eventBridgeTable, rules, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -661,9 +776,8 @@ public class MainController {
     private void loadSnsTopics() {
         try {
             List<Topic> topics = awsService.getSnsTopics();
-            Platform.runLater(() -> 
-                snsTable.setItems(FXCollections.observableArrayList(topics))
-            );
+            Map<Topic, Map<String, String>> tags = collectTags(topics, tp -> tagIndex.byArn(tp.topicArn()), false);
+            Platform.runLater(() -> showItems(snsTable, topics, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -675,9 +789,8 @@ public class MainController {
     private void loadSqsQueues() {
         try {
             List<String> queues = awsService.getSqsQueues();
-            Platform.runLater(() -> 
-                sqsTable.setItems(FXCollections.observableArrayList(queues))
-            );
+            Map<String, Map<String, String>> tags = collectTags(queues, url -> tagIndex.byResource("sqs", url.substring(url.lastIndexOf('/') + 1)), false);
+            Platform.runLater(() -> showItems(sqsTable, queues, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -689,9 +802,8 @@ public class MainController {
     private void loadSsmParameters() {
         try {
             List<ParameterMetadata> parameters = awsService.getSsmParameters();
-            Platform.runLater(() -> 
-                ssmTable.setItems(FXCollections.observableArrayList(parameters))
-            );
+            Map<ParameterMetadata, Map<String, String>> tags = collectTags(parameters, p -> tagIndex.byResource("ssm", p.name().startsWith("/") ? "parameter" + p.name() : "parameter/" + p.name()), false);
+            Platform.runLater(() -> showItems(ssmTable, parameters, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -703,9 +815,8 @@ public class MainController {
     private void loadStepFunctions() {
         try {
             List<StateMachineListItem> stateMachines = awsService.getStepFunctions();
-            Platform.runLater(() -> 
-                stepFunctionsTable.setItems(FXCollections.observableArrayList(stateMachines))
-            );
+            Map<StateMachineListItem, Map<String, String>> tags = collectTags(stateMachines, sm -> tagIndex.byArn(sm.stateMachineArn()), false);
+            Platform.runLater(() -> showItems(stepFunctionsTable, stateMachines, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -717,9 +828,8 @@ public class MainController {
     private void loadApiGatewayApis() {
         try {
             List<RestApi> apis = awsService.getApiGatewayApis();
-            Platform.runLater(() -> 
-                apiGatewayTable.setItems(FXCollections.observableArrayList(apis))
-            );
+            Map<RestApi, Map<String, String>> tags = collectTags(apis, api -> tagIndex.byResource("apigateway", "/restapis/" + api.id()), false);
+            Platform.runLater(() -> showItems(apiGatewayTable, apis, tags));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -730,20 +840,22 @@ public class MainController {
      */
     private void loadIamResources() {
         try {
+            // i gruppi IAM non supportano i tag
             List<software.amazon.awssdk.services.iam.model.Group> groups = awsService.getIamGroups();
-            Platform.runLater(() -> 
-                iamGroupsTable.setItems(FXCollections.observableArrayList(groups))
-            );
+            Map<software.amazon.awssdk.services.iam.model.Group, Map<String, String>> groupTags =
+                collectTags(groups, g -> DefaultTags.UNSUPPORTED, false);
+            Platform.runLater(() -> showItems(iamGroupsTable, groups, groupTags));
             
+            // ListUsers/ListRoles non restituiscono i tag: una chiamata per utente/ruolo, in parallelo
             List<software.amazon.awssdk.services.iam.model.User> users = awsService.getIamUsers();
-            Platform.runLater(() -> 
-                iamUsersTable.setItems(FXCollections.observableArrayList(users))
-            );
+            Map<software.amazon.awssdk.services.iam.model.User, Map<String, String>> userTags =
+                collectTags(users, u -> awsService.getIamUserTags(u.userName()), true);
+            Platform.runLater(() -> showItems(iamUsersTable, users, userTags));
             
             List<software.amazon.awssdk.services.iam.model.Role> roles = awsService.getIamRoles();
-            Platform.runLater(() -> 
-                iamRolesTable.setItems(FXCollections.observableArrayList(roles))
-            );
+            Map<software.amazon.awssdk.services.iam.model.Role, Map<String, String>> roleTags =
+                collectTags(roles, r -> awsService.getIamRoleTags(r.roleName()), true);
+            Platform.runLater(() -> showItems(iamRolesTable, roles, roleTags));
         } catch (Exception e) {
             e.printStackTrace();
         }

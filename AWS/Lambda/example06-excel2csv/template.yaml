@@ -9,6 +9,15 @@ Description: >
 Globals:
   Function:
     Timeout: 900
+    # Tag standard (vedi AWS/README.md#convenzione-dei-tag), propagati anche al ruolo IAM generato da SAM
+    PropagateTags: true
+    Tags:
+      Name: "aws-j-Lambda.example06-excel2csv"
+      Environment: "dev"
+      Project: "Development.aws.j-Lambda.example06-excel2csv"
+      Owner: "AlNao"
+      CostCenter: "dev"
+      ManagedBy: "Sh"
 
 Resources:
   Exc2CsvFunction:
@@ -34,6 +43,19 @@ Resources:
   Exc2CsvIAMRole:
     Type: 'AWS::IAM::Role'
     Properties:
+      Tags:
+        - Key: Name
+          Value: "aws-j-Lambda.example06-excel2csv"
+        - Key: Environment
+          Value: "dev"
+        - Key: Project
+          Value: "Development.aws.j-Lambda.example06-excel2csv"
+        - Key: Owner
+          Value: "AlNao"
+        - Key: CostCenter
+          Value: "dev"
+        - Key: ManagedBy
+          Value: "Sh"
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:

@@ -25,6 +25,8 @@ s3_prefix = "example04-s3signature"
 region = "eu-central-1"  # Frankfurt instead of Ireland
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
+# tag standard dello stack, vedi AWS/README.md#convenzione-dei-tag
+tags = "Name=aws-j-Lambda.example04-s3signature Environment=dev Project=Development.aws.j-Lambda.example04-s3signature Owner=AlNao CostCenter=dev ManagedBy=Sh"
 image_repositories = []
 parameter_overrides = [
     "S3BucketName=cloudformation-alnao", 

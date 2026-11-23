@@ -24,7 +24,7 @@ public class AwsConfig {
                     AwsBasicCredentials.create(
                             awsProperties.getAccessKey(),
                             awsProperties.getSecretKey()));
-        } else if (awsProperties.getProfile() != null) {
+        } else if (StringUtils.isNotEmpty(awsProperties.getProfile())) {
             return ProfileCredentialsProvider.create(awsProperties.getProfile());
         } else {
             return DefaultCredentialsProvider.create();

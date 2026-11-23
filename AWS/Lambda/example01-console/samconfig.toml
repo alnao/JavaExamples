@@ -6,4 +6,6 @@ s3_prefix = "example01-sam"
 region = "eu-west-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
+# tag standard dello stack, vedi AWS/README.md#convenzione-dei-tag
+tags = "Name=aws-j-Lambda.example01-console Environment=dev Project=Development.aws.j-Lambda.example01-console Owner=AlNao CostCenter=dev ManagedBy=Sh"
 image_repositories = []

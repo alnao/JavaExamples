@@ -29,6 +29,20 @@ Resources:
             Resource: arn:aws:logs:*:*:*
       Path: "/"
       RoleName: "insertuser-role"
+      # Tag standard (vedi AWS/README.md#convenzione-dei-tag)
+      Tags:
+      - Key: Name
+        Value: "aws-j-CorsiVari.AwsLambdaDynamoExamples.insert-user"
+      - Key: Environment
+        Value: "dev"
+      - Key: Project
+        Value: "Development.aws.j-CorsiVari.AwsLambdaDynamoExamples.insert-user"
+      - Key: Owner
+        Value: "AlNao"
+      - Key: CostCenter
+        Value: "dev"
+      - Key: ManagedBy
+        Value: "CloudFormation"
 
   InsertUserJava:
     Type: AWS::Lambda::Function
@@ -47,6 +61,19 @@ Resources:
 
       Runtime: java8
       Timeout: 25
+      Tags:
+      - Key: Name
+        Value: "aws-j-CorsiVari.AwsLambdaDynamoExamples.insert-user"
+      - Key: Environment
+        Value: "dev"
+      - Key: Project
+        Value: "Development.aws.j-CorsiVari.AwsLambdaDynamoExamples.insert-user"
+      - Key: Owner
+        Value: "AlNao"
+      - Key: CostCenter
+        Value: "dev"
+      - Key: ManagedBy
+        Value: "CloudFormation"
     DependsOn:
     - IamRoleLambdaExecution
     

@@ -159,6 +159,29 @@
     -fx-background-color: #d5dbdb;
 }
 
+/* Colonne dei tag standard */
+.table-view .table-cell.tag-missing {
+    -fx-alignment: center;
+}
+
+.tag-missing-icon {
+    -fx-text-fill: #fd7e14;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-cell.tag-error {
+    -fx-text-fill: #dc3545;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.table-view .table-cell.tag-unsupported {
+    -fx-text-fill: #6c757d;
+    -fx-font-style: italic;
+    -fx-alignment: center;
+}
+
 /* TextArea */
 .text-area {
     -fx-background-color: white;
